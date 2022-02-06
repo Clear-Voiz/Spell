@@ -1,13 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
     public float speed;
+    public Transform dir;
     void Start()
     {
-        Destroy(gameObject,2f);
+        Destroy(gameObject,2.5f);
         speed = 8f;
     }
 
@@ -15,7 +17,15 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         //transform.position += (transform.forward * speed * Time.deltaTime);
-        transform.Translate(speed * Time.deltaTime,0f,0f);
+        transform.Translate(dir.up * speed * Time.deltaTime);
         
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -9,22 +9,27 @@ public class Conjure : MonoBehaviour
 {
     private KeywordRecognizer _recognizer;
     private Transform _player1;
+    //private Transform _player2;
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
-    private Vector3 dir;
-    
+    public Transform ori;
+
     //Actual spell
     private GameObject fireBall;
 
     private void Awake()
     {
         _player1 = GameObject.Find("Player1").transform;
-        fireBall = Resources.Load("fireBall") as GameObject;
+        fireBall = Resources.Load("PS_FireBall") as GameObject;
     }
 
     private void Start()
     {
         spellDic.Add("fire",Fire);
         spellDic.Add("fuego",Fire);
+        spellDic.Add("levitate",Levitate);
+        spellDic.Add("levita",Levitate);
+        spellDic.Add("shield",Shield);
+        spellDic.Add("escudo",Shield);
         //spellDic.Add("freeze",Freeze);
         //spellDic.Add("thunder",Thunder);
 
@@ -45,11 +50,16 @@ public class Conjure : MonoBehaviour
 
     private void Fire()
     {
-        Instantiate(fireBall,_player1.transform.localPosition+_player1.transform.right,_player1.transform.rotation);
+        var shot = Instantiate(fireBall,ori.position+ori.up,ori.transform.localRotation);
+        shot.GetComponent<Shoot>().dir = ori;
     }
-    private void Patata()
+
+    private void Levitate()
     {
-        Instantiate(fireBall,_player1.transform.localPosition+_player1.transform.right,_player1.transform.rotation);
+        _player1.position += Vector3.up;
     }
-    
+    private void Shield()
+    {
+        Instantiate(Resources.Load("Shield") as GameObject, _player1.position,Quaternion.identity);
+    }
 }
