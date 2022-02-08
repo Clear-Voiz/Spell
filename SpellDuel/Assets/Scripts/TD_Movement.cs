@@ -9,7 +9,7 @@ public class TD_Movement : MonoBehaviour
     public Transform player;
     void Start()
     {
-        speed = 1f;
+        speed = 2f;
     }
 
     // Update is called once per frame

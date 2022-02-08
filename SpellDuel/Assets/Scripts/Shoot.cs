@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,13 @@ public class Shoot : MonoBehaviour
 {
     public float speed;
     public Transform dir;
+    public Stats playerStats;
+
+    private void Awake()
+    {
+        playerStats = GameObject.Find("Player1").GetComponent<Stats>();
+    }
+
     void Start()
     {
         Destroy(gameObject,2.5f);
@@ -18,7 +26,6 @@ public class Shoot : MonoBehaviour
     {
         //transform.position += (transform.forward * speed * Time.deltaTime);
         transform.Translate(dir.up * speed * Time.deltaTime);
-        
     }
 
     private void OnCollisionEnter(Collision other)
@@ -27,5 +34,25 @@ public class Shoot : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            var stats = other.gameObject.GetComponent<Stats>();
+            if (stats.hp > (playerStats.mgk - stats.magicDef))
+            {
+                stats.hp -= playerStats.mgk - stats.magicDef;
+                Debug.Log(stats.hp);
+            }
+            else
+            {
+                stats.hp = 0f;
+                Debug.Log(stats.hp);
+                Destroy(other.gameObject);
+                
+            }
+            
+            Destroy(gameObject);
+        }
     }
+    
 }
