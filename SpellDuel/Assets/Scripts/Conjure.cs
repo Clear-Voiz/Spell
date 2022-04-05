@@ -16,6 +16,7 @@ public class Conjure : MonoBehaviour
     public Speller speller1;
     private GameObject sparks;
     public Transform wand;
+    private GameObject shield;
 
     //Actual spell
     private GameObject fireBall;
@@ -25,6 +26,7 @@ public class Conjure : MonoBehaviour
         _player1 = GameObject.Find("Player1").transform;
         fireBall = Resources.Load("PS_FireBall") as GameObject;
         sparks = Resources.Load("PS_sparks") as GameObject;
+        shield = Resources.Load("Shield") as GameObject;
     }
 
     private void Start()
@@ -85,7 +87,7 @@ public class Conjure : MonoBehaviour
     }
     private void Shield()
     {
-        GameObject barrera = Instantiate(Resources.Load("Shield") as GameObject, _player1.position,Quaternion.identity);
+        GameObject barrera = Instantiate(shield, _player1.position,Quaternion.identity);
         Destroy(barrera,1.5f);
     }
 }
