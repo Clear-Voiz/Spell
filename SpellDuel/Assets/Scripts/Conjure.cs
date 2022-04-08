@@ -17,6 +17,7 @@ public class Conjure : MonoBehaviour
     private GameObject sparks;
     public Transform wand;
     private GameObject shield;
+    private GameObject terra;
 
     //Actual spell
     private GameObject fireBall;
@@ -27,6 +28,7 @@ public class Conjure : MonoBehaviour
         fireBall = Resources.Load("PS_FireBall") as GameObject;
         sparks = Resources.Load("PS_sparks") as GameObject;
         shield = Resources.Load("Shield") as GameObject;
+        terra = Resources.Load("Terra") as GameObject;
     }
 
     private void Start()
@@ -37,6 +39,8 @@ public class Conjure : MonoBehaviour
         spellDic.Add("levita",Levitate);
         spellDic.Add("shield",Shield);
         spellDic.Add("escudo",Shield);
+        spellDic.Add("earth",Earth);
+        spellDic.Add("tierra",Earth);
         //spellDic.Add("freeze",Freeze);
         //spellDic.Add("thunder",Thunder);
 
@@ -44,23 +48,16 @@ public class Conjure : MonoBehaviour
         _recognizer.OnPhraseRecognized += Recognized;
         _recognizer.Start();
         Debug.Log(Application.systemLanguage);
-        
     }
     
-
-
+    
     private void Recognized(PhraseRecognizedEventArgs speech)
     {
         Debug.Log(speech.text);
         spellDic[speech.text].Invoke();
         CallSpeller(speech);
     }
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) Fire();
-    }
-
+    
     private void CallSpeller(PhraseRecognizedEventArgs speech)
     {
         var txt = speech.text;
@@ -69,15 +66,23 @@ public class Conjure : MonoBehaviour
         speller1.visible = true;
         speller1.secs = 0;
     }
+    
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) Fire();
+    }
 
     //SPELL DEFINITIONS
     private void Fire()
     {
-        var shot = Instantiate(fireBall,ori.position + ori.up/1.25f,ori.localRotation);
-        shot.GetComponent<Shoot>().dir = ori;
+        var shot = Instantiate(fireBall,ori.position + (ori.forward/1.25f),ori.localRotation);
+        Shoot shotScipt = shot.GetComponent<Shoot>();
+        shotScipt.dir = ori;
+        shotScipt.conjurer = gameObject;
+        
         var rot = Quaternion.Euler(0f,0f,wand.rotation.z);
         GameObject sp = Instantiate(sparks, ori.position, rot);
-        sp.transform.forward = ori.up;
+        sp.transform.forward = ori.forward;
 
     }
 
@@ -89,5 +94,14 @@ public class Conjure : MonoBehaviour
     {
         GameObject barrera = Instantiate(shield, _player1.position,Quaternion.identity);
         Destroy(barrera,1.5f);
+    }
+
+    private void Earth()
+    {
+         GameObject spike = Instantiate(terra, _player1.position+(ori.forward*4f), Quaternion.identity);
+        Debug.Log(_player1.position);
+        Debug.Log(spike.transform.position);
+        
+        Destroy(spike,3f);
     }
 }

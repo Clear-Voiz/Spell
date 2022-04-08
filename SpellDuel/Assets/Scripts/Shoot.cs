@@ -9,6 +9,7 @@ public class Shoot : MonoBehaviour
     public float speed;
     public Transform dir;
     public Stats playerStats;
+    public GameObject conjurer;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         //transform.position += (transform.forward * speed * Time.deltaTime);
-        transform.Translate(dir.up * speed * Time.deltaTime);
+        transform.Translate(dir.forward * speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision other)
