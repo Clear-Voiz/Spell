@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Speakers : MonoBehaviour
 {
    public AudioSource audioSource;
@@ -14,7 +15,7 @@ public class Speakers : MonoBehaviour
 
    private void Start()
    {
-      audioSource.clip = Microphone.Start("Micrófono (Realtek High Definition Audio)", true, 10, 44100);
+      audioSource.clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);
       audioSource.Play();
    }
 
