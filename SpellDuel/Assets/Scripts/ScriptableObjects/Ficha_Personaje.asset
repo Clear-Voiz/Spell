@@ -21,7 +21,7 @@ MonoBehaviour:
   mp: 30
   maxMp: 30
   str: 0
-  mgk: 4
+  mgk: 10
   def: 0
   mgkDef: 3
   dex: 0

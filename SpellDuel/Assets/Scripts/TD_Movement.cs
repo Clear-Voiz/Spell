@@ -7,9 +7,10 @@ public class TD_Movement : MonoBehaviour
 {
     public float speed;
     public Transform player;
+    public Rigidbody rb;
     void Start()
     {
-        speed = 2f;
+        speed = 3f;
     }
 
     // Update is called once per frame

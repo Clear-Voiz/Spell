@@ -75,14 +75,12 @@ public class Conjure : MonoBehaviour
     //SPELL DEFINITIONS
     private void Fire()
     {
-        var shot = Instantiate(fireBall,ori.position + (ori.forward/1.25f),ori.localRotation);
+        var shot = Instantiate(fireBall,ori.position + (ori.forward*1.2f),ori.localRotation);
         Shoot shotScipt = shot.GetComponent<Shoot>();
         shotScipt.dir = ori;
         shotScipt.conjurer = gameObject;
         
-        var rot = Quaternion.Euler(0f,0f,wand.rotation.z);
-        GameObject sp = Instantiate(sparks, ori.position, rot);
-        sp.transform.forward = ori.forward;
+        Instantiate(sparks, ori.transform );
 
     }
 
@@ -98,10 +96,8 @@ public class Conjure : MonoBehaviour
 
     private void Earth()
     {
-         GameObject spike = Instantiate(terra, _player1.position+(ori.forward*4f), Quaternion.identity);
-        Debug.Log(_player1.position);
-        Debug.Log(spike.transform.position);
-        
+        GameObject spike = Instantiate(terra, new Vector3(ori.position.x,_player1.position.y,ori.position.z) + (ori.forward*3.5f), Quaternion.identity);
+
         Destroy(spike,3f);
     }
 }

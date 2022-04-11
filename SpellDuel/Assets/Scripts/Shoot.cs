@@ -26,7 +26,9 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         //transform.position += (transform.forward * speed * Time.deltaTime);
-        transform.Translate(dir.forward * speed * Time.deltaTime);
+        transform.forward = dir.forward;
+        transform.Translate(transform.forward * speed * Time.deltaTime);
+        Debug.Log(transform.forward);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -35,24 +37,26 @@ public class Shoot : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         if (other.gameObject.CompareTag("Enemy"))
         {
-            var stats = other.gameObject.GetComponent<Stats>();
-            if (stats.hp > (playerStats.mgk - stats.magicDef))
+            if (other.gameObject.GetComponent<Stats>() != null)
             {
-                stats.hp -= playerStats.mgk - stats.magicDef;
-                Debug.Log(stats.hp);
+                var stats = other.gameObject.GetComponent<Stats>();
+                if (stats.hp > (playerStats.mgk - stats.magicDef))
+                {
+                    stats.hp -= playerStats.mgk - stats.magicDef;
+                    Debug.Log(stats.hp);
+                }
+                else
+                {
+                    stats.hp = 0f;
+                    Debug.Log(stats.hp);
+                    Destroy(other.gameObject);
+                }
+
+                Destroy(gameObject);
             }
-            else
-            {
-                stats.hp = 0f;
-                Debug.Log(stats.hp);
-                Destroy(other.gameObject);
-                
-            }
-            
-            Destroy(gameObject);
         }
     }
     
