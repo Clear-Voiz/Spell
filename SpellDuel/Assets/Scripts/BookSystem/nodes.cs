@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,34 +16,55 @@ public class nodes : MonoBehaviour,IPointerClickHandler
    public int requiredPoints; //Required points to upgrade this magic to the next level
    public SpellTree.State State;
    private SpellTree _spellTree;
-   private GameObject seal;
-   [SerializeField] private string col = "#ff0000ff";
-   private string definition;
+   private GameObject seal; 
+   private string colActive;
+   private string colInactive;
+   public string[] definition;
+   private string[] textFormat;
+   public TextMeshProUGUI txter;
+   public int page { get; set; }
+   private TextMeshProUGUI pointsShower;
 
-   public String Col
+   public int InvestedPoints
    {
        get
        {
-           if (State == SpellTree.State.Active)
-           {
-               col = "#ff0000ff";
-           }
-           else
-           {
-               col = "#800000ff";
-           }
-           return col;
+           return investedPoints;
        }
        set
        {
-           col = value;
+           pointsShower.text = value + "/5";
+           
+           if (value == 0)
+           {
+               State = SpellTree.State.Unlocked;
+               _spellTree.activeSpells.Remove((int) id);
+           }
+           investedPoints = value;
        }
    }
-   
+
 
    private void Awake()
    {
+       definition = new []{"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
+       textFormat = new string[3];
        _spellTree = FindObjectOfType<SpellTree>();
+       pointsShower = GetComponentInChildren<TextMeshProUGUI>();
+       id = SpellTree.Spells.Fire;
+   }
+   private void Start()
+   {
+       State = SpellTree.State.Unlocked;
+       colActive = "#ff0000ff";
+       colInactive = "#800000ff";
+       requiredPoints = 2;
+
+       txter.text = Redefine();
+       if (State == SpellTree.State.Locked)
+       {
+           gameObject.SetActive(false);
+       }
    }
 
    //constructor
@@ -53,30 +75,24 @@ public class nodes : MonoBehaviour,IPointerClickHandler
        nextNode = NextNode;
        State = state;
    }
-   private void Start()
-   {
-       State = SpellTree.State.Unlocked;
-      if (State == SpellTree.State.Locked)
-      {
-            gameObject.SetActive(false);
-      }
-   }
 
    public void OnPointerClick(PointerEventData eventData)
    {
        if (eventData.button == PointerEventData.InputButton.Left)
        {
-           if (State == SpellTree.State.Unlocked && (dependant == null) || (dependant.State == SpellTree.State.Active))
+           if (State != SpellTree.State.Locked && (dependant == null || dependant.State == SpellTree.State.Active))
            {
-               if (_spellTree.leftPoints > 0)
+               if (_spellTree.leftPoints > 0 && InvestedPoints<5)
                {
                    State = SpellTree.State.Active;
                    _spellTree.leftPoints -= 1;
-                   print(id);
+                   InvestedPoints += 1;
+                   if (InvestedPoints == 3 || InvestedPoints == 5) id += 1;
+                   txter.text = Redefine();
                    _spellTree.leftPointsTxt.text = "Available points: " + _spellTree.leftPoints;
                    _spellTree.activeSpells.Add((int)id);
-                   seal = Instantiate(_spellTree.seal,transform); //_spellTree.body.
-                   seal.transform.position = transform.position;
+                   //seal = Instantiate(_spellTree.seal,transform);
+                   //seal.transform.position = transform.position;
                }
            }
        }
@@ -84,14 +100,32 @@ public class nodes : MonoBehaviour,IPointerClickHandler
        {
            if (State == SpellTree.State.Active)
            {
-               State = SpellTree.State.Unlocked;
                _spellTree.leftPoints += 1;
+               InvestedPoints -= 1;
+               if (InvestedPoints == 2 || InvestedPoints == 4) id -= 1;
+               txter.text = Redefine();
                _spellTree.leftPointsTxt.text = "Available points: " + _spellTree.leftPoints;
-               _spellTree.activeSpells.Remove((int) id);
                GameObject trash = seal;
                seal = null;
                Destroy(trash);
            }
        }
+   }
+   private string Redefine()
+   {
+       string temp;
+       for (int i=0;i<textFormat.Length;i++)
+       {
+           if (i == (int) id && State == SpellTree.State.Active)
+           {
+               textFormat[i] = $"<b><color={colActive}>";
+           }
+           else
+           {
+               textFormat[i] = $"<b><color={colInactive}>";
+           }
+       }
+       temp = textFormat[0] + definition[0] + "\n" + textFormat[1] + definition[1] + "\n" + textFormat[2] + definition[2];
+       return temp;
    }
 }
