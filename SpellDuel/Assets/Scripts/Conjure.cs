@@ -78,9 +78,11 @@ public class Conjure : MonoBehaviour
         var shot = Instantiate(fireBall,ori.position + (ori.forward*1.2f),ori.localRotation);
         Shoot shotScipt = shot.GetComponent<Shoot>();
         shotScipt.dir = ori;
+        shotScipt.spell = new FireSpell(shot.transform,ori);
         shotScipt.conjurer = gameObject;
         
         Instantiate(sparks, ori.transform );
+        //MasterServer
 
     }
 

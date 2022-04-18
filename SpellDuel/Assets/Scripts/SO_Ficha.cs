@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,4 +25,6 @@ public class SO_Ficha : ScriptableObject
     public float speed;
     public float stamina;
     public float dmg;
+    public Dictionary<Elements, float> RES = new Dictionary<Elements, float>();
+    
 }

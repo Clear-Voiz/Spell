@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ public class Stats : MonoBehaviour
     public float luck;
     public float dmg;
     public float stamina;
-
+    public Dictionary<Elements, float> RES = new Dictionary<Elements, float>(8);
+        
     private void Awake()
     {
         SetupPlayer();
@@ -53,5 +55,15 @@ public class Stats : MonoBehaviour
         luck = pjFicha.luck;
         dmg = pjFicha.dmg;
         stamina = pjFicha.stamina;
+        /*RES[Elements.NonElemental] = pjFicha.RES[Elements.NonElemental];
+        RES[Elements.Fire] =  pjFicha.RES[Elements.Fire];
+        RES[Elements.Ice] =  pjFicha.RES[Elements.Ice];
+        RES[Elements.Thunder] =  pjFicha.RES[Elements.Thunder];
+        RES[Elements.Earth] =  pjFicha.RES[Elements.Earth];
+        RES[Elements.Water] =  pjFicha.RES[Elements.Water];
+        RES[Elements.Wind] =  pjFicha.RES[Elements.Wind];
+        RES[Elements.Light] =  pjFicha.RES[Elements.Light];
+        RES[Elements.Dark] =  pjFicha.RES[Elements.Dark];*/
+        RES.Add(Elements.Fire,1.2f);
     }
 }

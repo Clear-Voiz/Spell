@@ -39,6 +39,7 @@ public class nodes : MonoBehaviour,IPointerClickHandler
            {
                State = SpellTree.State.Unlocked;
                _spellTree.activeSpells.Remove((int) id);
+               txter.text = Redefine();
            }
            investedPoints = value;
        }
@@ -87,10 +88,14 @@ public class nodes : MonoBehaviour,IPointerClickHandler
                    State = SpellTree.State.Active;
                    _spellTree.leftPoints -= 1;
                    InvestedPoints += 1;
-                   if (InvestedPoints == 3 || InvestedPoints == 5) id += 1;
+                   if (InvestedPoints == 3 || InvestedPoints == 5)
+                   {
+                       _spellTree.activeSpells.Remove((int) id);
+                       id += 1;
+                       _spellTree.activeSpells.Add((int) id);
+                   }
                    txter.text = Redefine();
                    _spellTree.leftPointsTxt.text = "Available points: " + _spellTree.leftPoints;
-                   _spellTree.activeSpells.Add((int)id);
                    //seal = Instantiate(_spellTree.seal,transform);
                    //seal.transform.position = transform.position;
                }
@@ -102,12 +107,18 @@ public class nodes : MonoBehaviour,IPointerClickHandler
            {
                _spellTree.leftPoints += 1;
                InvestedPoints -= 1;
-               if (InvestedPoints == 2 || InvestedPoints == 4) id -= 1;
-               txter.text = Redefine();
+               if (InvestedPoints == 2 || InvestedPoints == 4)
+               {
+                   _spellTree.activeSpells.Remove((int) id);
+                   id -= 1;
+                   _spellTree.activeSpells.Add((int) id);
+                   txter.text = Redefine();
+                   
+               }
                _spellTree.leftPointsTxt.text = "Available points: " + _spellTree.leftPoints;
-               GameObject trash = seal;
-               seal = null;
-               Destroy(trash);
+               //GameObject trash = seal;
+               //seal = null;
+               //Destroy(trash);
            }
        }
    }
