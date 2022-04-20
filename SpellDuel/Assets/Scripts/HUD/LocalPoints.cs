@@ -36,5 +36,7 @@ public class LocalPoints : MonoBehaviour
       elapsedTime += Time.deltaTime;
       completePercent = elapsedTime / duration;
       transform.position = Vector3.Lerp(startPos, endPos, completePercent);
+      
+      //if it doesn't always look at the camera set the transform.forward to the camera forward
    }
 }

@@ -20,7 +20,7 @@ public class Shoot : MonoBehaviour
 
     void Start()
     {
-        if (LP == null) spell.LP = LP;
+        spell.LP = LP;
         Destroy(gameObject,spell.lifespan);
     }
 

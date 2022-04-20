@@ -118,13 +118,22 @@ public class Conjure : MonoBehaviour
         
         var shot = lightning.GetComponent<Shoot>();
         shot.spell = new ThunderS(VFX.GetFloat("LifeSpan"));
+        StartCoroutine(Cine_Shake.Instance.shakeCamera(3f, 0.5f));
         shot.spell.LP = Resources.Load("LocalPoints") as GameObject;
-        if (hit.collider.CompareTag("Enemy"))
+        if (hit.collider != null)
         {
-            var thunderS = shot.spell as ThunderS;
-            thunderS.Strike(hit.collider);
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                var thunderS = shot.spell as ThunderS;
+                thunderS.Strike(hit.collider);
+            }
+            VFX.SetFloat("Length",hit.distance);
         }
-        VFX.SetFloat("Length",hit.distance);
+        else
+        {
+            VFX.SetFloat("Length",30f);
+        }
+        
         VFX.SetFloat("Pivoter",-4.5f);
 
     }
