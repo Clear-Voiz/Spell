@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AlterSpell : MonoBehaviour
+public class AlterSpell : Spell
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Move()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Impact(Collision other)
     {
         
     }

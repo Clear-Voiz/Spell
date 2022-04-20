@@ -6,10 +6,11 @@ using UnityEngine;
 public class OffensiveSpell : Spell
 {
     protected bool controllable;
-   /* public OffensiveSpell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element,bool _controllable) : base(_VFX, _ImpactVFX, _lifespan, _speed, _PM, _cost, _element)
-    {
-        controllable = _controllable;
-    }*/
+
+    /* public OffensiveSpell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element,bool _controllable) : base(_VFX, _ImpactVFX, _lifespan, _speed, _PM, _cost, _element)
+     {
+         controllable = _controllable;
+     }*/
 
     public override void Move()
     {
@@ -20,11 +21,16 @@ public class OffensiveSpell : Spell
     
     public override void Impact(Collision other)
     {
+        speed = 0f;
         if (other.collider.CompareTag("Enemy"))
         {
             var stats = other.gameObject.GetComponent<Stats>();
             if (stats.hp > (Globs.mgk.Value - stats.magicDef))
             {
+                if (stats.RES[Element] > 1f)
+                {
+                    MonoBehaviour.Instantiate(LP, transform.position, Quaternion.identity);
+                }
                 stats.hp -= Mathf.Round((Globs.mgk.Value - stats.magicDef)*PM*stats.RES[Element]);
                 Debug.Log(stats.hp + " mgk:" + Globs.mgk.Value + ", mgkDef" + stats.magicDef + ", PM" + PM + ", RES" + stats.RES[Element]);
             }

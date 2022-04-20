@@ -20,21 +20,9 @@ public abstract class Spell
     public string InactiveCol;
     public Transform transform;
     public Transform dir;
+    public GameObject LP;
     
 
     public abstract void Move();
     public abstract void Impact(Collision other);
-
-    /*public Spell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element)
-    {
-        VFX = _VFX;
-        ImpactVFX = _ImpactVFX;
-        lifespan = _lifespan;
-        speed = _speed;
-        PM = _PM;
-        cost = _cost;
-        Element = _element;
-    }*/
-
-    
 }

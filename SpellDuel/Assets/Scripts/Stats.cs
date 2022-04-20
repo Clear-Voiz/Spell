@@ -65,5 +65,13 @@ public class Stats : MonoBehaviour
         RES[Elements.Light] =  pjFicha.RES[Elements.Light];
         RES[Elements.Dark] =  pjFicha.RES[Elements.Dark];*/
         RES.Add(Elements.Fire,1.2f);
+        RES.Add(Elements.Thunder,1.2f);
+        RES.Add(Elements.Ice,1f);
+        RES.Add(Elements.Water,1f);
+        RES.Add(Elements.Earth,1f);
+        RES.Add(Elements.Wind, 1f);
+        RES.Add(Elements.Light,1f);
+        RES.Add(Elements.Dark,1f);
+        RES.Add(Elements.NonElemental,1f);
     }
 }

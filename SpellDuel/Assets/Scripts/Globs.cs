@@ -13,8 +13,9 @@ public static class Globs
 
    #region playerStats
 
-   public static int lvl;
+   public static int lvl = 1;
    public static CharacterStat mgk = new CharacterStat(6f);
+   public static CharacterStat xpGain = new CharacterStat(1f); //this will store the amount of xp multiplier. Add numbers between 0 and 1 to modifier list. Although percentage treat as flat
    public static CharacterStat mgkDef = new CharacterStat(2f);
    public static CharacterStat maxHp = new CharacterStat(10f);
    public static CharacterStat hp = new CharacterStat(maxHp.Value);
@@ -27,6 +28,30 @@ public static class Globs
    public static CharacterStat iceRes = new CharacterStat(1f);
    public static CharacterStat lightRes = new CharacterStat(1f);
    public static CharacterStat darkRes = new CharacterStat(1f);
+
+   public static int maxXp = 10;
+   public const float ScaleFactor = 1.25f;
+   public static int xp;
+   public static int Xp
+   {
+      get => xp;
+      set
+      {
+         if (value >= maxXp)
+         {
+            xp = value-maxXp;
+            maxXp = Mathf.RoundToInt(maxXp*ScaleFactor);
+            lvl += 1;
+            Debug.Log("current lvl: "+lvl);
+
+         }
+         else
+         {
+            xp = value;
+         }
+      }
+   }
+   
    //public static float
 
    

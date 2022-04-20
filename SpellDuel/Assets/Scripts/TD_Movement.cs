@@ -26,5 +26,11 @@ public class TD_Movement : MonoBehaviour
             player.position += (movimiento * speed * Time.deltaTime);
 
         }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            Globs.Xp += 1;
+            print(Globs.Xp);
+        }
     }
 }
