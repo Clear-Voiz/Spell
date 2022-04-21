@@ -8,15 +8,9 @@ using UnityEngine.EventSystems;
 
 public class AimAt : MonoBehaviour
 { //this is attached to the wand gameobject
-    private float rot;
-    private float rotSpeed;
-    private Vector3 rooot;
+    
     private Ray rayMouse;
 
-    private void Start()
-    {
-        rotSpeed = 180f;
-    }
 
     private void Update()
     {
@@ -33,9 +27,9 @@ public class AimAt : MonoBehaviour
         var vectorMouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100f);
         Vector3 mousePos =Camera.main.ScreenToWorldPoint(vectorMouse);
         Vector3 direction = mousePos - transform.position;
-        Quaternion rotatione = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotatione, 1);
-
+        Quaternion rot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1);
+    
 
         //if (Physics.Raycast(rayMouse.origin, rayMouse.direction, out hit)) ;
     }

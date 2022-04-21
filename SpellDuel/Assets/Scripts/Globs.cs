@@ -13,7 +13,7 @@ public static class Globs
 
    #region playerStats
 
-   public static int lvl = 1;
+   public static int lvl = 7;
    public static CharacterStat mgk = new CharacterStat(6f);
    public static CharacterStat xpGain = new CharacterStat(1f); //this will store the amount of xp multiplier. Add numbers between 0 and 1 to modifier list. Although percentage treat as flat
    public static CharacterStat mgkDef = new CharacterStat(2f);
@@ -58,19 +58,6 @@ public static class Globs
 
    #endregion
    
-   
-
-   public static float RES
-   {
-      get
-      {
-         return res;
-      }
-      set
-      {
-         res = value;
-      }
-   }
 
    public static HashSet<int> activeSpells = new HashSet<int>();
 }

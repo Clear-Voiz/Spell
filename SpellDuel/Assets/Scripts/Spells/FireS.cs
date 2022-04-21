@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FireS : OffensiveSpell
-{ 
+{
+        public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
         
         public FireS(Transform _transform, Transform _dir)
         { 

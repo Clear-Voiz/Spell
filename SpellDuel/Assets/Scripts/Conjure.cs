@@ -21,11 +21,14 @@ public class Conjure : MonoBehaviour
     private GameObject terra;
     private GameObject thunder;
 
+    private StoreHouse storeHouse;
+
     //Actual spell
     private GameObject fireBall;
 
     private void Awake()
     {
+        storeHouse = FindObjectOfType<StoreHouse>();
         _player1 = GameObject.Find("Player1").transform;
         sparks = Resources.Load("PS_sparks") as GameObject;
         shield = Resources.Load("Shield") as GameObject;
@@ -104,7 +107,8 @@ public class Conjure : MonoBehaviour
 
     private void Earth()
     {
-        GameObject spike = Instantiate(terra, new Vector3(ori.position.x,_player1.position.y,ori.position.z) + (ori.forward*3.5f), Quaternion.identity);
+        GameObject spike = Instantiate(terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),storeHouse.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        //spike.transform.position = new Vector3(spike.transform.position.x, storeHouse.groundLevel, spike.transform.position.z);
         Shoot shotScipt = spike.GetComponent<Shoot>();
         shotScipt.spell = new GroundS(spike.transform, ori);
     }
@@ -125,7 +129,8 @@ public class Conjure : MonoBehaviour
             if (hit.collider.CompareTag("Enemy"))
             {
                 var thunderS = shot.spell as ThunderS;
-                thunderS.Strike(hit.collider);
+                if (shot.spell is ThunderS)
+                {thunderS.Strike(hit.collider);}
             }
             VFX.SetFloat("Length",hit.distance);
         }
