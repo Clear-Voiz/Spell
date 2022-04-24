@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireS : OffensiveSpell,IControllable<Transform>
+public class FireS : Spell,IControllable,IShootable
 {
         public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
-        
-        public FireS(Transform _transform, Transform _dir)
-        { 
-                VFX = Resources.Load("PS_FireBall") as GameObject;
+
+        private void Awake()
+        {
+                _conjure = FindObjectOfType<Conjure>();
+        }
+
+        private void Start()
+        {
+                //VFX = Resources.Load("PS_FireBall") as GameObject;
                 ImpactVFX = null;
                 lifespan = 3f;
                 speed = 8f;
@@ -18,14 +23,27 @@ public class FireS : OffensiveSpell,IControllable<Transform>
                 Element = Elements.Fire;
                 ActiveCol = "#ff0000ff";
                 InactiveCol = "#800000ff";
-                controllable = true;
-                transform = _transform;
-                dir = _dir;
+                Destroy(gameObject,lifespan);
         }
 
-
-        public void Controll(Transform fire)
+        private void Update()
         {
-                
+                Controll();
+                Shoot();
+        }
+
+        public void Controll()
+        { 
+                transform.forward = _conjure.ori.forward;
+        }
+
+        public void Shoot()
+        {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+                Damager(other);
         }
 }

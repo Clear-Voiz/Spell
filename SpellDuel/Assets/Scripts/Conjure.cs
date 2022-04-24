@@ -87,14 +87,8 @@ public class Conjure : MonoBehaviour
     private void Fire()
     {
         var shot = Instantiate(fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
-        Shoot shotScipt = shot.GetComponent<Shoot>();
-        shotScipt.dir = ori;
-        shotScipt.spell = new FireS(shot.transform,ori);
-        shotScipt.conjurer = gameObject;
-        
         Instantiate(sparks, ori.transform );
         //MasterServer
-
     }
 
     private void Levitate()
@@ -109,10 +103,8 @@ public class Conjure : MonoBehaviour
 
     private void Earth()
     {
-        GameObject spike = Instantiate(terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),storeHouse.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        Instantiate(terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),storeHouse.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
         //spike.transform.position = new Vector3(spike.transform.position.x, storeHouse.groundLevel, spike.transform.position.z);
-        Shoot shotScipt = spike.GetComponent<Shoot>();
-        shotScipt.spell = new GroundS(spike.transform, ori);
     }
 
     private void Thunder()
@@ -120,29 +112,21 @@ public class Conjure : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(ori.position, ori.forward, out hit);
         GameObject lightning = Instantiate(thunder, ori.position + (ori.forward*1.2f), ori.rotation);
-        var VFX = lightning.GetComponentInChildren<VisualEffect>();
+
+        var spell = lightning.GetComponent<ThunderS>();
         
-        var shot = lightning.GetComponent<Shoot>();
-        shot.spell = new ThunderS(VFX.GetFloat("LifeSpan"));
-        StartCoroutine(Cine_Shake.Instance.shakeCamera(3f, 0.5f));
-        shot.spell.LP = Resources.Load("LocalPoints") as GameObject;
         if (hit.collider != null)
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                var thunderS = shot.spell as ThunderS;
-                if (shot.spell is ThunderS)
-                {thunderS.Strike(hit.collider);}
+                spell.Strike(hit.collider);
             }
-            VFX.SetFloat("Length",hit.distance);
+            spell.range = hit.distance;
         }
         else
         {
-            VFX.SetFloat("Length",30f);
+            spell.range = 30f;
         }
-        
-        VFX.SetFloat("Pivoter",-4.5f);
-
     }
 
     private void Vanish()

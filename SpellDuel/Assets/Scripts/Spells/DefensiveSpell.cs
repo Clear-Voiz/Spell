@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DefensiveSpell : Spell
 {
-    public override void Move()
+   /* public override void Move()
     {
         
     }
@@ -12,5 +12,5 @@ public class DefensiveSpell : Spell
     public override void Impact(Collision other)
     {
         
-    }
+    }*/
 }

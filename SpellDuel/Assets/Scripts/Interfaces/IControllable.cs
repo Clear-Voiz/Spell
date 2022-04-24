@@ -2,7 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IControllable<T>
+public interface IControllable
 {
-    void Controll(T t);
+    void Controll();
+}
+
+public interface IShootable
+{
+    void Shoot();
+}
+
+public interface IEffectable
+{
+    void Effect();
 }

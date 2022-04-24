@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OffensiveSpell : Spell
-{
+{/*
     protected bool controllable;
 
-    /* public OffensiveSpell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element,bool _controllable) : base(_VFX, _ImpactVFX, _lifespan, _speed, _PM, _cost, _element)
+    public OffensiveSpell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element,bool _controllable) : base(_VFX, _ImpactVFX, _lifespan, _speed, _PM, _cost, _element)
      {
          controllable = _controllable;
-     }*/
+     }
 
     public override void Move()
     {
@@ -44,4 +44,5 @@ public class OffensiveSpell : Spell
             //Destroy(gameObject);
         }
     }
+*/
 }

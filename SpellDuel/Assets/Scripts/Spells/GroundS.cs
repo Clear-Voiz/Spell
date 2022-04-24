@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundS : DefensiveSpell
+public class GroundS : Spell
 {
-    public GroundS(Transform _transform, Transform _dir)
-    { 
-        VFX = Resources.Load("Terra") as GameObject;
+    private void Start()
+    {
+        //VFX = Resources.Load("Terra") as GameObject;
         ImpactVFX = null;
         lifespan = 3f;
         speed = 0f;
@@ -15,28 +16,28 @@ public class GroundS : DefensiveSpell
         Element = Elements.Earth;
         ActiveCol = "#ff0000ff";
         InactiveCol = "#800000ff";
-        transform = _transform;
-        dir = _dir;
+        Destroy(gameObject,lifespan);
     }
 
-    public override void Impact(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.collider.CompareTag("Spell"))
         {
-            
-            var shoot = other.collider.GetComponent<Shoot>();
-            if (shoot.spell.Element != Elements.NonElemental)
+            Spell spell;
+            if (other.collider.TryGetComponent(out spell))
             {
-                MonoBehaviour.Destroy(other.gameObject);
-                if (shoot.spell.Element != Elements.Thunder)
+                if (spell.Element != Elements.NonElemental)
                 {
-                    MonoBehaviour.Destroy(transform.gameObject);
-                   
+                    Destroy(other.gameObject);
+                    if (spell.Element != Elements.Thunder)
+                    {
+                        Destroy(gameObject);
+                    }
                 }
-            }
-            else
-            {
-                MonoBehaviour.Destroy(transform.gameObject);
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

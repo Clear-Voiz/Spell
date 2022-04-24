@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
-    public Transform dir;
+   /* public Transform dir;
     public Stats playerStats;
     public GameObject conjurer;
     public Spell spell;
@@ -43,5 +43,5 @@ public class Shoot : MonoBehaviour
     private void OnDestroy()
     {
         
-    }
+    }*/
 }
