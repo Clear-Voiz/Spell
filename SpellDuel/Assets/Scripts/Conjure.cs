@@ -49,6 +49,8 @@ public class Conjure : MonoBehaviour
         spellDic.Add("tierra",Earth);
         spellDic.Add("thunder",Thunder);
         spellDic.Add("rayo",Thunder);
+        spellDic.Add("vanish",Vanish);
+        spellDic.Add("oculto",Vanish);
         //spellDic.Add("freeze",Freeze);
         //spellDic.Add("thunder",Thunder);
 
@@ -141,5 +143,10 @@ public class Conjure : MonoBehaviour
         
         VFX.SetFloat("Pivoter",-4.5f);
 
+    }
+
+    private void Vanish()
+    {
+        
     }
 }

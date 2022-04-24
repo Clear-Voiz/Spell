@@ -28,6 +28,7 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         if (spell != null && dir != null)
+            
         {//transform.position += (transform.forward * speed * Time.deltaTime);
             spell.Move();
         }
@@ -38,5 +39,9 @@ public class Shoot : MonoBehaviour
         Debug.Log(spell.Element);
         spell.Impact(other);
     }
-    
+
+    private void OnDestroy()
+    {
+        
+    }
 }

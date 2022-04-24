@@ -14,12 +14,6 @@ public class AimAt : MonoBehaviour
 
     private void Update()
     {
-        /*rot += Input.GetAxisRaw("Mouse X") * rotSpeed * Time.deltaTime;
-        rot = Mathf.Clamp(rot, -45f, 45f);
-        rooot.Set(transform.localRotation.x,rot,transform.localRotation.z);
-        //Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.localRotation.x,rot,transform.localRotation.z), Time.deltaTime);
-        transform.localEulerAngles = rooot;*/
-        
         //Camera.current
         /*RaycastHit hit;
         var mousePos = Input.mousePosition;
