@@ -19,12 +19,12 @@ public class GroundS : Spell
         Destroy(gameObject,lifespan);
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.collider.CompareTag("Spell"))
+        if (other.CompareTag("Spell"))
         {
             Spell spell;
-            if (other.collider.TryGetComponent(out spell))
+            if (other.TryGetComponent(out spell))
             {
                 if (spell.Element != Elements.NonElemental)
                 {
@@ -41,4 +41,5 @@ public class GroundS : Spell
             }
         }
     }
+    
 }

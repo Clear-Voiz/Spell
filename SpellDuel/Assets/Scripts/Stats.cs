@@ -72,6 +72,6 @@ public class Stats : MonoBehaviour
         RES.Add(Elements.Wind, 1f);
         RES.Add(Elements.Light,1f);
         RES.Add(Elements.Dark,1f);
-        RES.Add(Elements.NonElemental,1f);
+        RES.Add(Elements.NonElemental,0.8f);
     }
 }

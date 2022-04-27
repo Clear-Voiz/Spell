@@ -42,8 +42,8 @@ public class FireS : Spell,IControllable,IShootable
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
-                Damager(other);
+                Damager(other);  
         }
 }

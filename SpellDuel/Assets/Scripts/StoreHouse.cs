@@ -3,10 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoreHouse : MonoBehaviour
+[CreateAssetMenu(fileName = "StoreHouse_",menuName = "ScriptableObjects/Storage")]
+public class StoreHouse : ScriptableObject
 {
     public float groundLevel;
-    
+    public GameObject Effects;
+
+    private void OnEnable()
+    {
+        Effects = GameObject.Find("Effects");
+    }
     //assets
     
 

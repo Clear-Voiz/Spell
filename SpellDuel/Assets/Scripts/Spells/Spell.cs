@@ -12,7 +12,7 @@ public abstract class Spell: MonoBehaviour
     protected GameObject VFX;
     protected GameObject ImpactVFX;
     protected float lifespan;
-    protected float speed;
+    public float speed;
     protected float PM; //Power Multiplier
     protected float cost;
     public Elements Element;
@@ -20,24 +20,13 @@ public abstract class Spell: MonoBehaviour
     protected string InactiveCol;
     protected GameObject LP;
     protected Conjure _conjure;
-
-    private void Start()
+    
+    
+    protected void Damager(Collider other)
     {
-        print("Parent Start");
-    }
-
-    private void OnEnable()
-    {
-        LP = Resources.Load("LocalPoints") as GameObject;
-        print("Parent onEnabled");
-
-    }
-
-    public virtual void Damager(Collision other)
-    {
-        speed = 0f;
-        if (other.collider.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy"))
         {
+            speed = 0f;
             var stats = other.gameObject.GetComponent<Stats>();
             int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.magicDef)*PM*stats.RES[Element]);
             if (stats.RES[Element] > 1f)
@@ -58,6 +47,14 @@ public abstract class Spell: MonoBehaviour
             }
 
             //Destroy(gameObject);
-        } 
+        }
+        else
+        {
+            if (!other.CompareTag("Spell"))
+            {
+                speed = 0f;
+                //Fade Away
+            }
+        }
     }
 }

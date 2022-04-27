@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 public class AimAt : MonoBehaviour
 { //this is attached to the wand gameobject
     
-    private Ray rayMouse;
+   // private Ray rayMouse;
 
 
     private void Update()

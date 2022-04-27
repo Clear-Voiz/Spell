@@ -16,25 +16,28 @@ public class Conjure : MonoBehaviour
     public Transform ori;
     public Speller speller1;
     private GameObject sparks;
-    public Transform wand;
+    private Transform _player1_mesh;
     private GameObject shield;
     private GameObject terra;
     private GameObject thunder;
+    private GameObject mgkHit;
 
-    private StoreHouse storeHouse;
+    public StoreHouse storeHouse;
 
     //Actual spell
     private GameObject fireBall;
 
     private void Awake()
     {
-        storeHouse = FindObjectOfType<StoreHouse>();
         _player1 = GameObject.Find("Player1").transform;
+        _player1_mesh = GameObject.Find("Player1_mesh").transform;
+        
         sparks = Resources.Load("PS_sparks") as GameObject;
         shield = Resources.Load("Shield") as GameObject;
         terra = Resources.Load("Terra") as GameObject;
         fireBall = Resources.Load("PS_FireBall") as GameObject;
         thunder = Resources.Load("Thunder") as GameObject;
+        mgkHit = Resources.Load("Hit") as GameObject;
     }
 
     private void Start()
@@ -51,8 +54,9 @@ public class Conjure : MonoBehaviour
         spellDic.Add("rayo",Thunder);
         spellDic.Add("vanish",Vanish);
         spellDic.Add("oculto",Vanish);
+        spellDic.Add("hit",MagicHit);
+        spellDic.Add("golpe", MagicHit);
         //spellDic.Add("freeze",Freeze);
-        //spellDic.Add("thunder",Thunder);
 
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
         _recognizer.OnPhraseRecognized += Recognized;
@@ -79,7 +83,7 @@ public class Conjure : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) Thunder();
+        if (Input.GetMouseButtonDown(0)) MagicHit();
         if (Input.GetMouseButtonDown(1)) Earth();
     }
 
@@ -97,40 +101,26 @@ public class Conjure : MonoBehaviour
     }
     private void Shield()
     {
-        GameObject barrera = Instantiate(shield, _player1.position,Quaternion.identity);
-        Destroy(barrera,1.5f);
+        Instantiate(shield, _player1_mesh.position,Quaternion.identity);
     }
 
     private void Earth()
     {
         Instantiate(terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),storeHouse.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
-        //spike.transform.position = new Vector3(spike.transform.position.x, storeHouse.groundLevel, spike.transform.position.z);
     }
 
     private void Thunder()
     {
-        RaycastHit hit;
-        Physics.Raycast(ori.position, ori.forward, out hit);
-        GameObject lightning = Instantiate(thunder, ori.position + (ori.forward*1.2f), ori.rotation);
-
-        var spell = lightning.GetComponent<ThunderS>();
-        
-        if (hit.collider != null)
-        {
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                spell.Strike(hit.collider);
-            }
-            spell.range = hit.distance;
-        }
-        else
-        {
-            spell.range = 30f;
-        }
+        Instantiate(thunder, ori.position + (ori.forward*1.2f), ori.rotation);
     }
 
     private void Vanish()
     {
-        
+        storeHouse.Effects.AddComponent<VanishS>();
+    }
+
+    private void MagicHit()
+    {
+        Instantiate(mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
     }
 }

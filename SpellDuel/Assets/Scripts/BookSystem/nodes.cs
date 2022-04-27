@@ -98,6 +98,7 @@ public class nodes : MonoBehaviour,IPointerClickHandler
                    _spellTree.leftPointsTxt.text = "Available points: " + _spellTree.leftPoints;
                    //seal = Instantiate(_spellTree.seal,transform);
                    //seal.transform.position = transform.position;
+                   
                }
            }
        }
