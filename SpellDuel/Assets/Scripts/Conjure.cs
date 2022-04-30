@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -21,6 +22,10 @@ public class Conjure : MonoBehaviour
     private GameObject terra;
     private GameObject thunder;
     private GameObject mgkHit;
+    private GameObject impulse;
+    private Transform gameManager;
+    private GameObject doom;
+    public bool whisper;
 
     public StoreHouse storeHouse;
 
@@ -38,6 +43,9 @@ public class Conjure : MonoBehaviour
         fireBall = Resources.Load("PS_FireBall") as GameObject;
         thunder = Resources.Load("Thunder") as GameObject;
         mgkHit = Resources.Load("Hit") as GameObject;
+        impulse = Resources.Load("Impulse") as GameObject;
+        doom = Resources.Load("Doom") as GameObject;
+        gameManager = transform.GetChild(0);
     }
 
     private void Start()
@@ -56,12 +64,18 @@ public class Conjure : MonoBehaviour
         spellDic.Add("oculto",Vanish);
         spellDic.Add("hit",MagicHit);
         spellDic.Add("golpe", MagicHit);
+        spellDic.Add("presto", Presto);
+        spellDic.Add("impulse", Impulse);
+        spellDic.Add("impulso", Impulse);
+        spellDic.Add("doom", Doom);
+        spellDic.Add("whisper", Whisper);
+        spellDic.Add("susurro", Whisper);
         //spellDic.Add("freeze",Freeze);
 
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
         _recognizer.OnPhraseRecognized += Recognized;
         _recognizer.Start();
-        Debug.Log(Application.systemLanguage);
+//        Debug.Log(Application.systemLanguage);
     }
     
     
@@ -77,14 +91,16 @@ public class Conjure : MonoBehaviour
         var txt = speech.text;
         txt = txt.Substring(0, 1).ToUpper() + txt.Substring(1);
         speller1._renderer.text = txt;
+        if (whisper)
+            return;
         speller1.visible = true;
         speller1.secs = 0;
     }
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) MagicHit();
-        if (Input.GetMouseButtonDown(1)) Earth();
+        if (Input.GetMouseButtonDown(0)) Presto();
+        if (Input.GetMouseButtonDown(1)) Impulse();
     }
 
     //SPELL DEFINITIONS
@@ -116,11 +132,31 @@ public class Conjure : MonoBehaviour
 
     private void Vanish()
     {
-        storeHouse.Effects.AddComponent<VanishS>();
+        gameManager.gameObject.AddComponent<VanishS>();
     }
 
     private void MagicHit()
     {
         Instantiate(mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+    }
+
+    private void Impulse()
+    {
+        Instantiate(impulse,ori.position,Quaternion.identity);
+    }
+
+    private void Presto()
+    {
+        gameManager.gameObject.AddComponent<PrestoS>();
+    }
+    
+    private void Doom()
+    {
+        Instantiate(doom,ori.position,ori.rotation);
+    }
+
+    private void Whisper()
+    {
+        gameManager.gameObject.AddComponent<WhisperS>();
     }
 }

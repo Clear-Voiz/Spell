@@ -27,6 +27,8 @@ public class Stats : MonoBehaviour
     public float dmg;
     public float stamina;
     public Dictionary<Elements, float> RES = new Dictionary<Elements, float>(8);
+    
+    
         
     private void Awake()
     {

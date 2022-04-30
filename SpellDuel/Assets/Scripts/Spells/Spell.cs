@@ -28,7 +28,8 @@ public abstract class Spell: MonoBehaviour
         {
             speed = 0f;
             var stats = other.gameObject.GetComponent<Stats>();
-            int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.magicDef)*PM*stats.RES[Element]);
+            var tmpdmg = (Globs.mgk.Value - stats.magicDef) * PM * stats.RES[Element];
+            int damage = Mathf.RoundToInt(tmpdmg);
             if (stats.RES[Element] > 1f)
             {
                 LP = Resources.Load("LocalPoints") as GameObject;
@@ -37,7 +38,13 @@ public abstract class Spell: MonoBehaviour
             if (stats.hp > damage)
             {
                 stats.hp -= damage;
-                Debug.Log(stats.hp + " mgk:" + Globs.mgk.Value + ", mgkDef" + stats.magicDef + ", PM" + PM + ", RES" + stats.RES[Element]);
+                Debug.Log(
+                    stats.hp + 
+                    " mgk:" + Globs.mgk.Value + 
+                    ", mgkDef" + stats.magicDef + 
+                    ", PM" + PM + 
+                    ", RES" + stats.RES[Element]
+                    );
             }
             else
             {

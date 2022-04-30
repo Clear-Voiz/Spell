@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ab562982e80844685ec7c3a398bd4e, type: 3}
   m_Name: StoreHouse_Abyss
   m_EditorClassIdentifier: 
-  groundLevel: 7.5
+  groundLevel: 0.2
+  Effects: {fileID: 0}

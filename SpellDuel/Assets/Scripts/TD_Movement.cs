@@ -6,26 +6,21 @@ using UnityEngine;
 
 public class TD_Movement : MonoBehaviour
 {
-    public float speed;
     public Transform player;
     public Rigidbody rb;
     [SerializeField] private AnimationCurve curve;
-    void Start()
-    {
-        speed = 3f;
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
         var horizontal = Input.GetAxisRaw("Horizontal");
         var vertical = Input.GetAxisRaw("Vertical");
-        var movimiento = new Vector3(horizontal, 0f, 0f);
+        var movimiento = new Vector3(horizontal, 0f, vertical);
 
         if (movimiento.magnitude >= 0.1f)
         {
             var angle = Mathf.Atan2(movimiento.x, movimiento.z) * Mathf.Rad2Deg; //radianes a grados
-            player.position += (movimiento * speed * Time.deltaTime);
+            player.position += (movimiento * Globs.spd.Value * Time.deltaTime);
         }
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -36,11 +31,11 @@ public class TD_Movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Evade(player.position,player.position+(Vector3.right*speed),0.4f);
+            Evade(player.position,player.position+(Vector3.right*Globs.spd.Value),0.4f);
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Evade(player.position,player.position+(Vector3.right*-speed),0.4f);
+            Evade(player.position,player.position+(Vector3.right*-Globs.spd.Value),0.4f);
         }
     }
 

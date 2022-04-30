@@ -8,6 +8,7 @@ TagManager:
   - Spell
   - Enemy
   - Weapon
+  - Controllable
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - DefensiveSpells
   - Players
   - Weapon
-  - 
+  - Wall
   - 
   - 
   - 

@@ -27,7 +27,7 @@ public class VanishS : Spell,IEffectable
         meshRend.material = inv;
         tim = new Timers(3);
         tim.alarm[0] = 1f;
-        tim.alarm[1] = 4f;
+        tim.alarm[1] = 3f;
         tim.alarm[2] = 1f;
     }
 

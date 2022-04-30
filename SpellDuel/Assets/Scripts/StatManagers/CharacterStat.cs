@@ -21,7 +21,7 @@ public class CharacterStat
    private bool isDirty = true;
    private float _value;
    
-   private readonly List<StatModifier> statModifiers;
+   public readonly List<StatModifier> statModifiers;
 
    public CharacterStat(float baseVal)
    {

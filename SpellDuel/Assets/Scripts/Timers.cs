@@ -32,6 +32,23 @@ public class Timers
         return duration;
     }
     
+    /*public float Timer<T>(float duration, Action<T> act)
+    {
+        if (duration > 0f)
+        {
+            duration -= Time.deltaTime;
+
+            if (duration <= 0f)
+            {
+                act(T);
+                duration = 0f;
+            }
+        }
+
+        return duration;
+    }*/
+
+    
     public float Chronometer(float duration, Action constAct)
     {
         if (duration > 0f)

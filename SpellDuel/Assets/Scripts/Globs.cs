@@ -21,7 +21,7 @@ public static class Globs
    public static CharacterStat hp = new CharacterStat(maxHp.Value);
    public static CharacterStat maxMp = new CharacterStat(12f);
    public static CharacterStat mp = new CharacterStat(maxMp.Value);
-   public static CharacterStat sp = new CharacterStat(3f);
+   public static CharacterStat spd = new CharacterStat(3f);
 
    public static CharacterStat fireRes = new CharacterStat(1f);
    public static CharacterStat thunderRes = new CharacterStat(1f);
