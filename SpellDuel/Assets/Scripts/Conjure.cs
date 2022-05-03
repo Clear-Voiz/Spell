@@ -16,36 +16,23 @@ public class Conjure : MonoBehaviour
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
     public Speller speller1;
-    private GameObject sparks;
     private Transform _player1_mesh;
-    private GameObject shield;
-    private GameObject terra;
-    private GameObject thunder;
-    private GameObject mgkHit;
-    private GameObject impulse;
     private Transform gameManager;
-    private GameObject doom;
     public bool whisper;
+    public AimAt aimAt;
+    public EffectsManager effectsManager;
 
-    public StoreHouse storeHouse;
-
-    //Actual spell
-    private GameObject fireBall;
+    public StoreHouse SH;
 
     private void Awake()
     {
         _player1 = GameObject.Find("Player1").transform;
         _player1_mesh = GameObject.Find("Player1_mesh").transform;
-        
-        sparks = Resources.Load("PS_sparks") as GameObject;
-        shield = Resources.Load("Shield") as GameObject;
-        terra = Resources.Load("Terra") as GameObject;
-        fireBall = Resources.Load("PS_FireBall") as GameObject;
-        thunder = Resources.Load("Thunder") as GameObject;
-        mgkHit = Resources.Load("Hit") as GameObject;
-        impulse = Resources.Load("Impulse") as GameObject;
-        doom = Resources.Load("Doom") as GameObject;
         gameManager = transform.GetChild(0);
+        var weapon = _player1.transform.GetChild(2);
+        aimAt = weapon.GetComponent<AimAt>();
+        effectsManager = _player1.GetComponent<EffectsManager>();
+
     }
 
     private void Start()
@@ -68,8 +55,17 @@ public class Conjure : MonoBehaviour
         spellDic.Add("impulse", Impulse);
         spellDic.Add("impulso", Impulse);
         spellDic.Add("doom", Doom);
+        spellDic.Add("condena", Doom);
         spellDic.Add("whisper", Whisper);
         spellDic.Add("susurro", Whisper);
+        spellDic.Add("ice",Shards);
+        spellDic.Add("hielo",Shards);
+        spellDic.Add("darkness", Darkness);
+        spellDic.Add("oscuridad",Darkness);
+        spellDic.Add("paralysis",Paralysis);
+        spellDic.Add("paralisis",Paralysis);
+        spellDic.Add("water",Water);
+        spellDic.Add("Agua", Water);
         //spellDic.Add("freeze",Freeze);
 
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
@@ -99,15 +95,15 @@ public class Conjure : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) Presto();
-        if (Input.GetMouseButtonDown(1)) Impulse();
+        if (Input.GetMouseButtonDown(0)) Shards();
+        if (Input.GetMouseButtonDown(1)) Water();
     }
 
     //SPELL DEFINITIONS
     private void Fire()
     {
-        var shot = Instantiate(fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
-        Instantiate(sparks, ori.transform );
+        var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
+        Instantiate(SH.sparks, ori.transform );
         //MasterServer
     }
 
@@ -117,46 +113,74 @@ public class Conjure : MonoBehaviour
     }
     private void Shield()
     {
-        Instantiate(shield, _player1_mesh.position,Quaternion.identity);
+        Instantiate(SH.shield, _player1_mesh.position,Quaternion.identity);
     }
 
     private void Earth()
     {
-        Instantiate(terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),storeHouse.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
     }
 
     private void Thunder()
     {
-        Instantiate(thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
     }
 
     private void Vanish()
     {
-        gameManager.gameObject.AddComponent<VanishS>();
+        var temp = new SVanish();
+        effectsManager.ActiveEffects.Add(temp);
     }
 
     private void MagicHit()
     {
-        Instantiate(mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+        Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
     }
 
     private void Impulse()
     {
-        Instantiate(impulse,ori.position,Quaternion.identity);
+        Instantiate(SH.impulse,ori.position,Quaternion.identity);
     }
 
     private void Presto()
     {
-        gameManager.gameObject.AddComponent<PrestoS>();
+        //gameManager.gameObject.AddComponent<PrestoS>();
+        var temp = new SPresto(this);
+        effectsManager.ActiveEffects.Add(temp);
     }
     
     private void Doom()
     {
-        Instantiate(doom,ori.position,ori.rotation);
+        Instantiate(SH.doom,ori.position,ori.rotation);
     }
 
     private void Whisper()
     {
-        gameManager.gameObject.AddComponent<WhisperS>();
+        var temp = new SWhisper();
+        effectsManager.ActiveEffects.Add(temp);
     }
+
+    private void Darkness()
+    {
+        var temp = new SDarkness(this);
+        effectsManager.ActiveEffects.Add(temp);
+    }
+
+    private void Shards()
+    {
+        var temp = new SIce();
+        effectsManager.ActiveEffects.Add(temp);
+    }
+
+    private void Paralysis()
+    {
+        Instantiate(SH.paralysis,ori.position,ori.rotation);
+    }
+    
+    private void Water()
+    {
+        var temp = new SWater();
+        effectsManager.ActiveEffects.Add(temp);
+    }
+
 }

@@ -4,34 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class DoomS : Spell,IEffectable,IShootable
+public class DoomS : Spell,IShootable
 {
-    private Timers tim;
-    private bool countStart;
-    private Collider col;
-    //private MeshRenderer rend;
-
     private void Awake()
     {
-        tim = new Timers(1);
-        //rend = GetComponent<MeshRenderer>();
-        PM = 1.2f;
+        PM = 2f;
         Element = Elements.NonElemental;
+        _conjure = FindObjectOfType<Conjure>();
     }
 
     private void Start()
     {
         speed = 20f;
-        tim.alarm[0] = 3f;
     }
 
     private void Update()
     {
-        
-        if (countStart)
-        {
-            tim.alarm[0] = tim.Timer(tim.alarm[0], Effect);
-        }
         Shoot();
     }
 
@@ -39,18 +27,10 @@ public class DoomS : Spell,IEffectable,IShootable
     {
         if (other.CompareTag("Enemy"))
         {
-            col = other;
-            countStart = true;
-            //rend.enabled = false;
-            speed = 0f;
+            var temp = new SDoom(other, PM, LP,_conjure);
+            _conjure.effectsManager.ActiveEffects.Add(temp);
+            Destroy(gameObject);
         }
-    }
-
-
-    public void Effect()
-    {
-        Damager(col);
-        Destroy(gameObject);
     }
 
     public void Shoot()

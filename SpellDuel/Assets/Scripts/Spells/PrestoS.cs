@@ -10,7 +10,7 @@ public class PrestoS : Spell
     private void Start()
     {
         tim = new Timers(1);
-        tim.alarm[0] = 5f;
+        lifespan = 5f;
         presto = new StatModifier(1f, modiType.Percent);
         if (!Globs.spd.statModifiers.Contains(presto))
         {
@@ -21,7 +21,7 @@ public class PrestoS : Spell
 
     private void Update()
     {
-        tim.alarm[0] = tim.Timer(tim.alarm[0], EndEffect);
+        tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0], EndEffect);
     }
 
     private void EndEffect()

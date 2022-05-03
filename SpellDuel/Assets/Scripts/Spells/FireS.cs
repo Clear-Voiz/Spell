@@ -27,14 +27,18 @@ public class FireS : Spell,IControllable,IShootable
         }
 
         private void Update()
-        {
-                Controll();
+        { 
+                Control();
                 Shoot();
         }
 
-        public void Controll()
+        public void Control()
         { 
-                transform.forward = _conjure.ori.forward;
+                //transform.forward = _conjure.ori.forward;
+                var hitPoint = _conjure.aimAt.pointer;
+                var direction = hitPoint.position - transform.position;
+                Quaternion rot = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1);
         }
 
         public void Shoot()

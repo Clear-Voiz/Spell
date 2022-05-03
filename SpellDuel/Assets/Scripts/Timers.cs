@@ -5,31 +5,47 @@ using UnityEngine;
 
 public class Timers
 {
-    private int length;
     public float[] alarm;
-    public int index;
-    
-    public Timers(int Length)
+
+    public Timers(int length)
     {
-        length = Length;
         alarm = new float[length];
-        index = 0;
+        for(int i = 0;i<length;i++)
+        {
+            alarm[i] = 0f;
+        }
     }
 
-    public float Timer(float duration, Action act)
+    public float Timer(float duration, float currentTime, Action act)
     {
-        if (duration > 0f)
+        if (currentTime < duration)
         {
-            duration -= Time.deltaTime;
+            currentTime += Time.deltaTime;
 
-            if (duration <= 0f)
+            if (currentTime >= duration)
             {
+                currentTime = duration;
                 act();
-                duration = 0f;
             }
         }
 
-        return duration;
+        return currentTime;
+    }
+    
+    public float Cicle(float duration, float currentTime, Action act)
+    {
+        if (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+
+            if (currentTime >= duration)
+            {
+                currentTime = 0f;
+                act();
+            }
+        }
+
+        return currentTime;
     }
     
     /*public float Timer<T>(float duration, Action<T> act)
@@ -49,32 +65,32 @@ public class Timers
     }*/
 
     
-    public float Chronometer(float duration, Action constAct)
+    public float Chronometer(float duration, float currentTime, Action constAct)
     {
-        if (duration > 0f)
+        if (currentTime < duration)
         {
-            duration -= Time.deltaTime;
-            constAct();
-            if (duration <=0f)
+            currentTime += Time.deltaTime;
+            if (currentTime >= duration)
             {
-                duration = 0f;
+                currentTime = duration;
             }
+            constAct();
         }
         
-        return duration;
+        return currentTime;
     }
 
-    public float Timer(float duration)
+    public float Timer(float duration, float currentTime)
     {
-        if (duration > 0f)
+        if (currentTime < duration)
         {
-            duration -= Time.deltaTime;
-            if (duration <=0f)
+            currentTime += Time.deltaTime;
+            if (currentTime >= duration)
             {
-                duration = 0f;
+                currentTime = duration;
             }
         }
         
-        return duration;
+        return currentTime;
     }
 }

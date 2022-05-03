@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IControllable
 {
-    void Controll();
+    void Control();
 }
 
 public interface IShootable

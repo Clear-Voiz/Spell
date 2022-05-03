@@ -30,9 +30,13 @@ public abstract class Spell: MonoBehaviour
             var stats = other.gameObject.GetComponent<Stats>();
             var tmpdmg = (Globs.mgk.Value - stats.magicDef) * PM * stats.RES[Element];
             int damage = Mathf.RoundToInt(tmpdmg);
+            if (damage < 0)
+            {
+                damage = 1;
+            }
             if (stats.RES[Element] > 1f)
             {
-                LP = Resources.Load("LocalPoints") as GameObject;
+                LP = _conjure.SH.LP;
                 Instantiate(LP, transform.position, Quaternion.identity);
             }
             if (stats.hp > damage)

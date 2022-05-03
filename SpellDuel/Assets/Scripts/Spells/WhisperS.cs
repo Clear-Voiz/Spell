@@ -17,12 +17,11 @@ public class WhisperS : Spell,IEffectable
     {
         tim = new Timers(1);
         _conjure.whisper = true;
-        tim.alarm[0] = lifespan;
     }
 
     private void Update()
     {
-        tim.alarm[0] = tim.Timer(tim.alarm[0], Effect);
+        tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0], Effect);
     }
 
     public void Effect()

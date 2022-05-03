@@ -58,6 +58,11 @@ public class CharacterStat
 
       finalValue *= percentAccumul;
 
+      if (finalValue < 0f)
+      {
+         finalValue = 0f;
+      }
+
       return (float)Math.Round(finalValue,4);
    }
 }

@@ -34,7 +34,7 @@ public class ThunderS : Spell
             {
                 if (spell is ShieldS)
                 {
-                    LP = Resources.Load("LocalPoints") as GameObject;
+                    LP = _conjure.SH.LP;
                     Instantiate(LP, hit.point, Quaternion.identity);
                     Destroy(spell.gameObject);
                 }
@@ -61,8 +61,7 @@ public class ThunderS : Spell
         var stats = other.GetComponent<Stats>();
         if (stats.RES[Element] > 1f)
         {
-            LP = Resources.Load("LocalPoints") as GameObject;
-            Debug.Log(LP);
+            LP = _conjure.SH.LP;
             Instantiate(LP, other.transform.position, Quaternion.identity);
         }
         int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.magicDef)*PM*stats.RES[Element]);

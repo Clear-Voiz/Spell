@@ -26,9 +26,6 @@ public class VanishS : Spell,IEffectable
         mat = meshRend.material;
         meshRend.material = inv;
         tim = new Timers(3);
-        tim.alarm[0] = 1f;
-        tim.alarm[1] = 3f;
-        tim.alarm[2] = 1f;
     }
 
     private void Update()
@@ -38,34 +35,35 @@ public class VanishS : Spell,IEffectable
 
     public void Effect()
     {
-        tim.alarm[0] = tim.Chronometer(tim.alarm[0], Disappear);
+        tim.alarm[0] = tim.Chronometer(1f,tim.alarm[0], Disappear);
         
-        if (tim.alarm[0] == 0f)
+        if (tim.alarm[0] == 1f)
         {
-            tim.alarm[1] = tim.Timer(tim.alarm[1]);
+            tim.alarm[1] = tim.Timer(3f,tim.alarm[1]);
         }
 
-        if (tim.alarm[1] == 0f)
+        if (tim.alarm[1] == 3f)
         {
-            tim.alarm[2] = tim.Chronometer(tim.alarm[2], Reappear);
+            tim.alarm[2] = tim.Chronometer(1f,tim.alarm[2], Reappear);
         }
     }
 
     public void Reappear()
     {
-        meshRend.material.SetFloat("Time_",tim.alarm[2]);
-        if (tim.alarm[2] == 0f)
+        var temp = 1f - tim.alarm[2];
+        meshRend.material.SetFloat("Time_", temp);
+        if (tim.alarm[2] == 1f)
         {
             meshRend.material = mat;
-            Destroy(gameObject);
+            Destroy(this);
         }
     }
 
     private void Disappear()
     {
-        float disValue = 1f - tim.alarm[0];
+        float disValue = tim.alarm[0];
         meshRend.material.SetFloat("Time_",disValue);
-        if (tim.alarm[0] == 0f)
+        if (tim.alarm[0] == 1f)
         {
             meshRend.material.SetFloat("Time_",1f);
         }
