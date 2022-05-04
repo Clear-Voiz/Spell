@@ -10,6 +10,7 @@ public class SWater : AlterSpell
         IsBuff = true;
         tim = new Timers(2);
         _conjure = MonoBehaviour.FindObjectOfType<Conjure>();
+        OnStart();
     }
     
     public override void Effect()
@@ -34,6 +35,6 @@ public class SWater : AlterSpell
 
     public override void EndEffect()
     {
-        _conjure.effectsManager.RemoveEffect(this);
+        OnEnd();
     }
 }

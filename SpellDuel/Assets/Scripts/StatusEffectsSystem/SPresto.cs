@@ -6,12 +6,10 @@ using UnityEngine;
 public class SPresto : AlterSpell
 {
     private StatModifier presto;
-    private Conjure _conjure;
-    public SPresto(Conjure conjure)
+    public SPresto()
     {
         tim = new Timers(1);
         lifespan = 5f;
-        _conjure = conjure;
         presto = new StatModifier(1f, modiType.Percent);
         if (!Globs.spd.statModifiers.Contains(presto))
         {
@@ -19,7 +17,7 @@ public class SPresto : AlterSpell
             Debug.Log("has been added");
         }
 
-        isActive = true;
+        OnStart();
     }
     public override void Effect()
     {
@@ -28,7 +26,6 @@ public class SPresto : AlterSpell
     public override void EndEffect()
     {
         Globs.spd.RemoveModifier(presto);
-        _conjure.effectsManager.RemoveEffect(this);
-        
+        OnEnd();
     }
 }

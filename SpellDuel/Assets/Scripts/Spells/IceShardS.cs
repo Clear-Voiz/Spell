@@ -45,8 +45,8 @@ public class IceShardS : Spell,IShootable
         {
             Damager(other);
             transform.SetParent(other.transform);
-            SSlow slow = new SSlow(_conjure);
-            _conjure.effectsManager.ActiveEffects.Add(slow);
+            new SSlow();
+            //_conjure.effectsManager.ActiveEffects.Add(slow);
             _col.enabled = false;
         }
 

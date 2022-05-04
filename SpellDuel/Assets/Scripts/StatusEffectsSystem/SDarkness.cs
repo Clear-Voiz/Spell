@@ -9,12 +9,10 @@ public class SDarkness : AlterSpell
     private float elapsedTime;
     private float elapsedTime2;
     private float duration;
-    private Conjure _conjure;
 
-    public SDarkness(Conjure _conjure)
+    public SDarkness()
     {
         tim = new Timers(3);
-        this._conjure = _conjure;
         lifespan = 10f;
         illumination = MonoBehaviour.FindObjectsOfType<Light>();
         maxValues = new float[illumination.Length];
@@ -25,6 +23,7 @@ public class SDarkness : AlterSpell
         }
 
         IsBuff = true;
+        OnStart();
     }
     public override void Effect()
     {
@@ -83,6 +82,6 @@ public class SDarkness : AlterSpell
 
     public override void EndEffect()
     {
-       _conjure.effectsManager.RemoveEffect(this);
+       OnEnd();
     }
 }

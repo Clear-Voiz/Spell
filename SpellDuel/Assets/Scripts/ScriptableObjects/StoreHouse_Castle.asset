@@ -22,4 +22,8 @@ MonoBehaviour:
   mgkHit: {fileID: 8033099067129077420, guid: 306431dcd6ef06846b7bdda685c4b144, type: 3}
   impulse: {fileID: 2294224319409469716, guid: 399d5be5116dc9b49bc4a0f5a103caeb, type: 3}
   doom: {fileID: 8033099067129077420, guid: 260e91771630f6b44bc27c19e66b8d39, type: 3}
+  paralysis: {fileID: 7692628972939471154, guid: 85e0a0cb4f09d79499519edbdd2f462a,
+    type: 3}
+  ice: {fileID: 2878489049432126676, guid: d4fc20a0c3ee1654683b82cc554a0b41, type: 3}
+  checker: {fileID: 7996888778366277670, guid: ea1be92a8007b7e468299f5b870e98c3, type: 3}
   LP: {fileID: 7759937486753077659, guid: 604da8c3659641f418054df0e9f4057d, type: 3}

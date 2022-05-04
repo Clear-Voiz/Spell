@@ -5,9 +5,8 @@ using UnityEngine;
 public class SParalysis : AlterSpell
 {
     private TD_Movement movComp;
-    private Conjure _conjure;
-        
-    public SParalysis(Collider other, ref Conjure _conjure)
+
+    public SParalysis(Collider other)
     {
         tim = new Timers(1);
         
@@ -15,7 +14,8 @@ public class SParalysis : AlterSpell
         if (other.TryGetComponent(out movComp))
         {
             movComp.enabled = false;
-        }   
+        }
+        OnStart();
     }
     public override void Effect()
     {
@@ -25,7 +25,7 @@ public class SParalysis : AlterSpell
     public override void EndEffect()
     {
         movComp.enabled = true;
-        _conjure.effectsManager.RemoveEffect(this);
+        OnEnd();
         
     }
 }

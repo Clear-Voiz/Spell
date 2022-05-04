@@ -9,7 +9,6 @@ public enum Elements{NonElemental = 0,Fire = 1,Ice = 2,Thunder = 4,Earth = 8,Wat
 public abstract class Spell: MonoBehaviour
 {
     //var definitions
-    protected GameObject VFX;
     protected GameObject ImpactVFX;
     protected float lifespan;
     public float speed;

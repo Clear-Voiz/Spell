@@ -11,13 +11,14 @@ public class SDoom : AlterSpell
     private GameObject LP;
     private Conjure _conjure;
 
-    public SDoom(Collider col, float pm, GameObject lp, Conjure conjure)
+    public SDoom(Collider col, float pm, GameObject lp)
     {
         this.col = col;
         tim = new Timers(1);
         Element = Elements.NonElemental;
         PM = pm;
         LP = lp;
+        OnStart();
     }
     public override void Effect()
     {
@@ -58,6 +59,6 @@ public class SDoom : AlterSpell
             //Destroy(other.gameObject);
         }
 
-        _conjure.effectsManager.RemoveEffect(this);
+        OnEnd();
     }
 }

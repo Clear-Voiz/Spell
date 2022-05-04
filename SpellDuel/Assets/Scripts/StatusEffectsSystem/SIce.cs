@@ -17,6 +17,7 @@ public class SIce : AlterSpell
         _conjure = MonoBehaviour.FindObjectOfType<Conjure>();
         iceShard = _conjure.SH.ice;
         tim = new Timers(1);
+        OnStart();
     }
     
     public override void Effect()
@@ -26,7 +27,7 @@ public class SIce : AlterSpell
 
     public override void EndEffect()
     {
-        _conjure.effectsManager.RemoveEffect(this);
+        OnEnd();
     }
     
 

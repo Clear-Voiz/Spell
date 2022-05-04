@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class SWhisper : AlterSpell
         _conjure = MonoBehaviour.FindObjectOfType<Conjure>();
         tim = new Timers(1);
         _conjure.whisper = true;
-        isActive = true;
+        OnStart();
     }
     
     public override void Effect()
@@ -23,7 +24,16 @@ public class SWhisper : AlterSpell
     public override void EndEffect()
     {
         _conjure.whisper = false;
-        Debug.Log("Desaparecido");
-        _conjure.effectsManager.RemoveEffect(this);
+        Debug.Log("Desaparecido"); 
+        OnEnd();
     }
+
+    /*
+    public void AcabaEfecto(Action<AlterSpell> haAcabado)
+    {
+        _conjure.whisper = false;
+        Debug.Log("Desaparecido"); 
+        haAcabado?.Invoke(this);
+    }
+    */
 }

@@ -12,7 +12,6 @@ public class SVanish : AlterSpell
 
     public SVanish()
     {
-        isActive = true;
         if (GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>().material != null) //TryGetComponent(out curMat)
         {
             meshRend = GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>();
@@ -23,6 +22,7 @@ public class SVanish : AlterSpell
         }
 
         tim = new Timers(3);
+        OnStart();
     }
     
     public override void Effect()
@@ -63,6 +63,7 @@ public class SVanish : AlterSpell
     public override void EndEffect()
     {
         meshRend.material = mat;
+        OnEnd();
         
     }
 }

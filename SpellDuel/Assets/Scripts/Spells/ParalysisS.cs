@@ -7,7 +7,6 @@ public class ParalysisS : Spell,IShootable
 {
     private void Awake()
     {
-        _conjure = FindObjectOfType<Conjure>();
         Element = Elements.Thunder;
         lifespan = 3f;
         speed = 25f;
@@ -27,8 +26,8 @@ public class ParalysisS : Spell,IShootable
     {
         if (other.CompareTag("Enemy"))
         {
-            var temp = new SParalysis(other,ref _conjure);
-            _conjure.effectsManager.ActiveEffects.Add(temp);
+            new SParalysis(other);
+            
         }
     }
 }

@@ -10,7 +10,6 @@ public class DoomS : Spell,IShootable
     {
         PM = 2f;
         Element = Elements.NonElemental;
-        _conjure = FindObjectOfType<Conjure>();
     }
 
     private void Start()
@@ -27,8 +26,7 @@ public class DoomS : Spell,IShootable
     {
         if (other.CompareTag("Enemy"))
         {
-            var temp = new SDoom(other, PM, LP,_conjure);
-            _conjure.effectsManager.ActiveEffects.Add(temp);
+            new SDoom(other, PM, LP);
             Destroy(gameObject);
         }
     }

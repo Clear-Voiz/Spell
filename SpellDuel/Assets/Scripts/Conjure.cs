@@ -17,6 +17,7 @@ public class Conjure : MonoBehaviour
     public Transform ori;
     public Speller speller1;
     private Transform _player1_mesh;
+    private Transform player2;
     private Transform gameManager;
     public bool whisper;
     public AimAt aimAt;
@@ -27,7 +28,8 @@ public class Conjure : MonoBehaviour
     private void Awake()
     {
         _player1 = GameObject.Find("Player1").transform;
-        _player1_mesh = GameObject.Find("Player1_mesh").transform;
+        _player1_mesh = GameObject.Find("foxy_170cm").transform;
+        player2 = GameObject.Find("Player2").transform;
         gameManager = transform.GetChild(0);
         var weapon = _player1.transform.GetChild(2);
         aimAt = weapon.GetComponent<AimAt>();
@@ -66,6 +68,8 @@ public class Conjure : MonoBehaviour
         spellDic.Add("paralisis",Paralysis);
         spellDic.Add("water",Water);
         spellDic.Add("Agua", Water);
+        spellDic.Add("check",Check);
+        spellDic.Add("Jaque", Check);
         //spellDic.Add("freeze",Freeze);
 
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
@@ -95,8 +99,8 @@ public class Conjure : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) Shards();
-        if (Input.GetMouseButtonDown(1)) Water();
+        if (Input.GetMouseButtonDown(0)) Fire();
+        if (Input.GetMouseButtonDown(1)) Shards();
     }
 
     //SPELL DEFINITIONS
@@ -128,8 +132,7 @@ public class Conjure : MonoBehaviour
 
     private void Vanish()
     {
-        var temp = new SVanish();
-        effectsManager.ActiveEffects.Add(temp);
+        new SVanish();
     }
 
     private void MagicHit()
@@ -145,8 +148,7 @@ public class Conjure : MonoBehaviour
     private void Presto()
     {
         //gameManager.gameObject.AddComponent<PrestoS>();
-        var temp = new SPresto(this);
-        effectsManager.ActiveEffects.Add(temp);
+        new SPresto();
     }
     
     private void Doom()
@@ -156,20 +158,18 @@ public class Conjure : MonoBehaviour
 
     private void Whisper()
     {
-        var temp = new SWhisper();
-        effectsManager.ActiveEffects.Add(temp);
+        new SWhisper();
+        
     }
 
     private void Darkness()
     {
-        var temp = new SDarkness(this);
-        effectsManager.ActiveEffects.Add(temp);
+        new SDarkness();
     }
 
     private void Shards()
-    {
-        var temp = new SIce();
-        effectsManager.ActiveEffects.Add(temp);
+    { 
+        new SIce();
     }
 
     private void Paralysis()
@@ -179,8 +179,14 @@ public class Conjure : MonoBehaviour
     
     private void Water()
     {
-        var temp = new SWater();
-        effectsManager.ActiveEffects.Add(temp);
+        new SWater();
+        
+    }
+
+    private void Check()
+    {
+        var place = Vector3.up * 3f + player2.transform.position;
+        Instantiate(SH.checker,place,Quaternion.identity);
     }
 
 }
