@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ScriptableObject")]
+[CreateAssetMenu(menuName = "ScriptableObjects/SpellInfo", fileName = "Info_")]
 public class SO_SpellSpreadSheet : ScriptableObject
 {
     public string id;

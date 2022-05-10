@@ -19,7 +19,7 @@ public abstract class Spell: MonoBehaviour
     protected string InactiveCol;
     protected GameObject LP;
     protected Conjure _conjure;
-    
+
     
     protected void Damager(Collider other)
     {

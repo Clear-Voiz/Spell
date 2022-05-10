@@ -6,6 +6,7 @@ using UnityEngine;
 public class FireS : Spell,IControllable,IShootable
 {
         public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
+        
 
         private void Awake()
         {

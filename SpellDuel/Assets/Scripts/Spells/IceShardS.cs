@@ -41,6 +41,7 @@ public class IceShardS : Spell,IShootable
 
     private void OnTriggerEnter(Collider other)
     {
+        Destroy(gameObject,3f);
         if (other.CompareTag("Enemy"))
         {
             Damager(other);

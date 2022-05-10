@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
-using TMPro;
 using UnityEngine;
-using UnityEngine.VFX;
 using UnityEngine.Windows.Speech;
 
 public class Conjure : MonoBehaviour
@@ -22,6 +18,8 @@ public class Conjure : MonoBehaviour
     public bool whisper;
     public AimAt aimAt;
     public EffectsManager effectsManager;
+    private HUD_Displayer _hudDisplayer;
+    public SpellCosts cost;
 
     public StoreHouse SH;
 
@@ -34,7 +32,7 @@ public class Conjure : MonoBehaviour
         var weapon = _player1.transform.GetChild(2);
         aimAt = weapon.GetComponent<AimAt>();
         effectsManager = _player1.GetComponent<EffectsManager>();
-
+        _hudDisplayer = GetComponent<HUD_Displayer>();
     }
 
     private void Start()
@@ -106,6 +104,8 @@ public class Conjure : MonoBehaviour
     //SPELL DEFINITIONS
     private void Fire()
     {
+        if (Globs.mt < Globs.maxMt.Value) _hudDisplayer.Mt += 5;
+        
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
         Instantiate(SH.sparks, ori.transform );
         //MasterServer
