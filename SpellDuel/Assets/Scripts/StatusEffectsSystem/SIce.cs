@@ -11,7 +11,6 @@ public class SIce : AlterSpell
     
     public SIce()
     {
-        isActive = true;
         interval = 0.2f;
         amount = 10;
         _conjure = MonoBehaviour.FindObjectOfType<Conjure>();

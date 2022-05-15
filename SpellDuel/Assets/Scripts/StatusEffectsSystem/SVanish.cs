@@ -8,16 +8,20 @@ public class SVanish : AlterSpell
     private Material mat;
     private MeshRenderer meshRend;
     private Material inv;
+    private Texture texture;
     private float time;
 
-    public SVanish()
+    public SVanish(Conjure conj)
     {
-        if (GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>().material != null) //TryGetComponent(out curMat)
+        //if (_conjure._player1_mesh.GetComponent<MeshRenderer>().material != null) //TryGetComponent(out curMat)
+        if (conj._player1_mesh.TryGetComponent(out meshRend))
         {
-            meshRend = GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>();
+            //meshRend = GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>();
             mat = meshRend.material;
+            texture = mat.GetTexture(0);
             inv = Resources.Load("DissolveMat") as Material;
             meshRend.material = inv;
+            inv.SetTexture(0,texture);
             Debug.Log("found");
         }
 
@@ -64,6 +68,5 @@ public class SVanish : AlterSpell
     {
         meshRend.material = mat;
         OnEnd();
-        
     }
 }

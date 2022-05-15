@@ -8,6 +8,9 @@ public class SpellCosts : ScriptableObject
 
     private void Awake()
     {
+        if (costs != null)
+            return;
+        costs = new Dictionary<string, int>();
         costs.Add("Fire",5);
         costs.Add("Ice",10);
         costs.Add("Thunder",35);

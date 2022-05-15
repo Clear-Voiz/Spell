@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StoreHouse_",menuName = "ScriptableObjects/Storage")]
 public class StoreHouse : ScriptableObject
 {
+
     public float groundLevel;
     public GameObject sparks;
     public GameObject shield;
@@ -20,8 +21,9 @@ public class StoreHouse : ScriptableObject
     public GameObject checker;
     
     public GameObject LP;
-
     
+    
+
     //assets
 
     //TryGetComponent

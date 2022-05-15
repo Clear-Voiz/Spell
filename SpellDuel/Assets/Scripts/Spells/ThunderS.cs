@@ -64,17 +64,17 @@ public class ThunderS : Spell
             LP = _conjure.SH.LP;
             Instantiate(LP, other.transform.position, Quaternion.identity);
         }
-        int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.magicDef)*PM*stats.RES[Element]);
+        int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.mgkDef.Value)*PM*stats.RES[Element]);
 
-        if (stats.hp > damage)
+        if (stats.HP > damage)
         {
-            stats.hp -= damage;
-            Debug.Log(stats.hp + " mgk:" + Globs.mgk.Value + ", mgkDef" + stats.magicDef + ", PM" + PM + ", RES" + stats.RES[Element]);
+            stats.HP -= damage;
+            Debug.Log(stats.hp + " mgk:" + Globs.mgk.Value + ", mgkDef" + stats.mgkDef.Value + ", PM" + PM + ", RES" + stats.RES[Element]);
         }
         else
         {
-            stats.hp = 0f;
-            Debug.Log(stats.hp);
+            stats.HP = 0f;
+            Debug.Log(stats.HP);
             //Destroy(other.gameObject);
         }
     }

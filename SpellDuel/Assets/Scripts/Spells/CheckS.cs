@@ -45,7 +45,7 @@ public class CheckS : Spell
         if (other.CompareTag("Enemy"))
         {
             var stats = other.GetComponent<Stats>();
-            if (stats.hp <= (stats.maxHp / 10))
+            if (stats.hp <= stats.maxHp.Value / 10)
             {
                 Destroy(other.gameObject);
             }

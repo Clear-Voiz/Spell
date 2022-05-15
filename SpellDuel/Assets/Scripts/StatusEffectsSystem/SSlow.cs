@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEngine.PlayerLoop;
+﻿using UnityEngine;
 
 public class SSlow : AlterSpell
 {
@@ -13,6 +9,7 @@ public class SSlow : AlterSpell
     {
         tim = new Timers(1);
         lifespan = 5f;
+        effectTitle = "Slowed";
         if (!Globs.spd.statModifiers.Contains(slow))
         {
             slow = new StatModifier(-0.1f, modiType.Percent);

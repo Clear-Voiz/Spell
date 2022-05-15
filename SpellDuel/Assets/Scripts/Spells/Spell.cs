@@ -27,7 +27,7 @@ public abstract class Spell: MonoBehaviour
         {
             speed = 0f;
             var stats = other.gameObject.GetComponent<Stats>();
-            var tmpdmg = (Globs.mgk.Value - stats.magicDef) * PM * stats.RES[Element];
+            var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
             int damage = Mathf.RoundToInt(tmpdmg);
             if (damage < 0)
             {
@@ -38,21 +38,21 @@ public abstract class Spell: MonoBehaviour
                 LP = _conjure.SH.LP;
                 Instantiate(LP, transform.position, Quaternion.identity);
             }
-            if (stats.hp > damage)
+            if (stats.HP > damage)
             {
-                stats.hp -= damage;
+                stats.HP -= damage;
                 Debug.Log(
                     stats.hp + 
                     " mgk:" + Globs.mgk.Value + 
-                    ", mgkDef" + stats.magicDef + 
+                    ", mgkDef" + stats.mgkDef.Value + 
                     ", PM" + PM + 
                     ", RES" + stats.RES[Element]
                     );
             }
             else
             {
-                stats.hp = 0f;
-                Debug.Log(stats.hp);
+                stats.HP = 0f;
+                Debug.Log(stats.HP);
                 //Destroy(other.gameObject);
             }
 

@@ -9,12 +9,30 @@ public class Cine_Shake : MonoBehaviour
 {
     private CinemachineVirtualCamera _virtualCamera;
     [SerializeField] private AnimationCurve curve;
+    public Transform followTarget;
+    public Transform lookAt;
+    private Timers tim;
+
+    private Vector3 origiFollow;
+    private Vector3 origiLook;
+    public GameObject secondCam;
     public static Cine_Shake Instance { get; private set;}
     private void Awake()
     {
        _virtualCamera = GetComponent<CinemachineVirtualCamera>();
        Debug.Log(_virtualCamera);
        Instance = this;
+       tim = new Timers(1);
+    }
+
+    private void OnEnable()
+    {
+        Stats.OnDefeat += DefeatedCinematic;
+    }
+
+    private void OnDisable()
+    {
+        Stats.OnDefeat -= DefeatedCinematic;
     }
 
     public IEnumerator shakeCamera(float intensity, float duration)
@@ -41,5 +59,21 @@ public class Cine_Shake : MonoBehaviour
         }
 
         activate = false;
+    }
+
+    private void DefeatedCinematic(Transform trans)
+    {
+        /*origiFollow = followTarget.position;
+        origiLook = lookAt.position;
+        Vector3 pos = trans.position + (Vector3.back * 5f)+(Vector3.up*2f);
+        followTarget.position = pos;
+        lookAt.position = trans.position+Vector3.up;*/
+        if (trans.CompareTag("Enemy"))
+        {
+            Vector3 pos = Vector3.back * 5f + Vector3.up * 2f + trans.position ;
+            secondCam.transform.position = pos;
+        }
+        _virtualCamera.gameObject.SetActive(false);
+        secondCam.SetActive(true);
     }
 }

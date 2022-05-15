@@ -5,7 +5,7 @@ public abstract class AlterSpell
 {
     protected Timers tim;
     protected float lifespan;
-    protected bool isActive;
+    public string effectTitle = string.Empty;
     public static event Action<AlterSpell> onEnd;
     public static event Action<AlterSpell> onStart;
     

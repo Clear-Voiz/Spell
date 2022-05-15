@@ -12,7 +12,7 @@ public class Conjure : MonoBehaviour
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
     public Speller speller1;
-    private Transform _player1_mesh;
+    public Transform _player1_mesh;
     private Transform player2;
     private Transform gameManager;
     public bool whisper;
@@ -22,10 +22,11 @@ public class Conjure : MonoBehaviour
     public SpellCosts cost;
 
     public StoreHouse SH;
+    public Stats[] stats;
 
     private void Awake()
     {
-        _player1 = GameObject.Find("Player1").transform;
+        _player1 = GameObject.FindWithTag("Player").transform;
         _player1_mesh = GameObject.Find("foxy_170cm").transform;
         player2 = GameObject.Find("Player2").transform;
         gameManager = transform.GetChild(0);
@@ -33,12 +34,13 @@ public class Conjure : MonoBehaviour
         aimAt = weapon.GetComponent<AimAt>();
         effectsManager = _player1.GetComponent<EffectsManager>();
         _hudDisplayer = GetComponent<HUD_Displayer>();
+        stats = FindObjectsOfType<Stats>();
     }
 
     private void Start()
     {
         spellDic.Add("fire",Fire);
-        spellDic.Add("llama",Fire);
+        spellDic.Add("fuego",Fire);
         spellDic.Add("levitate",Levitate);
         spellDic.Add("levita",Levitate);
         spellDic.Add("shield",Shield);
@@ -104,7 +106,7 @@ public class Conjure : MonoBehaviour
     //SPELL DEFINITIONS
     private void Fire()
     {
-        if (Globs.mt < Globs.maxMt.Value) _hudDisplayer.Mt += 5;
+        if (stats[0].mt < stats[0].maxMt.Value) _hudDisplayer.Mt += 5;
         
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
         Instantiate(SH.sparks, ori.transform );
@@ -132,7 +134,7 @@ public class Conjure : MonoBehaviour
 
     private void Vanish()
     {
-        new SVanish();
+        new SVanish(this);
     }
 
     private void MagicHit()
@@ -164,7 +166,7 @@ public class Conjure : MonoBehaviour
 
     private void Darkness()
     {
-        new SDarkness();
+        //new SDarkness();
     }
 
     private void Shards()

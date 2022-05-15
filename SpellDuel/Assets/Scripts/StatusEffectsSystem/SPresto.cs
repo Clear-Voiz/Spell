@@ -10,6 +10,7 @@ public class SPresto : AlterSpell
     {
         tim = new Timers(1);
         lifespan = 5f;
+        effectTitle = "Haste";
         presto = new StatModifier(1f, modiType.Percent);
         if (!Globs.spd.statModifiers.Contains(presto))
         {
