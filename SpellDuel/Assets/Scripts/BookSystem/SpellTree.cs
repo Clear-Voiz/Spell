@@ -22,7 +22,7 @@ public class SpellTree : MonoBehaviour
 
     private void Start()
     {
-        leftPoints = playerStats.lvl;
+        leftPoints = Globs.lvl;
         leftPointsTxt.text = "Available points: " + leftPoints;
         definitions[0] = "";
     }
@@ -45,7 +45,7 @@ public class SpellTree : MonoBehaviour
         Earth, Earthing, Earthed,
         Thunder, Thundering, Thundered,
         Water, Watering, Watered,
-        Ruin, Ruining, Runed,
+        Ruin, Ruining, Ruined,
         
         Shield, Shielding, Shielded,
         Fireproof,DragonSkin,DragonMouth,

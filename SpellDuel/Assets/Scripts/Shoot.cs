@@ -6,19 +6,21 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
-    public float speed;
-    public Transform dir;
+   /* public Transform dir;
     public Stats playerStats;
     public GameObject conjurer;
     public Spell spell;
+    public GameObject LP;
 
     private void Awake()
     {
         playerStats = GameObject.Find("Player1").GetComponent<Stats>();
+        LP = Resources.Load("LocalPoints") as GameObject;
     }
 
     void Start()
     {
+        spell.LP = LP;
         Destroy(gameObject,spell.lifespan);
     }
 
@@ -26,6 +28,7 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         if (spell != null && dir != null)
+            
         {//transform.position += (transform.forward * speed * Time.deltaTime);
             spell.Move();
         }
@@ -33,7 +36,12 @@ public class Shoot : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        Debug.Log(spell.Element);
         spell.Impact(other);
     }
-    
+
+    private void OnDestroy()
+    {
+        
+    }*/
 }

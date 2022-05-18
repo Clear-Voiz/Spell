@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -14,21 +12,29 @@ public class Conjure : MonoBehaviour
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
     public Speller speller1;
-    private GameObject sparks;
-    public Transform wand;
-    private GameObject shield;
-    private GameObject terra;
+    public Transform _player1_mesh;
+    private Transform player2;
+    private Transform gameManager;
+    public bool whisper;
+    public AimAt aimAt;
+    public EffectsManager effectsManager;
+    private HUD_Displayer _hudDisplayer;
+    public SpellCosts cost;
 
-    //Actual spell
-    private GameObject fireBall;
+    public StoreHouse SH;
+    public Stats[] stats;
 
     private void Awake()
     {
-        _player1 = GameObject.Find("Player1").transform;
-        fireBall = Resources.Load("PS_FireBall") as GameObject;
-        sparks = Resources.Load("PS_sparks") as GameObject;
-        shield = Resources.Load("Shield") as GameObject;
-        terra = Resources.Load("Terra") as GameObject;
+        _player1 = GameObject.FindWithTag("Player").transform;
+        _player1_mesh = GameObject.Find("foxy_170cm").transform;
+        player2 = GameObject.Find("Player2").transform;
+        gameManager = transform.GetChild(0);
+        var weapon = _player1.transform.GetChild(2);
+        aimAt = weapon.GetComponent<AimAt>();
+        effectsManager = _player1.GetComponent<EffectsManager>();
+        _hudDisplayer = GetComponent<HUD_Displayer>();
+        stats = FindObjectsOfType<Stats>();
     }
 
     private void Start()
@@ -41,13 +47,35 @@ public class Conjure : MonoBehaviour
         spellDic.Add("escudo",Shield);
         spellDic.Add("earth",Earth);
         spellDic.Add("tierra",Earth);
+        spellDic.Add("thunder",Thunder);
+        spellDic.Add("rayo",Thunder);
+        spellDic.Add("vanish",Vanish);
+        spellDic.Add("oculto",Vanish);
+        spellDic.Add("hit",MagicHit);
+        spellDic.Add("golpe", MagicHit);
+        spellDic.Add("presto", Presto);
+        spellDic.Add("impulse", Impulse);
+        spellDic.Add("impulso", Impulse);
+        spellDic.Add("doom", Doom);
+        spellDic.Add("condena", Doom);
+        spellDic.Add("whisper", Whisper);
+        spellDic.Add("susurro", Whisper);
+        spellDic.Add("ice",Shards);
+        spellDic.Add("hielo",Shards);
+        spellDic.Add("darkness", Darkness);
+        spellDic.Add("oscuridad",Darkness);
+        spellDic.Add("paralysis",Paralysis);
+        spellDic.Add("paralisis",Paralysis);
+        spellDic.Add("water",Water);
+        spellDic.Add("Agua", Water);
+        spellDic.Add("check",Check);
+        spellDic.Add("Jaque", Check);
         //spellDic.Add("freeze",Freeze);
-        //spellDic.Add("thunder",Thunder);
 
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
         _recognizer.OnPhraseRecognized += Recognized;
         _recognizer.Start();
-        Debug.Log(Application.systemLanguage);
+//        Debug.Log(Application.systemLanguage);
     }
     
     
@@ -63,6 +91,8 @@ public class Conjure : MonoBehaviour
         var txt = speech.text;
         txt = txt.Substring(0, 1).ToUpper() + txt.Substring(1);
         speller1._renderer.text = txt;
+        if (whisper)
+            return;
         speller1.visible = true;
         speller1.secs = 0;
     }
@@ -70,20 +100,17 @@ public class Conjure : MonoBehaviour
     private void Update()
     {
         if (Input.GetMouseButtonDown(0)) Fire();
+        if (Input.GetMouseButtonDown(1)) Shards();
     }
 
     //SPELL DEFINITIONS
     private void Fire()
     {
-        var shot = Instantiate(fireBall,ori.position + (ori.forward*1.2f),ori.localRotation);
-        Shoot shotScipt = shot.GetComponent<Shoot>();
-        shotScipt.dir = ori;
-        shotScipt.spell = new FireSpell(shot.transform,ori);
-        shotScipt.conjurer = gameObject;
+        if (stats[0].mt < stats[0].maxMt.Value) _hudDisplayer.Mt += 5;
         
-        Instantiate(sparks, ori.transform );
+        var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
+        Instantiate(SH.sparks, ori.transform );
         //MasterServer
-
     }
 
     private void Levitate()
@@ -92,14 +119,76 @@ public class Conjure : MonoBehaviour
     }
     private void Shield()
     {
-        GameObject barrera = Instantiate(shield, _player1.position,Quaternion.identity);
-        Destroy(barrera,1.5f);
+        Instantiate(SH.shield, _player1_mesh.position,Quaternion.identity);
     }
 
     private void Earth()
     {
-        GameObject spike = Instantiate(terra, new Vector3(ori.position.x,_player1.position.y,ori.position.z) + (ori.forward*3.5f), Quaternion.identity);
-
-        Destroy(spike,3f);
+        Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
     }
+
+    private void Thunder()
+    {
+        Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+    }
+
+    private void Vanish()
+    {
+        new SVanish(this);
+    }
+
+    private void MagicHit()
+    {
+        Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+    }
+
+    private void Impulse()
+    {
+        Instantiate(SH.impulse,ori.position,Quaternion.identity);
+    }
+
+    private void Presto()
+    {
+        //gameManager.gameObject.AddComponent<PrestoS>();
+        new SPresto();
+    }
+    
+    private void Doom()
+    {
+        Instantiate(SH.doom,ori.position,ori.rotation);
+    }
+
+    private void Whisper()
+    {
+        new SWhisper();
+        
+    }
+
+    private void Darkness()
+    {
+        //new SDarkness();
+    }
+
+    private void Shards()
+    { 
+        new SIce();
+    }
+
+    private void Paralysis()
+    {
+        Instantiate(SH.paralysis,ori.position,ori.rotation);
+    }
+    
+    private void Water()
+    {
+        new SWater();
+        
+    }
+
+    private void Check()
+    {
+        var place = Vector3.up * 3f + player2.transform.position;
+        Instantiate(SH.checker,place,Quaternion.identity);
+    }
+
 }

@@ -21,7 +21,7 @@ public class CharacterStat
    private bool isDirty = true;
    private float _value;
    
-   private readonly List<StatModifier> statModifiers;
+   public readonly List<StatModifier> statModifiers;
 
    public CharacterStat(float baseVal)
    {
@@ -57,6 +57,11 @@ public class CharacterStat
       }
 
       finalValue *= percentAccumul;
+
+      if (finalValue < 0f)
+      {
+         finalValue = 0f;
+      }
 
       return (float)Math.Round(finalValue,4);
    }

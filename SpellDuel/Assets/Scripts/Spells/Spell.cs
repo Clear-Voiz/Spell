@@ -6,35 +6,65 @@ using UnityEngine;
 [Flags]
 public enum Elements{NonElemental = 0,Fire = 1,Ice = 2,Thunder = 4,Earth = 8,Water = 16,Wind = 32,Light = 64, Dark= 128}
 
-public abstract class Spell
+public abstract class Spell: MonoBehaviour
 {
     //var definitions
-    public GameObject VFX;
-    public GameObject ImpactVFX;
-    public float lifespan;
+    protected GameObject ImpactVFX;
+    protected float lifespan;
     public float speed;
-    public float PM; //Power Multiplier
-    public float cost;
+    protected float PM; //Power Multiplier
+    protected float cost;
     public Elements Element;
-    public string ActiveCol;
-    public string InactiveCol;
-    public Transform transform;
-    public Transform dir;
+    protected string ActiveCol;
+    protected string InactiveCol;
+    protected GameObject LP;
+    protected Conjure _conjure;
+
     
-
-    public abstract void Move();
-    public abstract void Impact(Collision other);
-
-    /*public Spell(GameObject _VFX, GameObject _ImpactVFX, float _lifespan, float _speed, float _PM, float _cost, Elements _element)
+    protected void Damager(Collider other)
     {
-        VFX = _VFX;
-        ImpactVFX = _ImpactVFX;
-        lifespan = _lifespan;
-        speed = _speed;
-        PM = _PM;
-        cost = _cost;
-        Element = _element;
-    }*/
+        if (other.CompareTag("Enemy"))
+        {
+            speed = 0f;
+            var stats = other.gameObject.GetComponent<Stats>();
+            var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
+            int damage = Mathf.RoundToInt(tmpdmg);
+            if (damage < 0)
+            {
+                damage = 1;
+            }
+            if (stats.RES[Element] > 1f)
+            {
+                LP = _conjure.SH.LP;
+                Instantiate(LP, transform.position, Quaternion.identity);
+            }
+            if (stats.HP > damage)
+            {
+                stats.HP -= damage;
+                Debug.Log(
+                    stats.hp + 
+                    " mgk:" + Globs.mgk.Value + 
+                    ", mgkDef" + stats.mgkDef.Value + 
+                    ", PM" + PM + 
+                    ", RES" + stats.RES[Element]
+                    );
+            }
+            else
+            {
+                stats.HP = 0f;
+                Debug.Log(stats.HP);
+                //Destroy(other.gameObject);
+            }
 
-    
+            //Destroy(gameObject);
+        }
+        else
+        {
+            if (!other.CompareTag("Spell"))
+            {
+                speed = 0f;
+                //Fade Away
+            }
+        }
+    }
 }

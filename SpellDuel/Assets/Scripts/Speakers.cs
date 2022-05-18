@@ -15,8 +15,10 @@ public class Speakers : MonoBehaviour
 
    private void Start()
    {
+      print(Microphone.devices[0]);
       audioSource.clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);
-      audioSource.Play();
+//      audioSource.Play();
+   
    }
 
 

@@ -11,7 +11,7 @@ public class Impact : MonoBehaviour
         if (other.collider.CompareTag("Enemy"))
         {
             var stats = other.gameObject.GetComponent<Stats>();
-            if (stats.hp > (Globs.mgk.Value - stats.magicDef))
+            if (stats.hp > (Globs.mgk.Value - stats.mgkDef.Value))
             {
                 //stats.hp -= (Globs.mgk.Value - stats.magicDef)*PM*RES;
                 Debug.Log(stats.hp);
