@@ -14,4 +14,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Grimoire.unity
     guid: 60ceb5e5ff2d6c14fafbd04cffc7cabd
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: f740e0d930332794ca9ec88b7311d315
+  - enabled: 1
+    path: Assets/Scenes/OnlineCastle.unity
+    guid: 5b81ac2475532e64dae59fe41252a8a1
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 1cf01de5c7a914d4187ac836f8ded1dc
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 7960fd87767b49844a00562ed7a6d639,
+      type: 2}

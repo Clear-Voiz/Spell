@@ -22,4 +22,14 @@ public class ButtonsManager : MonoBehaviour
     {
         SceneManager.LoadScene("Abyss");
     }
+
+    public void onCreditClicked()
+    {
+        SceneManager.LoadScene(3);
+    }
+
+    public void onExit()
+    {
+        Application.Quit();
+    }
 }
