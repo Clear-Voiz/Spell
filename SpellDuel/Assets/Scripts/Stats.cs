@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +12,7 @@ public class Stats : MonoBehaviour
     public float maxExp;
     public float str;
     public float def;
+    public static event Action<Stats> spreadStats;  //remember to include isOwner check in the subscriber
 
 
     public Dictionary<Elements, float> RES = new Dictionary<Elements, float>(8);
@@ -55,7 +55,12 @@ public class Stats : MonoBehaviour
         //new CharacterStat(6f);
     }
 
-    
+    private void Start()
+    {
+        spreadStats?.Invoke(this);
+    }
+
+
     public void SetupPlayer()
     {
         Name = pjFicha.Name;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Text;
 using UnityEngine;
 
 
@@ -15,8 +13,17 @@ public class Speakers : MonoBehaviour
 
    private void Start()
    {
-      print(Microphone.devices[0]);
-      audioSource.clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);
+      if (Microphone.devices.Length > 0)
+      {
+         print(Microphone.devices[0]);
+         if (audioSource.clip == null)
+            audioSource.clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);
+      }
+      else
+      {
+         StringBuilder warning = new StringBuilder("No devices connected");
+         print(warning.ToString());
+      }
 //      audioSource.Play();
    
    }

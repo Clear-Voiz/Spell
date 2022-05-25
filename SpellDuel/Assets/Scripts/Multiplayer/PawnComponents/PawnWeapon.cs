@@ -46,9 +46,9 @@ public sealed class PawnWeapon : NetworkBehaviour
     [ServerRpc]
     private void ServerFire(Vector3 FirePointPos, Vector3 firePointDirection)
     {
-        if (Physics.Raycast(FirePointPos, firePointDirection, out RaycastHit hit) && hit.transform.TryGetComponent(out Pawn pawn))
+        /*if (Physics.Raycast(FirePointPos, firePointDirection, out RaycastHit hit) && hit.transform.TryGetComponent(out Pawn pawn))
         {
             pawn.ReceiveDamage(damage);
-        }
+        }*/
     }
 }

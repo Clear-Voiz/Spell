@@ -7,7 +7,7 @@ public sealed class Pawn : NetworkBehaviour
 
     [SyncVar] public float health;
 
-    public void ReceiveDamage(float amount)
+    /*public void ReceiveDamage(float amount)
     {
         if (!IsSpawned) return;
         if ((health-=amount) <= 0f)
@@ -15,5 +15,5 @@ public sealed class Pawn : NetworkBehaviour
             controllingPlayer.TargetPawnKilled(Owner);
             Despawn();
         }
-    }
+    }*/
 }

@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
+using FishNet.Object;
 using UnityEngine;
 
-public class TD_Movement : MonoBehaviour
+public class TD_Movement : NetworkBehaviour
 {
     public Transform player;
     public Rigidbody rb;
@@ -20,6 +21,7 @@ public class TD_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         var horizontal = Input.GetAxisRaw("Horizontal");
         var vertical = Input.GetAxisRaw("Vertical");
         var movement = new Vector3(horizontal, 0f, vertical);
@@ -60,6 +62,7 @@ public class TD_Movement : MonoBehaviour
 
     private async void Evade(Vector3 initialPos, Vector3 finalPos, float duration)
     {
+        if (!IsOwner) return;
         float elapsedTime = 0f;
         float completeness = 0f;
         while (elapsedTime / duration < 1f)

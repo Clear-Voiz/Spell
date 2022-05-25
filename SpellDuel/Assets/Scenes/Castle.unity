@@ -5385,6 +5385,7 @@ GameObject:
   - component: {fileID: 572252907}
   - component: {fileID: 572252908}
   - component: {fileID: 572252909}
+  - component: {fileID: 572252910}
   m_Layer: 0
   m_Name: GAME
   m_TagString: Untagged
@@ -5404,6 +5405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee8e085547a87f468d9f0b05ad7e667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 572252910}
+  _networkObjectCache: {fileID: 572252910}
   ori: {fileID: 194270753}
   speller1: {fileID: 201543539}
   _player1_mesh: {fileID: 0}
@@ -5412,7 +5416,7 @@ MonoBehaviour:
   effectsManager: {fileID: 0}
   cost: {fileID: 11400000, guid: 4d32feff3a71c784e9438a555fefa21c, type: 2}
   SH: {fileID: 11400000, guid: b84db508b190d3240a30a083cff3677a, type: 2}
-  stats: []
+  stats: {fileID: 0}
 --- !u!4 &572252903
 Transform:
   m_ObjectHideFlags: 0
@@ -5616,6 +5620,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d89f6e30e0d3d934f8f0535e52e384a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &572252910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572252901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkObserver: {fileID: 0}
+  _prefabId: -1
+  _scenePathHash: 2839062888
+  _sceneId: 12193682256159565870
+  _sceneNetworkObjects:
+  - {fileID: 572252910}
+  _networkBehaviours:
+  - {fileID: 572252902}
+  SceneTransformProperties:
+    Position: {x: 1.8475555, y: 5.32585, z: 16.066814}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _hasParentNetworkObjectAtEdit: 0
 --- !u!1 &577488658
 GameObject:
   m_ObjectHideFlags: 0

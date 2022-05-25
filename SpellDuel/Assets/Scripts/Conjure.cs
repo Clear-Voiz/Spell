@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-public class Conjure : MonoBehaviour
+public class Conjure : NetworkBehaviour
 {
     private KeywordRecognizer _recognizer;
     private Transform _player1;
@@ -22,23 +23,26 @@ public class Conjure : MonoBehaviour
     public SpellCosts cost;
 
     public StoreHouse SH;
-    public Stats[] stats;
+    public Stats stats;
 
     private void Awake()
     {
-        _player1 = GameObject.FindWithTag("Player").transform;
+        _player1 = transform; //GameObject.FindWithTag("Player").transform
         _player1_mesh = GameObject.Find("foxy_170cm").transform;
-        player2 = GameObject.Find("Player2").transform;
+//        player2 = GameObject.Find("Player2").transform;
         gameManager = transform.GetChild(0);
         var weapon = _player1.transform.GetChild(2);
         aimAt = weapon.GetComponent<AimAt>();
         effectsManager = _player1.GetComponent<EffectsManager>();
-        _hudDisplayer = GetComponent<HUD_Displayer>();
-        stats = FindObjectsOfType<Stats>();
+        _hudDisplayer = FindObjectOfType<HUD_Displayer>();
+        stats = GetComponent<Stats>();
     }
 
     private void Start()
     {
+        if (!IsOwner) return;
+        if (spellDic.Count >0) spellDic.Clear();
+        
         spellDic.Add("fire",Fire);
         spellDic.Add("fuego",Fire);
         spellDic.Add("levitate",Levitate);
@@ -81,6 +85,7 @@ public class Conjure : MonoBehaviour
     
     private void Recognized(PhraseRecognizedEventArgs speech)
     {
+        if (!IsOwner) return;
         Debug.Log(speech.text);
         spellDic[speech.text].Invoke();
         CallSpeller(speech);
@@ -99,6 +104,7 @@ public class Conjure : MonoBehaviour
     
     private void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetMouseButtonDown(0)) Fire();
         if (Input.GetMouseButtonDown(1)) Shards();
     }
@@ -106,7 +112,7 @@ public class Conjure : MonoBehaviour
     //SPELL DEFINITIONS
     private void Fire()
     {
-        if (stats[0].mt < stats[0].maxMt.Value) _hudDisplayer.Mt += 5;
+        //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
         
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
         Instantiate(SH.sparks, ori.transform );

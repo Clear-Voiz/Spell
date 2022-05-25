@@ -1422,7 +1422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startInOffline: 0
   _offlineScene: Assets/Scenes/MainMenu.unity
-  _onlineScene: Assets/Scenes/Lobby.unity
+  _onlineScene: Assets/Scenes/OnlineCastle.unity
   _replaceScenes: 0
 --- !u!114 &595579653
 MonoBehaviour:

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -12,6 +11,8 @@ public sealed class GameManager : NetworkBehaviour
     public readonly SyncList<Player> players = new SyncList<Player>();
 
     [SyncVar] public bool canStart;
+
+    public Transform[] spawnPoints;
     
 
     private void Awake()
@@ -28,22 +29,29 @@ public sealed class GameManager : NetworkBehaviour
         /*Debug.Log($"Can Start = {canStart}");*/
     }
 
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        StopGame();
+    }
+
     [Server]
     public void StartGame()
     {
         if (!canStart) return;
-        for (int i = 0; i < players.Count; i++)
+        if (players!=null && players.Count >0) Debug.Log(players.Count);
+        foreach (var pl in players)
         {
-            players[i].StartGame();
+            pl.StartGame();
         }
     }
 
     [Server]
     public void StopGame()
     {
-        for (int i = 0; i < players.Count; i++)
+        foreach (var pl in players)
         {
-            players[i].StopGame();
+            pl.StopGame();
         }
     }
 }

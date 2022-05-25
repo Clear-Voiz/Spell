@@ -2,7 +2,6 @@
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 public sealed class Player : NetworkBehaviour
 {
@@ -13,6 +12,10 @@ public sealed class Player : NetworkBehaviour
     [SyncVar] public bool isReady;
 
     [SyncVar] public Pawn controlledPawn;
+
+    public Transform[] spawns;
+
+    [SyncVar] private float contadorDeSpawns;
     
     public override void OnStartServer()
     {
@@ -31,9 +34,10 @@ public sealed class Player : NetworkBehaviour
         base.OnStartClient();
         if (!IsOwner) return;
         Instance = this;
+        
         UIManager.Instance.Initialize();
         UIManager.Instance.Show<LobbyView>();
-        Debug.Log("should work sweetheart");
+        /*Debug.Log("should work sweetheart");*/
     }
 
     private void Update()
@@ -43,15 +47,28 @@ public sealed class Player : NetworkBehaviour
             ServerSetIsReady(!isReady);
     }
 
+    [Server]
     public void StartGame()
     {
-        GameObject pawnPrefab = Addressables.LoadAssetAsync<GameObject>("Pawn").WaitForCompletion();
+        if (GameManager.Instance == null) return;
+        
+        int playerIndex = GameManager.Instance.players.IndexOf(this);
+        
+        GameObject pawnPrefab = Resources.Load("Player1") as GameObject;
+
 
         if (pawnPrefab == null) return;
-        GameObject pawnInstance = Instantiate(pawnPrefab);
-        
+
+        var referencePoint = GameManager.Instance.spawnPoints[playerIndex];
+
+        GameObject pawnInstance = Instantiate(pawnPrefab,referencePoint.position,referencePoint.rotation);
         
         Spawn(pawnInstance,Owner);
+       
+        
+        
+
+        /*Debug.Log(pawnInstance.transform.position);*/
 
         controlledPawn = pawnInstance.GetComponent<Pawn>();
 

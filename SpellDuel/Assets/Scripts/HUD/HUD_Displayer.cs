@@ -1,4 +1,5 @@
 ﻿using System;
+using FishNet.Object;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,31 +18,41 @@ public class HUD_Displayer : MonoBehaviour
 
     private void Awake()
     {
-        if (GameObject.Find("HUD_Display").GetComponent<TextMeshProUGUI>() != null)
+        /*if (GameObject.Find("HUD_Display").GetComponent<TextMeshProUGUI>() != null)
         {
             Displayer = GameObject.Find("HUD_Display").GetComponent<TextMeshProUGUI>();
-        }
+        }*/
 
-        stats = FindObjectsOfType<Stats>();
     }
 
     private void OnEnable()
     {
         Stats.OnDefeat += EndFightCinematic;
+        Stats.spreadStats += GetPlayerStats;
     }
 
     private void OnDisable()
     {
         Stats.OnDefeat -= EndFightCinematic;
+        Stats.spreadStats -= GetPlayerStats;
     }
 
     public float Mt
     {
-        get => stats[0].mt;
+        get
+        {
+            if (stats[0] != null) return stats[0].mt;
+            else
+                return 100;
+        }
         set
         {
-            stats[0].mt = value;
-            Displayer.text = "<color=green>HP</color>: " + stats[0].hp +"\n<color=purple>MP</color>: "+stats[0].mt;
+            if (stats[0] != null)
+            {
+                stats[0].mt = value;
+                Displayer.text = "<color=green>HP</color>: " + stats[0].hp +"\n<color=purple>MP</color>: "+stats[0].mt;
+            }
+            
         }
     }
 
@@ -103,6 +114,18 @@ public class HUD_Displayer : MonoBehaviour
         else
         {
             result.text = "<color=blue>Defeat</color>";
+        }
+    }
+
+    
+    private void GetPlayerStats(Stats _stats)
+    {
+        if (_stats.gameObject.TryGetComponent(out NetworkObject nob))
+        {
+            if (nob.IsOwner)
+                stats[0] = _stats;
+            else
+                stats[1] = _stats;
         }
     }
 }

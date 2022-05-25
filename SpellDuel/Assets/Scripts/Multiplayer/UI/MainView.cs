@@ -12,7 +12,7 @@ public sealed class MainView : View
     if (!IsInitialized) return;
 
     Player player = Player.Instance;
-    if (player == null || player.controlledPawn == null) return;
-    healthText.text = $"Health {player.controlledPawn.health}";
+    /*if (player == null || player.controlledPawn == null) return;
+    healthText.text = $"Health {player.controlledPawn.health}";*/
   }
 }
