@@ -110,12 +110,17 @@ public class Conjure : NetworkBehaviour
     }
 
     //SPELL DEFINITIONS
+    [ServerRpc]
     private void Fire()
     {
         //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
         
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
-        Instantiate(SH.sparks, ori.transform );
+        if (shot == null) return;
+        Spawn(shot,Owner);
+        var vfx = Instantiate(SH.sparks, ori.position, ori.rotation);
+        if (vfx == null) return; 
+        Spawn(vfx,Owner);
         //MasterServer
     }
 

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
 [Flags]
 public enum Elements{NonElemental = 0,Fire = 1,Ice = 2,Thunder = 4,Earth = 8,Water = 16,Wind = 32,Light = 64, Dark= 128}
 
-public abstract class Spell: MonoBehaviour
+public abstract class Spell: NetworkBehaviour
 {
     //var definitions
     protected GameObject ImpactVFX;
@@ -23,7 +22,7 @@ public abstract class Spell: MonoBehaviour
     
     protected void Damager(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Player") && !IsOwner)
         {
             speed = 0f;
             var stats = other.gameObject.GetComponent<Stats>();
