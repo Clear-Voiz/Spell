@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
-public class Stats : MonoBehaviour
+public class Stats : NetworkBehaviour
 {
     public SO_Ficha pjFicha;
     public float scaleFact = 1.25f;
@@ -13,6 +14,7 @@ public class Stats : MonoBehaviour
     public float str;
     public float def;
     public static event Action<Stats> spreadStats;  //remember to include isOwner check in the subscriber
+    private HUDs Huds;
 
 
     public Dictionary<Elements, float> RES = new Dictionary<Elements, float>(8);
@@ -35,6 +37,7 @@ public class Stats : MonoBehaviour
         {
             if (value <= 0f)
             {
+                if (!IsOwner) return;
                 OnDefeat?.Invoke(transform);
             }
             hp = value;
@@ -53,13 +56,18 @@ public class Stats : MonoBehaviour
     {
         SetupPlayer();
         //new CharacterStat(6f);
+        //if (!IsOwner) return;
+        
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        spreadStats?.Invoke(this);
+        HUDs.OnExisting += setHud;
     }
-
+    private void OnDisable()
+    {
+        HUDs.OnExisting -= setHud;
+    }
 
     public void SetupPlayer()
     {
@@ -116,5 +124,12 @@ public class Stats : MonoBehaviour
 
         str = pjFicha.str;
         def = pjFicha.def;
+    }
+
+    private void setHud(HUDs huds)
+    {
+        if (!IsOwner) return;
+        Huds = huds;
+        huds.SetStats();
     }
 }

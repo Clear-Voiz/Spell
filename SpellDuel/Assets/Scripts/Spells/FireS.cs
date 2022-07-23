@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FireS : Spell,IControllable,IShootable
 {
         public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
-        
+        private Timers tim;
 
-        private void Awake()
-        {
-                _conjure = FindObjectOfType<Conjure>();
-        }
+        
 
         private void Start()
         {
@@ -24,17 +18,23 @@ public class FireS : Spell,IControllable,IShootable
                 Element = Elements.Fire;
                 ActiveCol = "#ff0000ff";
                 InactiveCol = "#800000ff";
-                Destroy(gameObject,lifespan);
+                Debug.Log("lifespan: " + lifespan);
+                tim = new Timers(1);
+                Debug.Log("alarm[0]: " + tim.alarm[0]);
+
         }
 
         private void Update()
-        { 
+        {
+                if (!IsOwner) return;
+                tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], Debugger);
+                /*if (_conjure == null) return;*/
                 Control();
                 Shoot();
         }
 
         public void Control()
-        { 
+        {
                 //transform.forward = _conjure.ori.forward;
                 var hitPoint = _conjure.aimAt.pointer;
                 var direction = hitPoint.position - transform.position;
@@ -44,11 +44,20 @@ public class FireS : Spell,IControllable,IShootable
 
         public void Shoot()
         {
-                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                transform.Translate(speed * Time.deltaTime * Vector3.forward);
         }
 
         private void OnTriggerEnter(Collider other)
         {
+                //if (!IsOwner) return;
                 Damager(other);  
         }
+
+        private void Debugger()
+        {
+                if (!IsOwner) return;
+                Despawner();
+                Debug.Log("Tim is working hard");
+        }
+
 }

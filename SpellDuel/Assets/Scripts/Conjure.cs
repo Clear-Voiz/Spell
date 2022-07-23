@@ -116,10 +116,14 @@ public class Conjure : NetworkBehaviour
         //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
         
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
+        if (shot.TryGetComponent(out FireS fireS))
+        {
+            fireS._conjure = this;
+        }
         if (shot == null) return;
         Spawn(shot,Owner);
         var vfx = Instantiate(SH.sparks, ori.position, ori.rotation);
-        if (vfx == null) return; 
+        if (vfx == null) return;
         Spawn(vfx,Owner);
         //MasterServer
     }

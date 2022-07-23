@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEditor;
+﻿using FishNet.Object;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class AimAt : MonoBehaviour
+public class AimAt : NetworkBehaviour
 { //this is attached to the wand gameobject
     
    // private Ray rayMouse;
@@ -25,6 +20,7 @@ public class AimAt : MonoBehaviour
 
    private void Update()
    {
+       if (!IsOwner) return;
        Ray ray = _mCam.ScreenPointToRay(Input.mousePosition);
        Physics.Raycast(ray, out RaycastHit hit,50f,1<<12); // 
        pointer.position = hit.point;

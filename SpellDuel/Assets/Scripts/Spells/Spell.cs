@@ -1,5 +1,6 @@
 ﻿using System;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 [Flags]
@@ -17,7 +18,9 @@ public abstract class Spell: NetworkBehaviour
     protected string ActiveCol;
     protected string InactiveCol;
     protected GameObject LP;
-    protected Conjure _conjure;
+    
+    [SyncVar]
+    public Conjure _conjure;
 
     
     protected void Damager(Collider other)
@@ -62,8 +65,16 @@ public abstract class Spell: NetworkBehaviour
             if (!other.CompareTag("Spell"))
             {
                 speed = 0f;
-                //Fade Away
+                //Fade Away (not necessary, the spell should play its animation effect and THEN fade away. Meanwhile it just stays in place until the end of its lifespawn)
             }
         }
     }
+
+    [ServerRpc]
+    protected void Despawner()
+    {
+        Despawn();
+        Debug.Log("got there");
+    }
+    
 }

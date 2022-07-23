@@ -12,11 +12,8 @@ public sealed class Player : NetworkBehaviour
     [SyncVar] public bool isReady;
 
     [SyncVar] public Pawn controlledPawn;
-
-    public Transform[] spawns;
-
-    [SyncVar] private float contadorDeSpawns;
     
+
     public override void OnStartServer()
     {
         base.OnStartServer();

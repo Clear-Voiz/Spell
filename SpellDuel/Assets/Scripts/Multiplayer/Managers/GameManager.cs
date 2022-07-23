@@ -10,6 +10,9 @@ public sealed class GameManager : NetworkBehaviour
     [SyncObject]
     public readonly SyncList<Player> players = new SyncList<Player>();
 
+    /*[SyncObject] public readonly SyncList<Conjure> conjureDatabase;
+    */
+
     [SyncVar] public bool canStart;
 
     public Transform[] spawnPoints;

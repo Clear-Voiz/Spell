@@ -1,5 +1,4 @@
-﻿using System;
-using FishNet.Object;
+﻿using FishNet.Object;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,8 +8,8 @@ public class HUD_Displayer : MonoBehaviour
     private TextMeshProUGUI Displayer;
     private Timers tim;
     public GameObject finalPanel;
-    public GameObject secondaryCam;
-    public GameObject primaryCam;
+    //public GameObject secondaryCam;
+    //public GameObject primaryCam;
     private Transform looser;
     private float waitTime;
     private Stats[] stats;
@@ -68,8 +67,8 @@ public class HUD_Displayer : MonoBehaviour
     
     private void Update()
     {
-        tim.alarm[0] = tim.Timer(1f, tim.alarm[0], MagicRecovery);
-        tim.alarm[1] = tim.Timer(waitTime, tim.alarm[1], ActivateFinalPanel);
+        //tim.alarm[0] = tim.Timer(1f, tim.alarm[0], MagicRecovery);
+        //tim.alarm[1] = tim.Timer(waitTime, tim.alarm[1], ActivateFinalPanel);
     }
 
     private void MagicRecovery()
@@ -87,7 +86,7 @@ public class HUD_Displayer : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void Rematch()
+    /*public void Rematch()   reactivate once you solve all the camera problems
     {
         finalPanel.SetActive(false);
         secondaryCam.SetActive(false);
@@ -96,7 +95,7 @@ public class HUD_Displayer : MonoBehaviour
         {
             col.ResetPlayerStats();
         }
-    }
+    }*/
 
     public void EndFightCinematic(Transform trans)
     {
@@ -104,7 +103,7 @@ public class HUD_Displayer : MonoBehaviour
         tim.alarm[1] = 0f;
     }
 
-    private void ActivateFinalPanel()
+    /*private void ActivateFinalPanel()
     {
         finalPanel.SetActive(true);
         if (looser.CompareTag("Enemy"))
@@ -115,7 +114,7 @@ public class HUD_Displayer : MonoBehaviour
         {
             result.text = "<color=blue>Defeat</color>";
         }
-    }
+    }*/
 
     
     private void GetPlayerStats(Stats _stats)
