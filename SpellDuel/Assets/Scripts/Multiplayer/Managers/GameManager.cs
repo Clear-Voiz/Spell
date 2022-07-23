@@ -29,7 +29,6 @@ public sealed class GameManager : NetworkBehaviour
         canStart = players.All(player => player.isReady);
         
         
-        /*Debug.Log($"Can Start = {canStart}");*/
     }
 
     public override void OnStopClient()
@@ -42,7 +41,6 @@ public sealed class GameManager : NetworkBehaviour
     public void StartGame()
     {
         if (!canStart) return;
-        if (players!=null && players.Count >0) Debug.Log(players.Count);
         foreach (var pl in players)
         {
             pl.StartGame();
@@ -57,4 +55,6 @@ public sealed class GameManager : NetworkBehaviour
             pl.StopGame();
         }
     }
+    
+    
 }

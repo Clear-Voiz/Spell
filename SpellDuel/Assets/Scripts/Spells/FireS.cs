@@ -6,7 +6,6 @@ public class FireS : Spell,IControllable,IShootable
         private Timers tim;
 
         
-
         private void Start()
         {
                 //VFX = Resources.Load("PS_FireBall") as GameObject;
@@ -18,9 +17,7 @@ public class FireS : Spell,IControllable,IShootable
                 Element = Elements.Fire;
                 ActiveCol = "#ff0000ff";
                 InactiveCol = "#800000ff";
-                Debug.Log("lifespan: " + lifespan);
                 tim = new Timers(1);
-                Debug.Log("alarm[0]: " + tim.alarm[0]);
 
         }
 

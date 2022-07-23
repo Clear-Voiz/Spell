@@ -13,7 +13,6 @@ public class Stats : NetworkBehaviour
     public float maxExp;
     public float str;
     public float def;
-    public static event Action<Stats> spreadStats;  //remember to include isOwner check in the subscriber
     private HUDs Huds;
 
 
@@ -130,6 +129,6 @@ public class Stats : NetworkBehaviour
     {
         if (!IsOwner) return;
         Huds = huds;
-        huds.SetStats();
+        Huds.SetHUDStats();
     }
 }

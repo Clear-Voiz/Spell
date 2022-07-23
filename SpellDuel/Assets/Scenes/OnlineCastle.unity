@@ -1826,7 +1826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.029755246, y: 0.795}
   m_AnchorMax: {x: 0.37748954, y: 0.94100004}
-  m_AnchoredPosition: {x: 5.5, y: 1.1999817}
+  m_AnchoredPosition: {x: 5.500122, y: 1.1999817}
   m_SizeDelta: {x: 1, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201543537
@@ -4831,8 +4831,10 @@ MonoBehaviour:
   _sceneId: 5071389895361895544
   _sceneNetworkObjects:
   - {fileID: 572252902}
+  - {fileID: 1538130230}
   _networkBehaviours:
   - {fileID: 1921274552}
+  - {fileID: 1921274554}
   SceneTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5343,6 +5345,7 @@ GameObject:
   - component: {fileID: 614766669}
   - component: {fileID: 614766668}
   - component: {fileID: 614766670}
+  - component: {fileID: 614766671}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -5448,6 +5451,18 @@ MonoBehaviour:
   followTarget: {fileID: 0}
   lookAt: {fileID: 0}
   secondCam: {fileID: 259271187}
+--- !u!114 &614766671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614766667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61c0d5ba7d8b4464cacf9ac277eda29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &641107274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6148,7 +6163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432a172df9da7314090ae48e9ccd0679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1538130230}
+  _networkObjectCache: {fileID: 1538130230}
   toDisplay: {fileID: 0}
+  ownerStats: {fileID: 0}
+  contendantStats: {fileID: 0}
 --- !u!114 &787282417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11616,6 +11636,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1538130229}
+  - component: {fileID: 1538130230}
   m_Layer: 0
   m_Name: HUD
   m_TagString: Untagged
@@ -11638,6 +11659,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1538130230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538130228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkObserver: {fileID: 0}
+  _prefabId: -1
+  _scenePathHash: 1180774973
+  _sceneId: 5071389894877021406
+  _sceneNetworkObjects:
+  - {fileID: 572252902}
+  - {fileID: 1538130230}
+  _networkBehaviours:
+  - {fileID: 787282416}
+  SceneTransformProperties:
+    Position: {x: 0, y: 10.889999, z: 6.9900007}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _hasParentNetworkObjectAtEdit: 0
 --- !u!1 &1560595725
 GameObject:
   m_ObjectHideFlags: 0
@@ -14960,6 +15008,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1921274553}
   - component: {fileID: 1921274552}
+  - component: {fileID: 1921274554}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -15000,6 +15049,30 @@ Transform:
   m_Father: {fileID: 572252903}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1921274554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921274551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee8e085547a87f468d9f0b05ad7e667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 572252902}
+  _networkObjectCache: {fileID: 572252902}
+  ori: {fileID: 0}
+  speller1: {fileID: 0}
+  _player1_mesh: {fileID: 0}
+  whisper: 0
+  aimAt: {fileID: 0}
+  effectsManager: {fileID: 0}
+  cost: {fileID: 0}
+  SH: {fileID: 0}
+  stats: {fileID: 0}
 --- !u!1001 &1942021129
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,8 +1,9 @@
 ﻿using System;
+using FishNet.Object;
 using TMPro;
 using UnityEngine;
 
-public class HUDs : MonoBehaviour
+public class HUDs : NetworkBehaviour
 {
     public TextMeshProUGUI toDisplay;
     public static event Action<HUDs> OnExisting;
@@ -20,7 +21,7 @@ public class HUDs : MonoBehaviour
         OnExisting?.Invoke(this);
     }
 
-
+//optimitzar aquest update
     private void Update()
     {
         if (ownerStats != null && contendantStats!=null)
@@ -34,20 +35,18 @@ public class HUDs : MonoBehaviour
         }*/
     }
 
-    public void SetStats()
+    [ObserversRpc]
+    public void SetHUDStats()
     {
         for (int i = 0; i < GameManager.Instance.players.Count; i++)
         {
-            Debug.Log(GameManager.Instance.players.Count);
             if (GameManager.Instance.players[i].controlledPawn.IsOwner)
             {
                 ownerStats = GameManager.Instance.players[i].controlledPawn.GetComponent<Stats>();
-                Debug.Log("ownerStats conn" +ownerStats.OwnerId);
             }
             else
             {
                 contendantStats = GameManager.Instance.players[i].controlledPawn.GetComponent<Stats>();
-                Debug.Log("ContendantStats conn" + ownerStats.OwnerId);
             }
         }
     }

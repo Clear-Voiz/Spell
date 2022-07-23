@@ -15,7 +15,6 @@ public class Conjure : NetworkBehaviour
     public Speller speller1;
     public Transform _player1_mesh;
     private Transform player2;
-    private Transform gameManager;
     public bool whisper;
     public AimAt aimAt;
     public EffectsManager effectsManager;
@@ -28,11 +27,6 @@ public class Conjure : NetworkBehaviour
     private void Awake()
     {
         _player1 = transform; //GameObject.FindWithTag("Player").transform
-        _player1_mesh = GameObject.Find("foxy_170cm").transform;
-//        player2 = GameObject.Find("Player2").transform;
-        gameManager = transform.GetChild(0);
-        var weapon = _player1.transform.GetChild(2);
-        aimAt = weapon.GetComponent<AimAt>();
         effectsManager = _player1.GetComponent<EffectsManager>();
         _hudDisplayer = FindObjectOfType<HUD_Displayer>();
         stats = GetComponent<Stats>();

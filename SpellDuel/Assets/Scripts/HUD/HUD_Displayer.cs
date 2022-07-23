@@ -1,5 +1,4 @@
-﻿using FishNet.Object;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,13 +26,11 @@ public class HUD_Displayer : MonoBehaviour
     private void OnEnable()
     {
         Stats.OnDefeat += EndFightCinematic;
-        Stats.spreadStats += GetPlayerStats;
     }
 
     private void OnDisable()
     {
         Stats.OnDefeat -= EndFightCinematic;
-        Stats.spreadStats -= GetPlayerStats;
     }
 
     public float Mt
@@ -115,16 +112,5 @@ public class HUD_Displayer : MonoBehaviour
             result.text = "<color=blue>Defeat</color>";
         }
     }*/
-
     
-    private void GetPlayerStats(Stats _stats)
-    {
-        if (_stats.gameObject.TryGetComponent(out NetworkObject nob))
-        {
-            if (nob.IsOwner)
-                stats[0] = _stats;
-            else
-                stats[1] = _stats;
-        }
-    }
 }

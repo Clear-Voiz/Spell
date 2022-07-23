@@ -27,6 +27,7 @@ public abstract class Spell: NetworkBehaviour
     {
         if (other.CompareTag("Player") && !IsOwner)
         {
+            /*Inflict(other);*/
             speed = 0f;
             var stats = other.gameObject.GetComponent<Stats>();
             var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
@@ -76,5 +77,40 @@ public abstract class Spell: NetworkBehaviour
         Despawn();
         Debug.Log("got there");
     }
+
+    /*[ObserversRpc]
+    private void Inflict(Collider other)
+    {
+        speed = 0f;
+        var stats = other.gameObject.GetComponent<Stats>();
+        var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
+        int damage = Mathf.RoundToInt(tmpdmg);
+        if (damage < 0)
+        {
+            damage = 1;
+        }
+        if (stats.RES[Element] > 1f)
+        {
+            LP = _conjure.SH.LP;
+            Instantiate(LP, transform.position, Quaternion.identity);
+        }
+        if (stats.HP > damage)
+        {
+            stats.HP -= damage;
+            Debug.Log(
+                stats.hp + 
+                " mgk:" + Globs.mgk.Value + 
+                ", mgkDef" + stats.mgkDef.Value + 
+                ", PM" + PM + 
+                ", RES" + stats.RES[Element]
+            );
+        }
+        else
+        {
+            stats.HP = 0f;
+            Debug.Log(stats.HP);
+            //Destroy(other.gameObject);
+        }
+    }*/
     
 }

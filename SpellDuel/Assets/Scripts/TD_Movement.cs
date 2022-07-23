@@ -29,7 +29,7 @@ public class TD_Movement : NetworkBehaviour
         if (movement.magnitude >= 0.1f)
         {
             var angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg; //radianes a grados
-            player.position += (Globs.spd.Value * Time.deltaTime * movement);
+            player.localPosition += (Globs.spd.Value * Time.deltaTime * movement);
         }
 
         if (Input.GetKeyDown(KeyCode.J))
