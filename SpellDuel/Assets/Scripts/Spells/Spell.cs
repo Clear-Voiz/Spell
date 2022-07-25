@@ -1,4 +1,5 @@
 ﻿using System;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -25,42 +26,48 @@ public abstract class Spell: NetworkBehaviour
     
     protected void Damager(Collider other)
     {
-        if (other.CompareTag("Player") && !IsOwner)
+        if (other.CompareTag("Player"))
         {
-            /*Inflict(other);*/
-            speed = 0f;
-            var stats = other.gameObject.GetComponent<Stats>();
-            var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
-            int damage = Mathf.RoundToInt(tmpdmg);
-            if (damage < 0)
+            NetworkObject nob;
+            if (other.TryGetComponent(out nob))
             {
-                damage = 1;
-            }
-            if (stats.RES[Element] > 1f)
-            {
-                LP = _conjure.SH.LP;
-                Instantiate(LP, transform.position, Quaternion.identity);
-            }
-            if (stats.HP > damage)
-            {
-                stats.HP -= damage;
-                Debug.Log(
-                    stats.hp + 
-                    " mgk:" + Globs.mgk.Value + 
-                    ", mgkDef" + stats.mgkDef.Value + 
-                    ", PM" + PM + 
-                    ", RES" + stats.RES[Element]
-                    );
-            }
-            else
-            {
-                stats.HP = 0f;
-                Debug.Log(stats.HP);
-                //Destroy(other.gameObject);
-            }
+                if (nob.IsOwner == false)
+                {
+                    speed = 0f;
+                    var stats = other.gameObject.GetComponent<Stats>();
+                    var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
+                    int damage = Mathf.RoundToInt(tmpdmg);
+                    if (damage < 0)
+                    {
+                        damage = 1;
+                    }
+                    
+                    if (!IsOwner) return;
+                    Inflict(stats,damage, LocalConnection);
+                    /*if (stats.HP > damage)
+                    {
+                        stats.HP -= damage;
+                        Debug.Log(
+                            stats.hp + 
+                            " mgk:" + Globs.mgk.Value + 
+                            ", mgkDef" + stats.mgkDef.Value + 
+                            ", PM" + PM + 
+                            ", RES" + stats.RES[Element]
+                        );
+                    }
+                    else
+                    {
+                        stats.HP = 0f;
+                        Debug.Log(stats.HP);
+                        //Destroy(other.gameObject);
+                    }*/
 
-            //Destroy(gameObject);
+                    //Destroy(gameObject);
+                }
+            }
         }
+        /*Inflict(other);*/
+
         else
         {
             if (!other.CompareTag("Spell"))
@@ -75,25 +82,16 @@ public abstract class Spell: NetworkBehaviour
     protected void Despawner()
     {
         Despawn();
-        Debug.Log("got there");
     }
 
-    /*[ObserversRpc]
-    private void Inflict(Collider other)
+    [ServerRpc]
+    private void Inflict(Stats stats, int damage, NetworkConnection conn)
     {
-        speed = 0f;
-        var stats = other.gameObject.GetComponent<Stats>();
-        var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
-        int damage = Mathf.RoundToInt(tmpdmg);
-        if (damage < 0)
-        {
-            damage = 1;
-        }
         if (stats.RES[Element] > 1f)
         {
-            LP = _conjure.SH.LP;
-            Instantiate(LP, transform.position, Quaternion.identity);
+            BonusPoints(conn);
         }
+        
         if (stats.HP > damage)
         {
             stats.HP -= damage;
@@ -108,9 +106,21 @@ public abstract class Spell: NetworkBehaviour
         else
         {
             stats.HP = 0f;
-            Debug.Log(stats.HP);
+            stats.SettleGame(conn);
             //Destroy(other.gameObject);
         }
-    }*/
+    }
+
+    [ObserversRpc]
+    private void BonusPoints(NetworkConnection conn)
+    {
+       
+            LP = _conjure.SH.LP;
+            GameObject lp = Instantiate(LP, transform.position, Quaternion.identity);
+            if (lp.TryGetComponent(out LocalPoints slp))
+            {
+                slp.conn = conn;
+            }
+    }
     
 }

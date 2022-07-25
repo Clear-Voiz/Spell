@@ -3,6 +3,8 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
+
+
 public sealed class Player : NetworkBehaviour
 {
 
@@ -12,7 +14,7 @@ public sealed class Player : NetworkBehaviour
     [SyncVar] public bool isReady;
 
     [SyncVar] public Pawn controlledPawn;
-    
+
 
     public override void OnStartServer()
     {
@@ -100,7 +102,9 @@ public sealed class Player : NetworkBehaviour
     [TargetRpc]
     public void TargetPawnKilled(NetworkConnection conn)
     {
-     UIManager.Instance.Show<RespawnView>();   
+     UIManager.Instance.Show<FinalView>();   
     }
+
+    
 
 }

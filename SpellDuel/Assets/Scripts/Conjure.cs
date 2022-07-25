@@ -12,7 +12,7 @@ public class Conjure : NetworkBehaviour
     //private Transform _player2;
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
-    public Speller speller1;
+    public Speller speller;
     public Transform _player1_mesh;
     private Transform player2;
     public bool whisper;
@@ -30,10 +30,13 @@ public class Conjure : NetworkBehaviour
         effectsManager = _player1.GetComponent<EffectsManager>();
         _hudDisplayer = FindObjectOfType<HUD_Displayer>();
         stats = GetComponent<Stats>();
+        speller = FindObjectOfType<Speller>();
     }
 
-    private void Start()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+        Debug.Log(IsOwner);
         if (!IsOwner) return;
         if (spellDic.Count >0) spellDic.Clear();
         
@@ -74,6 +77,53 @@ public class Conjure : NetworkBehaviour
         _recognizer.OnPhraseRecognized += Recognized;
         _recognizer.Start();
 //        Debug.Log(Application.systemLanguage);
+        Debug.Log("Words added to DICK");
+    }
+
+    private void Start()
+    {
+       //if (!IsOwner) return;
+       Debug.Log(IsOwner);
+        /*if (spellDic.Count >0) spellDic.Clear();
+        
+        spellDic.Add("fire",Fire);
+        spellDic.Add("fuego",Fire);
+        spellDic.Add("levitate",Levitate);
+        spellDic.Add("levita",Levitate);
+        spellDic.Add("shield",Shield);
+        spellDic.Add("escudo",Shield);
+        spellDic.Add("earth",Earth);
+        spellDic.Add("tierra",Earth);
+        spellDic.Add("thunder",Thunder);
+        spellDic.Add("rayo",Thunder);
+        spellDic.Add("vanish",Vanish);
+        spellDic.Add("oculto",Vanish);
+        spellDic.Add("hit",MagicHit);
+        spellDic.Add("golpe", MagicHit);
+        spellDic.Add("presto", Presto);
+        spellDic.Add("impulse", Impulse);
+        spellDic.Add("impulso", Impulse);
+        spellDic.Add("doom", Doom);
+        spellDic.Add("condena", Doom);
+        spellDic.Add("whisper", Whisper);
+        spellDic.Add("susurro", Whisper);
+        spellDic.Add("ice",Shards);
+        spellDic.Add("hielo",Shards);
+        spellDic.Add("darkness", Darkness);
+        spellDic.Add("oscuridad",Darkness);
+        spellDic.Add("paralysis",Paralysis);
+        spellDic.Add("paralisis",Paralysis);
+        spellDic.Add("water",Water);
+        spellDic.Add("Agua", Water);
+        spellDic.Add("check",Check);
+        spellDic.Add("Jaque", Check);
+        //spellDic.Add("freeze",Freeze);
+
+        _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
+        _recognizer.OnPhraseRecognized += Recognized;
+        _recognizer.Start();
+//        Debug.Log(Application.systemLanguage);
+        Debug.Log("Words added to DICK");*/
     }
     
     
@@ -89,11 +139,11 @@ public class Conjure : NetworkBehaviour
     {
         var txt = speech.text;
         txt = txt.Substring(0, 1).ToUpper() + txt.Substring(1);
-        speller1._renderer.text = txt;
+        speller._renderer.text = txt;
         if (whisper)
             return;
-        speller1.visible = true;
-        speller1.secs = 0;
+        speller.visible = true;
+        speller.secs = 0;
     }
     
     private void Update()
@@ -101,6 +151,7 @@ public class Conjure : NetworkBehaviour
         if (!IsOwner) return;
         if (Input.GetMouseButtonDown(0)) Fire();
         if (Input.GetMouseButtonDown(1)) Shards();
+        if (Input.GetKeyDown(KeyCode.A)) Debug.Log(IsOwner);
     }
 
     //SPELL DEFINITIONS
@@ -108,6 +159,7 @@ public class Conjure : NetworkBehaviour
     private void Fire()
     {
         //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
+        Debug.Log("Launched fire");
         
         var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
         if (shot.TryGetComponent(out FireS fireS))

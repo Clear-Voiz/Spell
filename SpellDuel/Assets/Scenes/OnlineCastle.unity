@@ -2313,7 +2313,6 @@ GameObject:
   m_Component:
   - component: {fileID: 259271190}
   - component: {fileID: 259271189}
-  - component: {fileID: 259271188}
   m_Layer: 0
   m_Name: CM vcam1 (1)
   m_TagString: Untagged
@@ -2321,54 +2320,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &259271188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 259271187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c9adceb3930eb43890c8ebbba154e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.7
-      inSlope: 0.6
-      outSlope: 0.6
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: -0.7
-      outSlope: -0.7
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -2
-      outSlope: -2
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  followTarget: {fileID: 0}
-  lookAt: {fileID: 0}
-  secondCam: {fileID: 0}
 --- !u!114 &259271189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4834,7 +4785,6 @@ MonoBehaviour:
   - {fileID: 1538130230}
   _networkBehaviours:
   - {fileID: 1921274552}
-  - {fileID: 1921274554}
   SceneTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4979,8 +4929,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b065eb35c382a418a7d6c6b5f11204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finalPanel: {fileID: 498042009}
-  result: {fileID: 1052665425}
 --- !u!114 &572252909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5348,7 +5296,7 @@ GameObject:
   - component: {fileID: 614766671}
   m_Layer: 0
   m_Name: CM vcam1
-  m_TagString: Untagged
+  m_TagString: Virtual Camera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6169,6 +6117,8 @@ MonoBehaviour:
   toDisplay: {fileID: 0}
   ownerStats: {fileID: 0}
   contendantStats: {fileID: 0}
+  finalPanel: {fileID: 498042009}
+  result: {fileID: 1052665425}
 --- !u!114 &787282417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7361,6 +7311,7 @@ MonoBehaviour:
   views:
   - {fileID: 1316561727}
   - {fileID: 1560595727}
+  - {fileID: 1164193884}
 --- !u!1 &1012924795
 GameObject:
   m_ObjectHideFlags: 0
@@ -8677,6 +8628,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1164193883}
+  - component: {fileID: 1164193884}
   m_Layer: 5
   m_Name: FinalView
   m_TagString: Untagged
@@ -8704,6 +8656,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1164193884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164193882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58bc97ef7a0271d41bba07ff9024f078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnButton: {fileID: 1741070066}
 --- !u!1 &1165115392
 GameObject:
   m_ObjectHideFlags: 0
@@ -15008,7 +14973,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1921274553}
   - component: {fileID: 1921274552}
-  - component: {fileID: 1921274554}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -15049,30 +15013,6 @@ Transform:
   m_Father: {fileID: 572252903}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1921274554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921274551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aee8e085547a87f468d9f0b05ad7e667, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 1
-  _addedNetworkObject: {fileID: 572252902}
-  _networkObjectCache: {fileID: 572252902}
-  ori: {fileID: 0}
-  speller1: {fileID: 0}
-  _player1_mesh: {fileID: 0}
-  whisper: 0
-  aimAt: {fileID: 0}
-  effectsManager: {fileID: 0}
-  cost: {fileID: 0}
-  SH: {fileID: 0}
-  stats: {fileID: 0}
 --- !u!1001 &1942021129
 PrefabInstance:
   m_ObjectHideFlags: 0

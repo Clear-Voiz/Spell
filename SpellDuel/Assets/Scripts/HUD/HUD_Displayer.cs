@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class HUD_Displayer : MonoBehaviour
 {
-    private TextMeshProUGUI Displayer;
+    /*private TextMeshProUGUI Displayer;
     private Timers tim;
     public GameObject finalPanel;
     //public GameObject secondaryCam;
@@ -19,18 +19,18 @@ public class HUD_Displayer : MonoBehaviour
         /*if (GameObject.Find("HUD_Display").GetComponent<TextMeshProUGUI>() != null)
         {
             Displayer = GameObject.Find("HUD_Display").GetComponent<TextMeshProUGUI>();
-        }*/
+        }#1#
 
     }
 
     private void OnEnable()
     {
-        Stats.OnDefeat += EndFightCinematic;
+        Stats.OnEnd += EndFightCinematic;
     }
 
     private void OnDisable()
     {
-        Stats.OnDefeat -= EndFightCinematic;
+        Stats.OnEnd -= EndFightCinematic;
     }
 
     public float Mt
@@ -65,7 +65,7 @@ public class HUD_Displayer : MonoBehaviour
     private void Update()
     {
         //tim.alarm[0] = tim.Timer(1f, tim.alarm[0], MagicRecovery);
-        //tim.alarm[1] = tim.Timer(waitTime, tim.alarm[1], ActivateFinalPanel);
+        tim.alarm[1] = tim.Timer(waitTime, tim.alarm[1], ActivateFinalPanel);
     }
 
     private void MagicRecovery()
@@ -92,7 +92,7 @@ public class HUD_Displayer : MonoBehaviour
         {
             col.ResetPlayerStats();
         }
-    }*/
+    }#1#
 
     public void EndFightCinematic(Transform trans)
     {
@@ -100,7 +100,7 @@ public class HUD_Displayer : MonoBehaviour
         tim.alarm[1] = 0f;
     }
 
-    /*private void ActivateFinalPanel()
+    private void ActivateFinalPanel()
     {
         finalPanel.SetActive(true);
         if (looser.CompareTag("Enemy"))

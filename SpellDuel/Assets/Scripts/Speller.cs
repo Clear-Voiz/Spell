@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class Speller : MonoBehaviour
@@ -10,6 +7,7 @@ public class Speller : MonoBehaviour
     public TextMeshProUGUI _renderer;
     public float secs = 0f;
     private float maxsecs = 2f;
+    private Timers tim;
     //private bool ready;
 
     private void Awake()

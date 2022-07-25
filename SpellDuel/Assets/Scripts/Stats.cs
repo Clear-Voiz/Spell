@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
+
+public enum GameConditions
+{
+    None =0,Victorious=1,Defeated=2
+}
 
 public class Stats : NetworkBehaviour
 {
@@ -22,11 +29,15 @@ public class Stats : NetworkBehaviour
     public CharacterStat xpGain; //this will store the amount of xp multiplier. Add numbers between 0 and 1 to modifier list. Although percentage treat as flat
     public CharacterStat mgkDef;
     public CharacterStat maxHp;
-    public float hp;
+    [SyncVar(SendRate = 0)] public float hp;
     public CharacterStat maxMt;
     public float mt;
     public CharacterStat spd;
-    public static event Action<Transform> OnDefeat; 
+    
+    public GameConditions currentState = GameConditions.None;
+    public int VictoryCounter;
+    public int DefeatCounter;
+    public static event Action<Stats> OnEnd; 
 
     public float HP
     {
@@ -34,11 +45,11 @@ public class Stats : NetworkBehaviour
 
         set
         {
-            if (value <= 0f)
+            /*if (value <= 0f)
             {
                 if (!IsOwner) return;
                 OnDefeat?.Invoke(transform);
-            }
+            }*/
             hp = value;
         }
     }
@@ -130,5 +141,25 @@ public class Stats : NetworkBehaviour
         if (!IsOwner) return;
         Huds = huds;
         Huds.SetHUDStats();
+    }
+    
+    [ObserversRpc]
+    public void SettleGame(NetworkConnection conn)
+    {
+        if (conn == GameManager.Instance.LocalConnection)
+        {
+            currentState = GameConditions.Victorious;
+            VictoryCounter += 1;
+            //Debug.Log(Huds.contendantStats);
+            OnEnd?.Invoke(this);
+            Debug.Log("onEnd invoked victory");
+        }
+        else
+        {
+            currentState = GameConditions.Defeated;
+            DefeatCounter += 1;
+            OnEnd?.Invoke(this);
+            Debug.Log("onEnd invoked Defeat");
+        }
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Weapon
   - Controllable
+  - Virtual Camera
   layers:
   - Default
   - TransparentFX

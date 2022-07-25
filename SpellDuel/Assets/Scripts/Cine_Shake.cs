@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections;
 using Cinemachine;
 using UnityEngine;
 
@@ -27,12 +24,12 @@ public class Cine_Shake : MonoBehaviour
 
     private void OnEnable()
     {
-        Stats.OnDefeat += DefeatedCinematic;
+        Stats.OnEnd += DefeatedCinematic;
     }
 
     private void OnDisable()
     {
-        Stats.OnDefeat -= DefeatedCinematic;
+        Stats.OnEnd -= DefeatedCinematic;
     }
 
     public IEnumerator shakeCamera(float intensity, float duration)
@@ -61,18 +58,17 @@ public class Cine_Shake : MonoBehaviour
         activate = false;
     }
 
-    private void DefeatedCinematic(Transform trans)
+    private void DefeatedCinematic(Stats stats)
     {
         /*origiFollow = followTarget.position;
         origiLook = lookAt.position;
         Vector3 pos = trans.position + (Vector3.back * 5f)+(Vector3.up*2f);
         followTarget.position = pos;
         lookAt.position = trans.position+Vector3.up;*/
-        if (trans.CompareTag("Enemy"))
-        {
-            Vector3 pos = Vector3.back * 5f + Vector3.up * 2f + trans.position ;
+        
+            Vector3 pos = Vector3.back * 5f + Vector3.up * 2f + stats.transform.position ;
             secondCam.transform.position = pos;
-        }
+        
         _virtualCamera.gameObject.SetActive(false);
         secondCam.SetActive(true);
     }

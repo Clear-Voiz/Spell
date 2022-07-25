@@ -54,7 +54,6 @@ public class FireS : Spell,IControllable,IShootable
         {
                 if (!IsOwner) return;
                 Despawner();
-                Debug.Log("Tim is working hard");
         }
 
 }
