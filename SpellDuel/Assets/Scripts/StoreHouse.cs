@@ -15,7 +15,7 @@ public class StoreHouse : ScriptableObject
     public GameObject thunder;
     public GameObject mgkHit;
     public GameObject impulse;
-    public GameObject doom;
+    public DoomS doom;
     public GameObject paralysis;
     public GameObject ice;
     public GameObject checker;

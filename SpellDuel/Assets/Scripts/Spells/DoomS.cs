@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using FishNet.Connection;
+using FishNet.Object;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 
 public class DoomS : Spell,IShootable
 {
@@ -24,10 +22,13 @@ public class DoomS : Spell,IShootable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (!other.CompareTag("Player")) Despawn();
+        if (!IsOwner) return;
+        if (other.TryGetComponent(out NetworkObject nob))
         {
-            new SDoom(other, PM, LP);
-            Destroy(gameObject);
+            if (nob.IsOwner) return;
+            Telephone(nob.Owner);
+            Despawner();
         }
     }
 
@@ -35,4 +36,17 @@ public class DoomS : Spell,IShootable
     {
         transform.Translate(Vector3.forward*speed * Time.deltaTime);
     }
+
+    [TargetRpc]
+    private void Judge(NetworkConnection conn)
+    {
+        new SDoom(_conjure, PM);
+    }
+    
+    [ServerRpc]
+    protected void Telephone(NetworkConnection conn)
+    {
+        Judge(conn);
+    }
+
 }

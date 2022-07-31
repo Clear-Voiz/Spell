@@ -4782,6 +4782,7 @@ MonoBehaviour:
   _sceneId: 5071389895361895544
   _sceneNetworkObjects:
   - {fileID: 572252902}
+  - {fileID: 0}
   - {fileID: 1538130230}
   _networkBehaviours:
   - {fileID: 1921274552}
@@ -11642,6 +11643,7 @@ MonoBehaviour:
   _sceneId: 5071389894877021406
   _sceneNetworkObjects:
   - {fileID: 572252902}
+  - {fileID: 0}
   - {fileID: 1538130230}
   _networkBehaviours:
   - {fileID: 787282416}

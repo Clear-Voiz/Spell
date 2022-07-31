@@ -20,13 +20,14 @@ public class Conjure : NetworkBehaviour
     public EffectsManager effectsManager;
     private HUD_Displayer _hudDisplayer;
     public SpellCosts cost;
+    public Transform middlePoint;
 
     public StoreHouse SH;
     public Stats stats;
 
     private void Awake()
     {
-        _player1 = transform; //GameObject.FindWithTag("Player").transform
+        _player1 = transform;
         effectsManager = _player1.GetComponent<EffectsManager>();
         _hudDisplayer = FindObjectOfType<HUD_Displayer>();
         stats = GetComponent<Stats>();
@@ -80,53 +81,7 @@ public class Conjure : NetworkBehaviour
         Debug.Log("Words added to DICK");
     }
 
-    private void Start()
-    {
-       //if (!IsOwner) return;
-       Debug.Log(IsOwner);
-        /*if (spellDic.Count >0) spellDic.Clear();
-        
-        spellDic.Add("fire",Fire);
-        spellDic.Add("fuego",Fire);
-        spellDic.Add("levitate",Levitate);
-        spellDic.Add("levita",Levitate);
-        spellDic.Add("shield",Shield);
-        spellDic.Add("escudo",Shield);
-        spellDic.Add("earth",Earth);
-        spellDic.Add("tierra",Earth);
-        spellDic.Add("thunder",Thunder);
-        spellDic.Add("rayo",Thunder);
-        spellDic.Add("vanish",Vanish);
-        spellDic.Add("oculto",Vanish);
-        spellDic.Add("hit",MagicHit);
-        spellDic.Add("golpe", MagicHit);
-        spellDic.Add("presto", Presto);
-        spellDic.Add("impulse", Impulse);
-        spellDic.Add("impulso", Impulse);
-        spellDic.Add("doom", Doom);
-        spellDic.Add("condena", Doom);
-        spellDic.Add("whisper", Whisper);
-        spellDic.Add("susurro", Whisper);
-        spellDic.Add("ice",Shards);
-        spellDic.Add("hielo",Shards);
-        spellDic.Add("darkness", Darkness);
-        spellDic.Add("oscuridad",Darkness);
-        spellDic.Add("paralysis",Paralysis);
-        spellDic.Add("paralisis",Paralysis);
-        spellDic.Add("water",Water);
-        spellDic.Add("Agua", Water);
-        spellDic.Add("check",Check);
-        spellDic.Add("Jaque", Check);
-        //spellDic.Add("freeze",Freeze);
 
-        _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
-        _recognizer.OnPhraseRecognized += Recognized;
-        _recognizer.Start();
-//        Debug.Log(Application.systemLanguage);
-        Debug.Log("Words added to DICK");*/
-    }
-    
-    
     private void Recognized(PhraseRecognizedEventArgs speech)
     {
         if (!IsOwner) return;
@@ -149,9 +104,8 @@ public class Conjure : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        if (Input.GetMouseButtonDown(0)) Fire();
-        if (Input.GetMouseButtonDown(1)) Shards();
-        if (Input.GetKeyDown(KeyCode.A)) Debug.Log(IsOwner);
+        if (Input.GetMouseButtonDown(0)) MagicHit();
+        if (Input.GetMouseButtonDown(1)) Shield();
     }
 
     //SPELL DEFINITIONS
@@ -178,9 +132,12 @@ public class Conjure : NetworkBehaviour
     {
         _player1.position += Vector3.up*3f;
     }
+    
+    [ServerRpc]
     private void Shield()
     {
-        Instantiate(SH.shield, _player1_mesh.position,Quaternion.identity);
+        GameObject shield = Instantiate(SH.shield, middlePoint.position,Quaternion.identity);
+        Spawn(shield,Owner);
     }
 
     private void Earth()
@@ -188,9 +145,11 @@ public class Conjure : NetworkBehaviour
         Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
     }
 
+    [ServerRpc]
     private void Thunder()
     {
-        Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        GameObject thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        Spawn(thunder,Owner);
     }
 
     private void Vanish()
@@ -200,7 +159,8 @@ public class Conjure : NetworkBehaviour
 
     private void MagicHit()
     {
-        Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+       GameObject hit = Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+       Spawn(hit,Owner);
     }
 
     private void Impulse()
@@ -216,7 +176,9 @@ public class Conjure : NetworkBehaviour
     
     private void Doom()
     {
-        Instantiate(SH.doom,ori.position,ori.rotation);
+        DoomS doom = Instantiate(SH.doom,ori.position,ori.rotation);
+        doom._conjure = this;
+        Spawn(doom.gameObject, Owner);
     }
 
     private void Whisper()

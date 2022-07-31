@@ -17,7 +17,6 @@ public class Cine_Shake : MonoBehaviour
     private void Awake()
     {
        _virtualCamera = GetComponent<CinemachineVirtualCamera>();
-       Debug.Log(_virtualCamera);
        Instance = this;
        tim = new Timers(1);
     }
@@ -34,28 +33,20 @@ public class Cine_Shake : MonoBehaviour
 
     public IEnumerator shakeCamera(float intensity, float duration)
     {
-        bool activate = true;
+        Debug.Log(duration);
         float timer = 0;
-        float completeness;
+        float completeness = 0f;
         if (_virtualCamera.GetComponentInChildren<CinemachineBasicMultiChannelPerlin>())
         {
             CinemachineBasicMultiChannelPerlin cinemachinePerlin = _virtualCamera.GetComponentInChildren<CinemachineBasicMultiChannelPerlin>(); 
-            while (activate)
+            while (completeness<1f)
             {
                 timer += Time.deltaTime;
                 completeness = timer / duration;
                 cinemachinePerlin.m_AmplitudeGain = curve.Evaluate(completeness);
-                if (completeness>=1f) break;
                 yield return null;
             }
         }
-        else
-        {
-            Debug.Log("no existe");
-            activate = false;
-        }
-
-        activate = false;
     }
 
     private void DefeatedCinematic(Stats stats)

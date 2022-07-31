@@ -2,19 +2,17 @@
 
 public class SDoom : AlterSpell
 {
-    private Collider col;
     private Elements Element;
     private float PM;
     private GameObject LP;
     private Conjure _conjure;
 
-    public SDoom(Collider col, float pm, GameObject lp)
+    public SDoom(Conjure _conjure, float pm)
     {
-        this.col = col;
+        this._conjure = _conjure;
         tim = new Timers(1);
         Element = Elements.NonElemental;
         PM = pm;
-        LP = lp;
         OnStart();
     }
     public override void Effect()
@@ -24,7 +22,7 @@ public class SDoom : AlterSpell
 
     public override void EndEffect()
     {
-        var stats = col.gameObject.GetComponent<Stats>();
+        var stats = _conjure.stats;
         var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
         int damage = Mathf.RoundToInt(tmpdmg);
         
@@ -35,7 +33,7 @@ public class SDoom : AlterSpell
         
         if (stats.RES[Element] > 1f)
         {
-            MonoBehaviour.Instantiate(LP, col.transform.position, Quaternion.identity);
+            //MonoBehaviour.Instantiate(LP, _conjure.transform.position, Quaternion.identity);
         }
         
         if (stats.HP > damage)

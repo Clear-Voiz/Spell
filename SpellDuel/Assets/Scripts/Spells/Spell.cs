@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -26,6 +27,7 @@ public abstract class Spell: NetworkBehaviour
     
     protected void Damager(Collider other)
     {
+        if (!IsOwner) return;
         if (other.CompareTag("Player"))
         {
             NetworkObject nob;
@@ -42,31 +44,10 @@ public abstract class Spell: NetworkBehaviour
                         damage = 1;
                     }
                     
-                    if (!IsOwner) return;
                     Inflict(stats,damage, LocalConnection);
-                    /*if (stats.HP > damage)
-                    {
-                        stats.HP -= damage;
-                        Debug.Log(
-                            stats.hp + 
-                            " mgk:" + Globs.mgk.Value + 
-                            ", mgkDef" + stats.mgkDef.Value + 
-                            ", PM" + PM + 
-                            ", RES" + stats.RES[Element]
-                        );
-                    }
-                    else
-                    {
-                        stats.HP = 0f;
-                        Debug.Log(stats.HP);
-                        //Destroy(other.gameObject);
-                    }*/
-
-                    //Destroy(gameObject);
                 }
             }
         }
-        /*Inflict(other);*/
 
         else
         {
@@ -79,13 +60,19 @@ public abstract class Spell: NetworkBehaviour
     }
 
     [ServerRpc]
-    protected void Despawner()
+    public void Despawner()
     {
+        Despawn();
+    }
+    
+    protected IEnumerator DestroyAfter(float t)
+    {
+        yield return new WaitForSeconds(t);
         Despawn();
     }
 
     [ServerRpc]
-    private void Inflict(Stats stats, int damage, NetworkConnection conn)
+    protected void Inflict(Stats stats, int damage, NetworkConnection conn)
     {
         if (stats.RES[Element] > 1f)
         {
@@ -112,7 +99,7 @@ public abstract class Spell: NetworkBehaviour
     }
 
     [ObserversRpc]
-    private void BonusPoints(NetworkConnection conn)
+    protected void BonusPoints(NetworkConnection conn)
     {
        
             LP = _conjure.SH.LP;
@@ -122,5 +109,5 @@ public abstract class Spell: NetworkBehaviour
                 slp.conn = conn;
             }
     }
-    
+
 }

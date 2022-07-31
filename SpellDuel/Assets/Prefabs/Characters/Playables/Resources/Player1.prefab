@@ -110,6 +110,36 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &6960479116624108921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1769479223547595362}
+  m_Layer: 0
+  m_Name: MiddlePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1769479223547595362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6960479116624108921}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.01, y: 1.26, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6966833470437816558}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6966833469995391578
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +214,7 @@ Transform:
   - {fileID: 7142042758242261486}
   - {fileID: 6966833471099682661}
   - {fileID: 490461227}
+  - {fileID: 1769479223547595362}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -254,6 +285,9 @@ MonoBehaviour:
   def: 0
   hp: 0
   mt: 0
+  currentState: 0
+  VictoryCounter: 0
+  DefeatCounter: 0
 --- !u!114 &7562575252694266812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,12 +345,13 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8929540637636132581}
   _networkObjectCache: {fileID: 8929540637636132581}
   ori: {fileID: 6966833470880440351}
-  speller1: {fileID: 0}
+  speller: {fileID: 0}
   _player1_mesh: {fileID: 3273760275025881610}
   whisper: 0
   aimAt: {fileID: 6966833470880440348}
   effectsManager: {fileID: 0}
   cost: {fileID: 11400000, guid: 4d32feff3a71c784e9438a555fefa21c, type: 2}
+  middlePoint: {fileID: 1769479223547595362}
   SH: {fileID: 11400000, guid: b84db508b190d3240a30a083cff3677a, type: 2}
   stats: {fileID: 0}
 --- !u!114 &336676332163945173

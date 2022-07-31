@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShieldS : Spell
 {
-    private void Start()
+    public override void OnStartClient()
     {
-        Destroy(gameObject,5f);
+        base.OnStartClient();
+        lifespan = 5f;
+        StartCoroutine(DestroyAfter(lifespan));
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
         if (other.CompareTag("Spell"))
         {
-            Spell spell;
-            if (other.TryGetComponent(out spell))
+            if (other.TryGetComponent(out Spell spell))
             {
-                Debug.Log("it works");
                 if (spell.Element == Elements.NonElemental)
                 {
                     spell.speed = 0f;
@@ -26,9 +23,8 @@ public class ShieldS : Spell
                 }
                 else
                 {
-                    LP = Resources.Load("LocalPoints") as GameObject;
-                    Instantiate(LP, transform.position, Quaternion.identity);
-                    Destroy(gameObject);
+                    BonusPoints(Owner);
+                    Despawner();
                 }
             }
             else
