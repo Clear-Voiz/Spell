@@ -24,6 +24,7 @@ public class HUDs : NetworkBehaviour
         tim = new Timers(2);
         waitTime = 1f;
         tim.alarm[1] = waitTime;
+        SetHUDStats();
         
         //Displayer.text = "<color=green>HP</color>: " + stats[0].hp +"\n<color=purple>MP</color>: "+stats[0].mt;
     }
@@ -37,7 +38,7 @@ public class HUDs : NetworkBehaviour
     private void OnDisable()
     {
         Stats.OnEnd -= EndFightCinematic;
-        
+
     }
     
     
@@ -62,9 +63,10 @@ public class HUDs : NetworkBehaviour
     [ObserversRpc]
     public void SetHUDStats()
     {
+        
         for (int i = 0; i < GameManager.Instance.players.Count; i++)
         {
-            if (GameManager.Instance.players[i].controlledPawn.IsOwner)
+            if (GameManager.Instance.players[i].IsOwner)
             {
                 ownerStats = GameManager.Instance.players[i].controlledPawn.GetComponent<Stats>();
             }
@@ -133,15 +135,13 @@ public class HUDs : NetworkBehaviour
 
     public void EndFightCinematic(Stats stats)
     {
-        Debug.Log("Final Cinematic took place");
         tim.alarm[1] = 0f;
     }
 
     private void ActivateFinalPanel()
     {
-        Debug.Log("Final Panel Activated");
         UIManager.Instance.Show<FinalView>();
-        if (ownerStats.hp>0)
+        if (ownerStats.HP > 0f)
         {
             result.text = "Victory";
         }

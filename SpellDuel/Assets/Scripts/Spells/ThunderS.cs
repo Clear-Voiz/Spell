@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using FishNet.Connection;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -52,18 +51,10 @@ public class ThunderS : Spell
         ImpactVFX = null;
         lifespan = _bolt.GetFloat("LifeSpan");
         cost = 2f;
-        ActiveCol = "#ff0000ff";
-        InactiveCol = "#800000ff";
         StartCoroutine(Cine_Shake.Instance.shakeCamera(3f, lifespan-0.1f));
         if (!IsOwner) return;
         StartCoroutine(Cleaner());
     }
-
-    public override void OnSpawnServer(NetworkConnection connection)
-    {
-        base.OnSpawnServer(connection);
-    }
-
     private void Strike(Collider other)
     {
         var stats = other.GetComponent<Stats>();

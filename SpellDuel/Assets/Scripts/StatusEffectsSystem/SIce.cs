@@ -15,6 +15,7 @@ public class SIce : AlterSpell
         iceShard = _conjure.SH.ice;
         tim = new Timers(1);
         OnStart();
+        
     }
     
     public override void Effect()

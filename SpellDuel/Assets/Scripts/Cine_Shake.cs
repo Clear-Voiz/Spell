@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cine_Shake : MonoBehaviour
 {
-    private CinemachineVirtualCamera _virtualCamera;
+    [HideInInspector] public CinemachineVirtualCamera _virtualCamera;
     [SerializeField] private AnimationCurve curve;
     public Transform followTarget;
     public Transform lookAt;

@@ -44,11 +44,21 @@ public sealed class GameManager : NetworkBehaviour
         foreach (var pl in players)
         {
             pl.StartGame();
+            pl.isReady = false;
         }
     }
 
     [Server]
     public void StopGame()
+    {
+        foreach (var pl in players)
+        {
+            pl.StopGame();
+        }
+    }
+
+    [Server]
+    public void EndGame()
     {
         foreach (var pl in players)
         {

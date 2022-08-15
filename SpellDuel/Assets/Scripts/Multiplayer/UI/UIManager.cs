@@ -4,7 +4,7 @@ public sealed class UIManager : MonoBehaviour
 {
    public static UIManager Instance {get; private set;}
 
-   [SerializeField] private View[] views;
+   [SerializeField] public View[] views;
 
 
    private void Awake()

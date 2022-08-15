@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "StoreHouse_",menuName = "ScriptableObjects/Storage")]
 public class StoreHouse : ScriptableObject
@@ -9,16 +6,16 @@ public class StoreHouse : ScriptableObject
 
     public float groundLevel;
     public GameObject sparks;
-    public GameObject shield;
-    public GameObject terra;
-    public GameObject fireBall;
-    public GameObject thunder;
-    public GameObject mgkHit;
+    public ShieldS shield;
+    public GroundS terra;
+    public FireS fireBall;
+    public ThunderS thunder;
+    public HitS mgkHit;
     public GameObject impulse;
     public DoomS doom;
     public GameObject paralysis;
     public GameObject ice;
-    public GameObject checker;
+    public CheckS checker;
     
     public GameObject LP;
     

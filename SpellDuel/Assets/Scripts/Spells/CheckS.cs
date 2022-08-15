@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using FishNet;
+using FishNet.Object;
 using UnityEngine;
 
 public class CheckS : Spell
@@ -21,18 +20,19 @@ public class CheckS : Spell
     private void Update()
     {
         tim.alarm[0] = tim.Timer(0.7f, tim.alarm[0], Fall);
+        if(!IsOwner) return;
         tim.alarm[1] = tim.Timer(4f, tim.alarm[1], Finish);
     }
 
     private void Fall()
     {
         _rig.useGravity = true;
-        Debug.Log("using gravity");
     }
 
+    [ServerRpc]
     private void Finish()
     {
-        Destroy(gameObject);
+        Despawner();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -42,12 +42,12 @@ public class CheckS : Spell
             _rig.velocity = Vector3.zero;
         }
         
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Player"))
         {
             var stats = other.GetComponent<Stats>();
-            if (stats.hp <= stats.maxHp.Value / 10)
+            if (stats.hp <= stats.maxHp.Value / 2)
             {
-                Destroy(other.gameObject);
+                InstanceFinder.ServerManager.Despawn(other.gameObject);
             }
             else
             {

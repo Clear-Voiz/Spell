@@ -35,8 +35,7 @@ public class Stats : NetworkBehaviour
     public CharacterStat spd;
     
     public GameConditions currentState = GameConditions.None;
-    public int VictoryCounter;
-    public int DefeatCounter;
+    
     public static event Action<Stats> OnEnd; 
 
     public float HP
@@ -140,16 +139,16 @@ public class Stats : NetworkBehaviour
     {
         if (!IsOwner) return;
         Huds = huds;
-        Huds.SetHUDStats();
+        huds.SetHUDStats();
     }
     
     [ObserversRpc]
     public void SettleGame(NetworkConnection conn)
     {
-        if (conn == GameManager.Instance.LocalConnection)
+        if (conn == LocalConnection)
         {
             currentState = GameConditions.Victorious;
-            VictoryCounter += 1;
+            Player.Instance.VictoryCounter += 1;
             //Debug.Log(Huds.contendantStats);
             OnEnd?.Invoke(this);
             Debug.Log("onEnd invoked victory");
@@ -157,7 +156,7 @@ public class Stats : NetworkBehaviour
         else
         {
             currentState = GameConditions.Defeated;
-            DefeatCounter += 1;
+            Player.Instance.DefeatCounter += 1;
             OnEnd?.Invoke(this);
             Debug.Log("onEnd invoked Defeat");
         }

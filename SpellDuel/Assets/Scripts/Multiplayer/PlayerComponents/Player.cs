@@ -1,4 +1,6 @@
-﻿using FishNet.Connection;
+﻿using System.Linq;
+using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -14,6 +16,9 @@ public sealed class Player : NetworkBehaviour
     [SyncVar] public bool isReady;
 
     [SyncVar] public Pawn controlledPawn;
+
+    public int VictoryCounter;
+    public int DefeatCounter;
 
 
     public override void OnStartServer()
@@ -81,11 +86,68 @@ public sealed class Player : NetworkBehaviour
     {
        StartGame();
     }
+    
+    
+    public void OnContinue()
+    {
+        if (IsServer)
+        {
+            InstanceFinder.ServerManager.StopConnection(true);
+        }
+        else if (IsClient)
+        {
+            InstanceFinder.ClientManager.StopConnection();
+        }
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void OnRematch()
+    {
+        isReady = true;
+        SetHatColor();
+        if (GameManager.Instance.players.All(player => player.isReady))
+        {
+            foreach (var pl in GameManager.Instance.players)
+            {
+                pl.isReady = false;
+                pl.StopGame();
+                pl.StartGame();
+            }
+            
+            NextPhase();
+        }
 
+    }
+
+    [ObserversRpc]
+    public void NextPhase()
+    {
+        
+        FinalView fv = UIManager.Instance.views[2] as FinalView;
+        foreach (var img in fv.hats)
+        {
+            img.color = Color.black;
+        }
+        UIManager.Instance.Show<MainView>();
+        Cine_Shake.Instance.secondCam.SetActive(false);
+        Cine_Shake.Instance._virtualCamera.gameObject.SetActive(true);
+        
+    }
+
+    [ObserversRpc]
+    public void SetHatColor()
+    {
+        FinalView fv = UIManager.Instance.views[2] as FinalView;
+        fv.hats[OwnerId].color=Color.green;
+    }
+
+    [Server]
     public void StopGame()
     {
         if (controlledPawn !=null && controlledPawn.IsSpawned) controlledPawn.Despawn();
+        //LocalConnection.Disconnect(false);
     }
+    
 
     [ServerRpc(RequireOwnership = false)]
     public void ServerSetIsReady(bool value)
@@ -94,7 +156,7 @@ public sealed class Player : NetworkBehaviour
     }
 
     [TargetRpc]
-    private void TargetPawnSpawned(NetworkConnection conn = null)
+    private void TargetPawnSpawned(NetworkConnection conn)
     {
         UIManager.Instance.Show<MainView>();
     }

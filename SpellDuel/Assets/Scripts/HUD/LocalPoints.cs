@@ -17,7 +17,8 @@ public class LocalPoints : MonoBehaviour
    private void Awake()
    {
       tmp = GetComponent<TextMeshPro>();
-      cam = GameObject.FindGameObjectWithTag("Virtual Camera").transform;
+      cam = Cine_Shake.Instance._virtualCamera.transform;
+      //cam = GameObject.FindGameObjectWithTag("Virtual Camera").transform;
    }
 
    private void Start()

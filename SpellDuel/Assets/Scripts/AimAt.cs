@@ -10,6 +10,7 @@ public class AimAt : NetworkBehaviour
    private Camera _mCam;
    private Timers tim;
    private Vector3 Direction;
+   public Quaternion rot;
 
    private void Start()
    {
@@ -17,7 +18,7 @@ public class AimAt : NetworkBehaviour
        tim = new Timers(2);
        tim.alarm[0] = 1f;
    }
-
+   
    private void Update()
    {
        if (!IsOwner) return;
@@ -25,7 +26,7 @@ public class AimAt : NetworkBehaviour
        Physics.Raycast(ray, out RaycastHit hit,50f,1<<12); // 
        pointer.position = hit.point;
        Direction = hit.point - transform.position;
-       Quaternion rot = Quaternion.LookRotation(Direction);
+       rot = Quaternion.LookRotation(Direction);
        transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1);
        
         //if (Physics.Raycast(rayMouse.origin, rayMouse.direction, out hit)) ;

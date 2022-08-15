@@ -6,7 +6,6 @@ public class MCam : MonoBehaviour
     private void Awake()
     {
         Pawn.OnFirstObjectSpawned += OnFirstObjectNotified;
-        Debug.Log("Camera Right Awake");
     }
 
     private void OnDestroy()

@@ -17,8 +17,6 @@ public abstract class Spell: NetworkBehaviour
     protected float PM; //Power Multiplier
     protected float cost;
     public Elements Element;
-    protected string ActiveCol;
-    protected string InactiveCol;
     protected GameObject LP;
     
     [SyncVar]
@@ -27,25 +25,23 @@ public abstract class Spell: NetworkBehaviour
     
     protected void Damager(Collider other)
     {
-        if (!IsOwner) return;
+        
         if (other.CompareTag("Player"))
         {
             NetworkObject nob;
             if (other.TryGetComponent(out nob))
             {
-                if (nob.IsOwner == false)
+                if (nob.IsOwner) return;
+                speed = 0f;
+                var stats = other.gameObject.GetComponent<Stats>();
+                var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
+                int damage = Mathf.RoundToInt(tmpdmg);
+                if (damage < 0)
                 {
-                    speed = 0f;
-                    var stats = other.gameObject.GetComponent<Stats>();
-                    var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
-                    int damage = Mathf.RoundToInt(tmpdmg);
-                    if (damage < 0)
-                    {
-                        damage = 1;
-                    }
-                    
-                    Inflict(stats,damage, LocalConnection);
+                    damage = 1;
                 }
+                    
+                Inflict(stats,damage, LocalConnection);
             }
         }
 
@@ -65,10 +61,11 @@ public abstract class Spell: NetworkBehaviour
         Despawn();
     }
     
+   
     protected IEnumerator DestroyAfter(float t)
     {
         yield return new WaitForSeconds(t);
-        Despawn();
+        Despawner();
     }
 
     [ServerRpc]

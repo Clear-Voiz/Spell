@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
+using FishNet.Connection;
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
@@ -8,38 +10,50 @@ using UnityEngine.Windows.Speech;
 public class Conjure : NetworkBehaviour
 {
     private KeywordRecognizer _recognizer;
-    private Transform _player1;
     //private Transform _player2;
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
     public Speller speller;
     public Transform _player1_mesh;
-    private Transform player2;
+    private Transform enemy;
     public bool whisper;
     public AimAt aimAt;
     public EffectsManager effectsManager;
     private HUD_Displayer _hudDisplayer;
     public SpellCosts cost;
     public Transform middlePoint;
+    private Timers tim;
 
     public StoreHouse SH;
     public Stats stats;
 
     private void Awake()
     {
-        _player1 = transform;
-        effectsManager = _player1.GetComponent<EffectsManager>();
+        effectsManager = GetComponent<EffectsManager>();
         _hudDisplayer = FindObjectOfType<HUD_Displayer>();
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
+        tim = new Timers(1);
     }
+
+    /*public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (GameManager.Instance.players.Count<1) return;
+        foreach (var player in GameManager.Instance.players)
+            if (!player.IsOwner)
+            {
+                enemy = player.controlledPawn.transform;
+                break;
+            }
+    }*/
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-        Debug.Log(IsOwner);
+
         if (!IsOwner) return;
-        if (spellDic.Count >0) spellDic.Clear();
+        /*if (spellDic.Count >0) spellDic.Clear();
         
         spellDic.Add("fire",Fire);
         spellDic.Add("fuego",Fire);
@@ -73,12 +87,26 @@ public class Conjure : NetworkBehaviour
         spellDic.Add("check",Check);
         spellDic.Add("Jaque", Check);
         //spellDic.Add("freeze",Freeze);
-
+        
         _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
         _recognizer.OnPhraseRecognized += Recognized;
-        _recognizer.Start();
+        _recognizer.Start();*/
+        
+        
 //        Debug.Log(Application.systemLanguage);
-        Debug.Log("Words added to DICK");
+
+        /*if (GameManager.Instance.players.Count<1) return;
+        foreach (var player in GameManager.Instance.players)
+            if (!player.IsOwner)
+            {
+                if (player.controlledPawn.transform == null) break;
+                enemy = player.controlledPawn.transform;
+                break;
+            }*/
+        
+       // Debug.Log(OwnerId + ": " + GameManager.Instance.players.Count);
+        
+        
     }
 
 
@@ -104,8 +132,24 @@ public class Conjure : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        if (Input.GetMouseButtonDown(0)) MagicHit();
-        if (Input.GetMouseButtonDown(1)) Shield();
+        //if (Input.GetMouseButtonDown(0)) Check();
+        if (Input.GetMouseButtonDown(1)) Fire();
+        //tim.Timer(1f, tim.alarm[0], MyEnemy);
+
+    }
+
+    private void MyEnemy()
+    {
+        for (int i=0; i< GameManager.Instance.players.Count;i++)
+        {
+            if (!GameManager.Instance.players[i].IsOwner)
+            {
+                Debug.Log(i);
+                Debug.Log(GameManager.Instance.players[i].controlledPawn);
+                enemy = GameManager.Instance.players[i].controlledPawn.transform;
+                break;
+            }
+        }
     }
 
     //SPELL DEFINITIONS
@@ -115,41 +159,42 @@ public class Conjure : NetworkBehaviour
         //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
         Debug.Log("Launched fire");
         
-        var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),ori.rotation);
-        if (shot.TryGetComponent(out FireS fireS))
-        {
-            fireS._conjure = this;
-        }
+        var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),aimAt.rot);
+        shot._conjure = this;
         if (shot == null) return;
-        Spawn(shot,Owner);
+        Spawn(shot.gameObject,Owner);
         var vfx = Instantiate(SH.sparks, ori.position, ori.rotation);
         if (vfx == null) return;
+        
         Spawn(vfx,Owner);
-        //MasterServer
+
     }
 
     private void Levitate()
     {
-        _player1.position += Vector3.up*3f;
+        transform.position += Vector3.up*3f;
     }
-    
+
     [ServerRpc]
     private void Shield()
     {
-        GameObject shield = Instantiate(SH.shield, middlePoint.position,Quaternion.identity);
-        Spawn(shield,Owner);
+        ShieldS shield = Instantiate(SH.shield, middlePoint.position,Quaternion.identity);
+        Spawn(shield.gameObject,Owner);
     }
 
+    [ServerRpc]
     private void Earth()
     {
-        Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        var earth = Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        earth._conjure = this;
+        Spawn(earth.gameObject,Owner);
     }
 
     [ServerRpc]
     private void Thunder()
     {
-        GameObject thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
-        Spawn(thunder,Owner);
+        var thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        Spawn(thunder.gameObject,Owner);
     }
 
     private void Vanish()
@@ -157,10 +202,13 @@ public class Conjure : NetworkBehaviour
         new SVanish(this);
     }
 
-    private void MagicHit()
+    [ServerRpc]
+    private void MagicHit() //
     {
-       GameObject hit = Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
-       Spawn(hit,Owner);
+        
+        HitS hit = Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
+       hit._conjure = this;
+       Spawn(hit.gameObject,Owner);
     }
 
     private void Impulse()
@@ -208,10 +256,14 @@ public class Conjure : NetworkBehaviour
         
     }
 
+    [ServerRpc]
     private void Check()
     {
-        var place = Vector3.up * 3f + player2.transform.position;
-        Instantiate(SH.checker,place,Quaternion.identity);
+        MyEnemy();
+        if (enemy == null) return;
+        var place = Vector3.up * 3f + enemy.position;
+        CheckS checker = Instantiate(SH.checker,place,Quaternion.identity);
+        Spawn(checker.gameObject,Owner);
     }
 
 }

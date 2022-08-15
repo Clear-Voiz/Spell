@@ -2,27 +2,33 @@
 
 public class HitS : Spell,IShootable
 {
-    private void Start()
+    public override void OnStartClient()
     {
-        speed = 18f;
+        base.OnStartClient();
+        speed = 18f;//tis 18f
         lifespan = 3f;
         PM = 0.5f;
         Element = Elements.NonElemental;
-        Destroy(gameObject,lifespan);
+        if (!IsOwner) return;
+        StartCoroutine(DestroyAfter(lifespan));
+        Debug.Log(transform.rotation);
+        Debug.Log(_conjure.aimAt.rot);
     }
 
     private void Update()
     {
+        if (!IsOwner) return;
         Shoot();
+        //Control();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Damager(other);
     }
-
+    
     public void Shoot()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(speed * Time.deltaTime * Vector3.forward);
     }
 }

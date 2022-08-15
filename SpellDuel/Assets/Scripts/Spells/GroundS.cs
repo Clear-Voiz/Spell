@@ -14,8 +14,6 @@ public class GroundS : Spell
         PM = 0.6f; //Power Multiplier
         cost = 2f;
         Element = Elements.Earth;
-        ActiveCol = "#ff0000ff";
-        InactiveCol = "#800000ff";
         Destroy(gameObject,lifespan);
     }
 

@@ -5,9 +5,9 @@ public class FireS : Spell,IControllable,IShootable
         public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
         private Timers tim;
 
-        
-        private void Start()
+        public override void OnStartClient()
         {
+                base.OnStartClient();
                 //VFX = Resources.Load("PS_FireBall") as GameObject;
                 ImpactVFX = null;
                 lifespan = 3f;
@@ -15,10 +15,8 @@ public class FireS : Spell,IControllable,IShootable
                 PM = 0.6f; //Power Multiplier
                 cost = 2f;
                 Element = Elements.Fire;
-                ActiveCol = "#ff0000ff";
-                InactiveCol = "#800000ff";
                 tim = new Timers(1);
-
+                
         }
 
         private void Update()
