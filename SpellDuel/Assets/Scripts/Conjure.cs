@@ -37,7 +37,7 @@ public class Conjure : NetworkBehaviour
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
         tim = new Timers(1);
-        channelled = Shards;
+        channelled = Doom;
     }
 
     public override void OnStartClient()
@@ -154,9 +154,8 @@ public class Conjure : NetworkBehaviour
             recastable = false;
             tim.alarm[0] = 0f;
         }
-        //tim.Timer(1f, tim.alarm[0], MyEnemy);
 
-        
+
 
     }
 
@@ -232,10 +231,14 @@ public class Conjure : NetworkBehaviour
         Instantiate(SH.impulse,ori.position,Quaternion.identity);
     }
 
+    [ServerRpc]
     private void Presto()
     {
-        //gameManager.gameObject.AddComponent<PrestoS>();
-        new SPresto();
+        PrestoS haste = Instantiate(SH.presto, ori.position, ori.rotation);
+        haste._conjure = this;
+        cooldown = 5f;
+        Spawn(haste.gameObject,Owner);
+        //effectsManager.AddBuff(haste);
     }
     
     [ServerRpc]
@@ -274,7 +277,8 @@ public class Conjure : NetworkBehaviour
     
     private void Water()
     {
-        new SWater(this);
+        SWater water = new SWater(this);
+        effectsManager.AddBuff(water);
         
     }
 

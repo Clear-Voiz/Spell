@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class SWater : AlterSpell
 {
-    private Conjure _conjure;
     public SWater(Conjure conjure )
     {
         IsBuff = true;
         tim = new Timers(2);
         _conjure = conjure;
-        OnStart();
     }
     
     public override void Effect()
     {
-        var EM = _conjure.effectsManager.ActiveEffects;
+        var EM = _conjure.effectsManager.ActiveDebuffs;
         if (EM.Count > 0)
         {
             var removedEffects = 0f;
-            for (int i = _conjure.effectsManager.ActiveEffects.Count-1; i >= 0; i--)
+            for (int i = _conjure.effectsManager.ActiveDebuffs.Count-1; i >= 0; i--)
             {
                 if (EM[i].IsBuff==false)
                 {

@@ -30,6 +30,22 @@ public struct Timers
         return currentTime;
     }
     
+    public float Timer<T>(float duration, float currentTime, Action<T> act,T thing)
+    {
+        if (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+
+            if (currentTime >= duration)
+            {
+                currentTime = duration;
+                act(thing);
+            }
+        }
+
+        return currentTime;
+    }
+    
     public float Cicle<T>(float duration, float currentTime, Action<T> act, T thing)
     {
         if (currentTime < duration)

@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class EffectsManager : NetworkBehaviour
 {
-    public List<AlterSpell> ActiveEffects;
+    public List<AlterSpell> ActiveDebuffs;
+    public List<AlterSpell> ActiveBuffs;
     public TextMeshProUGUI informer;
     private Timers tim;
     private float duration;
@@ -18,7 +19,8 @@ public class EffectsManager : NetworkBehaviour
 
     void Start()
     {
-        ActiveEffects = new List<AlterSpell>();
+        ActiveDebuffs = new List<AlterSpell>();
+        ActiveBuffs = new List<AlterSpell>();
         duration = 1f;
         tim.alarm[0] = duration;
     }
@@ -39,31 +41,58 @@ public class EffectsManager : NetworkBehaviour
         if (tim.alarm[0] < duration) 
             tim.alarm[0] = tim.Timer(duration, tim.alarm[0], Vanish);
         
-        if (ActiveEffects.Count <= 0) return;
-        
-        for (int i = ActiveEffects.Count-1; i >=0 ; i--) //never change to foreach or might cause errors
+        //DEBUFFS
+        /*if (ActiveDebuffs.Count > 0)
         {
-            ActiveEffects[i].Effect();
-            if (ActiveEffects.Count <= 0)
+            for (int i = ActiveDebuffs.Count - 1; i >= 0; i--) //never change to foreach or might cause errors
             {
-                return;
+                ActiveDebuffs[i].Effect();
+                if (ActiveDebuffs.Count < 1) break;
             }
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            print(ActiveEffects.Count);
+            print(ActiveDebuffs.Count);
         }
-    }
-
-    public void RemoveEffect(AlterSpell effect)
-    {
-        ActiveEffects.Remove(effect);
+        
+        //BUFFS
+        /*if (ActiveBuffs.Count > 0)
+        {
+            for (int i = ActiveBuffs.Count - 1; i > 0; i--) //never change to foreach or might cause errors
+            {
+                Debug.Log(i);
+                ActiveDebuffs[i].Effect();
+                if (ActiveDebuffs.Count < 1) break;
+            }
+        }*/
     }
     
-    public void AddEffect(AlterSpell effect)
+    public void RemoveEffect(AlterSpell effect)
     {
-        ActiveEffects.Add(effect);
+        if (effect.IsBuff)
+        {
+            ActiveBuffs.Remove(effect);
+        }
+        else
+        {
+            ActiveDebuffs.Remove(effect);
+        }
+    }
+    
+    public void AddDebuff(AlterSpell effect)
+    {
+        ActiveDebuffs.Add(effect);
+        if (effect.effectTitle != String.Empty)
+        {
+            informer.text = effect.effectTitle;
+            tim.alarm[0] = 0f;
+        }
+    }
+    
+    public void AddBuff(AlterSpell effect)
+    {
+        ActiveBuffs.Add(effect);
         if (effect.effectTitle != String.Empty)
         {
             informer.text = effect.effectTitle;

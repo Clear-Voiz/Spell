@@ -5,15 +5,12 @@ using UnityEngine;
 
 public class SWhisper : AlterSpell
 {
-    private Conjure _conjure;
-
     public SWhisper()
     {
         lifespan = 10f;
         _conjure = MonoBehaviour.FindObjectOfType<Conjure>();
         tim = new Timers(1);
         _conjure.whisper = true;
-        OnStart();
     }
     
     public override void Effect()

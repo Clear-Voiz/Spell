@@ -88,6 +88,6 @@ public class IceShardS : Spell,IShootable
     private void Affect(NetworkConnection conn)
     {
         AlterSpell alterSpell = new SSlow();
-        _conjure.effectsManager.AddEffect(alterSpell);
+        _conjure.effectsManager.AddDebuff(alterSpell);
     }
 }

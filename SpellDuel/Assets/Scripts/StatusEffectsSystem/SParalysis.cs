@@ -15,7 +15,6 @@ public class SParalysis : AlterSpell
         {
             movComp.enabled = false;
         }
-        OnStart();
     }
     public override void Effect()
     {

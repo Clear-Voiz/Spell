@@ -13,11 +13,15 @@ public class StoreHouse : ScriptableObject
     public HitS mgkHit;
     public GameObject impulse;
     public DoomS doom;
-    public GameObject paralysis;
     public IceShardS ice;
     public CheckS checker;
     public BlizzardS blizzard;
-    
+    public PrestoS presto;
+    public SParalysis paralysis;
+    public SWater water;
+    public SVanish vanish;
+    public SDoom judge;
+
     public GameObject LP;
     
     

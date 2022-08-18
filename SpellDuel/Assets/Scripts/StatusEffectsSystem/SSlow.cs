@@ -10,12 +10,12 @@ public class SSlow : AlterSpell
         tim = new Timers(1);
         lifespan = 5f;
         effectTitle = "Slowed";
+        IsBuff = false;
         if (!Globs.spd.statModifiers.Contains(slow))
         {
             slow = new StatModifier(-0.1f, modiType.Percent);
             Globs.spd.AddModifier(slow);
         }
-        OnStart();
     }
     
     public override void Effect()

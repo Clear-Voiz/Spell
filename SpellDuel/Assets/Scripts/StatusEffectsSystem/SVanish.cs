@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,9 +27,13 @@ public class SVanish : AlterSpell
         }
 
         tim = new Timers(3);
-        OnStart();
     }
-    
+
+    private void Update()
+    {
+        
+    }
+
     public override void Effect()
     {
         tim.alarm[0] = tim.Chronometer(1f,tim.alarm[0], Disappear);

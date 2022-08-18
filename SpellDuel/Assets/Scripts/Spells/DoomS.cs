@@ -25,8 +25,7 @@ public class DoomS : Spell,IShootable
         if (other.TryGetComponent(out NetworkObject nob))
         {
             if (nob.IsOwner) return;
-            Telephone(nob.Owner);
-            Despawner();
+            Judge(nob.Owner);
         }
     }
 
@@ -35,16 +34,18 @@ public class DoomS : Spell,IShootable
         transform.Translate(Vector3.forward*speed * Time.deltaTime);
     }
 
-    [TargetRpc]
-    private void Judge(NetworkConnection conn)
-    {
-        new SDoom(_conjure, PM);
-    }
-    
     [ServerRpc]
-    protected void Telephone(NetworkConnection conn)
+    protected void Judge(NetworkConnection conn)
     {
-        Judge(conn);
+        
+        SDoom judge = Instantiate(_conjure.SH.judge);
+        if (_conjure.enemy.gameObject.TryGetComponent(out Conjure conjure))
+        {
+            judge._conjure = conjure;
+            Spawn(judge.gameObject,conn);
+        }
+        
+        Despawn();
     }
 
 }
