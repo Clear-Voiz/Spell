@@ -21,6 +21,7 @@ public class Stats : NetworkBehaviour
     public float str;
     public float def;
     private HUDs Huds;
+    private Conjure _conjure;
 
 
     public Dictionary<Elements, float> RES = new Dictionary<Elements, float>(8);
@@ -64,9 +65,11 @@ public class Stats : NetworkBehaviour
     private void Awake()
     {
         SetupPlayer();
+        _conjure = GetComponent<Conjure>();
+
         //new CharacterStat(6f);
         //if (!IsOwner) return;
-        
+
     }
 
     private void OnEnable()
@@ -159,6 +162,40 @@ public class Stats : NetworkBehaviour
             Player.Instance.DefeatCounter += 1;
             OnEnd?.Invoke(this);
             Debug.Log("onEnd invoked Defeat");
+        }
+    }
+
+    [Server]
+    public void TakeDamage(Elements Element,int damage)
+    {
+        Debug.Log("Last barrier surpassed");
+        if (RES[Element] > 1f)
+        {
+            BonusPoints(LocalConnection);
+        }
+        
+        if (HP > damage)
+        {
+            Debug.Log("Can you surprise me even more?: "+damage);
+            HP -= damage;
+        }
+        else
+        {
+            HP = 0f;
+            SettleGame(LocalConnection);
+            //Destroy(other.gameObject);
+        }
+    }
+    
+    [ObserversRpc]
+    protected void BonusPoints(NetworkConnection conn)
+    {
+       
+        GameObject LP = _conjure.SH.LP;
+        GameObject lp = Instantiate(LP, transform.position, Quaternion.identity);
+        if (lp.TryGetComponent(out LocalPoints slp))
+        {
+            slp.conn = conn;
         }
     }
 }

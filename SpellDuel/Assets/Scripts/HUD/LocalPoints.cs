@@ -36,7 +36,7 @@ public class LocalPoints : MonoBehaviour
       }
       
       Globs.Xp += Mathf.RoundToInt(points * Globs.xpGain.Value);
-      print(Globs.Xp);
+      print("exp: " + Globs.Xp);
       startPos = transform.position;
       endPos = startPos + new Vector3(0f, 1f, 0f);
       if (cam != null) transform.forward = cam.forward;

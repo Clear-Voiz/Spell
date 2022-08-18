@@ -8,15 +8,13 @@ public class DoomS : Spell,IShootable
     {
         PM = 2f;
         Element = Elements.NonElemental;
-    }
-
-    private void Start()
-    {
+        cooldown = 5f;
         speed = 20f;
     }
 
     private void Update()
     {
+        if(!IsOwner) return;
         Shoot();
     }
 

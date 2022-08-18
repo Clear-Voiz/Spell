@@ -1,11 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ShieldS : Spell
 {
+    private void Awake()
+    {
+        lifespan = 5f;
+        cooldown = lifespan + 0.2f;
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
-        lifespan = 5f;
+       
         StartCoroutine(DestroyAfter(lifespan));
     }
 

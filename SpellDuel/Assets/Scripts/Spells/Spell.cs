@@ -18,30 +18,20 @@ public abstract class Spell: NetworkBehaviour
     protected float cost;
     public Elements Element;
     protected GameObject LP;
-    
+    public float cooldown;
+
     [SyncVar]
     public Conjure _conjure;
-
     
-    protected void Damager(Collider other)
+    protected void Clash(Collider other)
     {
-        
         if (other.CompareTag("Player"))
         {
-            NetworkObject nob;
-            if (other.TryGetComponent(out nob))
+            if (other.TryGetComponent(out NetworkObject nob))
             {
                 if (nob.IsOwner) return;
                 speed = 0f;
-                var stats = other.gameObject.GetComponent<Stats>();
-                var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
-                int damage = Mathf.RoundToInt(tmpdmg);
-                if (damage < 0)
-                {
-                    damage = 1;
-                }
-                    
-                Inflict(stats,damage, LocalConnection);
+                DamageCalc();
             }
         }
 
@@ -56,9 +46,24 @@ public abstract class Spell: NetworkBehaviour
     }
 
     [ServerRpc]
+    public void DamageCalc()
+    {
+        var stats = _conjure.enemy.GetComponent<Stats>();
+        var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
+        //Debug.Log("mgk: " + Globs.mgk.Value + " - def: " +stats.mgkDef.Value + " * PM: " + PM + " * " + "stats.RES: " + stats.RES[Element] + " = " + tmpdmg);
+        int damage = Mathf.RoundToInt(tmpdmg);
+        if (damage < 1)
+        {
+            damage = 1;
+        }
+                    
+        stats.TakeDamage(Element,damage);
+    }
+
+    [ServerRpc]
     public void Despawner()
     {
-        Despawn();
+        if (IsSpawned) Despawn();
     }
     
    
@@ -68,7 +73,7 @@ public abstract class Spell: NetworkBehaviour
         Despawner();
     }
 
-    [ServerRpc]
+    /*[ServerRpc]
     protected void Inflict(Stats stats, int damage, NetworkConnection conn)
     {
         if (stats.RES[Element] > 1f)
@@ -79,13 +84,6 @@ public abstract class Spell: NetworkBehaviour
         if (stats.HP > damage)
         {
             stats.HP -= damage;
-            Debug.Log(
-                stats.hp + 
-                " mgk:" + Globs.mgk.Value + 
-                ", mgkDef" + stats.mgkDef.Value + 
-                ", PM" + PM + 
-                ", RES" + stats.RES[Element]
-            );
         }
         else
         {
@@ -93,7 +91,7 @@ public abstract class Spell: NetworkBehaviour
             stats.SettleGame(conn);
             //Destroy(other.gameObject);
         }
-    }
+    }*/
 
     [ObserversRpc]
     protected void BonusPoints(NetworkConnection conn)
@@ -106,5 +104,11 @@ public abstract class Spell: NetworkBehaviour
                 slp.conn = conn;
             }
     }
+
+    /*[TargetRpc]
+    protected void Affect(NetworkConnection conn, AlterSpell alterSpell)
+    {
+        _conjure.effectsManager.AddEffect(alterSpell);
+    }*/
 
 }

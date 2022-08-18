@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -15,7 +15,7 @@ public class Conjure : NetworkBehaviour
     public Transform ori;
     public Speller speller;
     public Transform _player1_mesh;
-    private Transform enemy;
+    [SyncVar] public Transform enemy;
     public bool whisper;
     public AimAt aimAt;
     public EffectsManager effectsManager;
@@ -23,6 +23,9 @@ public class Conjure : NetworkBehaviour
     public SpellCosts cost;
     public Transform middlePoint;
     private Timers tim;
+    private Action channelled;
+    [SyncVar] public float cooldown;
+    public bool recastable = true;
 
     public StoreHouse SH;
     public Stats stats;
@@ -34,26 +37,15 @@ public class Conjure : NetworkBehaviour
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
         tim = new Timers(1);
+        channelled = Shards;
     }
-
-    /*public override void OnStartClient()
-    {
-        base.OnStartClient();
-        if (GameManager.Instance.players.Count<1) return;
-        foreach (var player in GameManager.Instance.players)
-            if (!player.IsOwner)
-            {
-                enemy = player.controlledPawn.transform;
-                break;
-            }
-    }*/
 
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         if (!IsOwner) return;
-        /*if (spellDic.Count >0) spellDic.Clear();
+        if (spellDic.Count >0) spellDic.Clear();
         
         spellDic.Add("fire",Fire);
         spellDic.Add("fuego",Fire);
@@ -87,26 +79,33 @@ public class Conjure : NetworkBehaviour
         spellDic.Add("check",Check);
         spellDic.Add("Jaque", Check);
         //spellDic.Add("freeze",Freeze);
-        
-        _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
-        _recognizer.OnPhraseRecognized += Recognized;
-        _recognizer.Start();*/
-        
-        
-//        Debug.Log(Application.systemLanguage);
 
-        /*if (GameManager.Instance.players.Count<1) return;
-        foreach (var player in GameManager.Instance.players)
-            if (!player.IsOwner)
+        if (_recognizer == null)
+        {
+            _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
+            _recognizer.OnPhraseRecognized += Recognized;
+            _recognizer.Start();
+        }
+
+        MyEnemy(Owner);
+        
+    }
+    
+    [ServerRpc]
+    private void MyEnemy(NetworkConnection conn)
+    {
+        for (int i=0; i< GameManager.Instance.players.Count;i++)
+        {
+            if (GameManager.Instance.players[i].Owner != conn)
             {
-                if (player.controlledPawn.transform == null) break;
-                enemy = player.controlledPawn.transform;
+                
+                /*Transform ene*/
+                enemy = GameManager.Instance.players[i].controlledPawn.transform;
+                //ReceiveEnemy(conn,ene);
+                
                 break;
-            }*/
-        
-       // Debug.Log(OwnerId + ": " + GameManager.Instance.players.Count);
-        
-        
+            }
+        }
     }
 
 
@@ -114,7 +113,20 @@ public class Conjure : NetworkBehaviour
     {
         if (!IsOwner) return;
         Debug.Log(speech.text);
-        spellDic[speech.text].Invoke();
+        Action spell = spellDic[speech.text];
+
+        if (channelled != spell)
+        {
+            channelled = spell;
+            spell.Invoke();
+        }
+        else
+        {
+            if (recastable==false) return;
+            spell.Invoke();
+        }
+        recastable = false;
+        tim.alarm[0] = 0f;
         CallSpeller(speech);
     }
     
@@ -132,25 +144,23 @@ public class Conjure : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
+        tim.alarm[0] = tim.Timer(cooldown, tim.alarm[0], ()=>recastable = true);
+        
         //if (Input.GetMouseButtonDown(0)) Check();
-        if (Input.GetMouseButtonDown(1)) Fire();
+        if (!recastable) return;
+        if (Input.GetMouseButtonDown(1))
+        {
+            channelled.Invoke();
+            recastable = false;
+            tim.alarm[0] = 0f;
+        }
         //tim.Timer(1f, tim.alarm[0], MyEnemy);
 
+        
+
     }
 
-    private void MyEnemy()
-    {
-        for (int i=0; i< GameManager.Instance.players.Count;i++)
-        {
-            if (!GameManager.Instance.players[i].IsOwner)
-            {
-                Debug.Log(i);
-                Debug.Log(GameManager.Instance.players[i].controlledPawn);
-                enemy = GameManager.Instance.players[i].controlledPawn.transform;
-                break;
-            }
-        }
-    }
+    
 
     //SPELL DEFINITIONS
     [ServerRpc]
@@ -159,8 +169,9 @@ public class Conjure : NetworkBehaviour
         //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
         Debug.Log("Launched fire");
         
-        var shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),aimAt.rot);
+        FireS shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),aimAt.rot);
         shot._conjure = this;
+        cooldown = shot.cooldown;
         if (shot == null) return;
         Spawn(shot.gameObject,Owner);
         var vfx = Instantiate(SH.sparks, ori.position, ori.rotation);
@@ -179,21 +190,25 @@ public class Conjure : NetworkBehaviour
     private void Shield()
     {
         ShieldS shield = Instantiate(SH.shield, middlePoint.position,Quaternion.identity);
+        cooldown = shield.cooldown;
         Spawn(shield.gameObject,Owner);
     }
 
     [ServerRpc]
     private void Earth()
     {
-        var earth = Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
+        GroundS earth = Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
         earth._conjure = this;
+        cooldown = earth.cooldown;
         Spawn(earth.gameObject,Owner);
     }
 
     [ServerRpc]
     private void Thunder()
     {
-        var thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        ThunderS thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
+        cooldown = thunder.cooldown;
+        thunder._conjure = this;
         Spawn(thunder.gameObject,Owner);
     }
 
@@ -208,6 +223,7 @@ public class Conjure : NetworkBehaviour
         
         HitS hit = Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
        hit._conjure = this;
+       cooldown = hit.cooldown;
        Spawn(hit.gameObject,Owner);
     }
 
@@ -222,10 +238,12 @@ public class Conjure : NetworkBehaviour
         new SPresto();
     }
     
+    [ServerRpc]
     private void Doom()
     {
         DoomS doom = Instantiate(SH.doom,ori.position,ori.rotation);
         doom._conjure = this;
+        cooldown = doom.cooldown;
         Spawn(doom.gameObject, Owner);
     }
 
@@ -239,30 +257,34 @@ public class Conjure : NetworkBehaviour
     {
         //new SDarkness();
     }
-
+    
+    [ServerRpc]
     private void Shards()
     { 
-        new SIce();
+         BlizzardS blizzard = Instantiate(SH.blizzard,ori.position,Quaternion.identity);
+         blizzard._conjure = this;
+         cooldown = blizzard.cooldown;
+         Spawn(blizzard.gameObject,Owner);
     }
 
     private void Paralysis()
     {
-        Instantiate(SH.paralysis,ori.position,ori.rotation);
+      //SParalysis paralysis =  Instantiate(SH.paralysis,ori.position,ori.rotation);
     }
     
     private void Water()
     {
-        new SWater();
+        new SWater(this);
         
     }
 
     [ServerRpc]
     private void Check()
     {
-        MyEnemy();
         if (enemy == null) return;
         var place = Vector3.up * 3f + enemy.position;
         CheckS checker = Instantiate(SH.checker,place,Quaternion.identity);
+        cooldown = checker.cooldown;
         Spawn(checker.gameObject,Owner);
     }
 

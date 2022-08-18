@@ -14,6 +14,7 @@ public class CheckS : Spell
         _conjure = FindObjectOfType<Conjure>();
         PM = 0.5f;
         LP = _conjure.SH.LP;
+        cooldown = 3f;
 
     }
 
@@ -51,7 +52,7 @@ public class CheckS : Spell
             }
             else
             {
-                Damager(other);
+                Clash(other);
             }
         }
     }

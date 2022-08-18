@@ -5,11 +5,11 @@ using UnityEngine;
 public class SWater : AlterSpell
 {
     private Conjure _conjure;
-    public SWater()
+    public SWater(Conjure conjure )
     {
         IsBuff = true;
         tim = new Timers(2);
-        _conjure = MonoBehaviour.FindObjectOfType<Conjure>();
+        _conjure = conjure;
         OnStart();
     }
     

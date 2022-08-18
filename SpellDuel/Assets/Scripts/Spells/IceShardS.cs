@@ -1,37 +1,45 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using FishNet.Connection;
+using FishNet.Object;
 using UnityEngine;
 
 public class IceShardS : Spell,IShootable
 {
     private Vector3 dir;
-    private Camera _mCam;
     private float rotSpeed;
     private Collider _col;
-    private void Awake()
+    private Timers tim;
+
+
+    
+
+    public override void OnStartClient()
     {
-        _mCam = Camera.main;
-        _conjure = FindObjectOfType<Conjure>();
+        base.OnStartClient();
+        //if (!IsOwner) return;
         _col = GetComponent<Collider>();
-
-    }
-
-    private void Start()
-    {
+        
         PM = 0.3f;
+        Element = Elements.Ice;
         speed = 20f;
         rotSpeed = 360f;
+        
         var hitpoint = _conjure.aimAt.pointer.position;
         dir = hitpoint - transform.position;
         Quaternion rot = Quaternion.LookRotation(dir);
         transform.rotation = rot;
+        lifespan = 3f;
+        tim = new Timers(1);
+        tim.alarm[0] = lifespan;
+
     }
+
 
     private void Update()
     {
+        if(!IsOwner) return;
         transform.Rotate(0f,0f, rotSpeed*Time.deltaTime,Space.Self);
         Shoot();
+        tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], Despawner);
     }
 
     public void Shoot()
@@ -41,12 +49,23 @@ public class IceShardS : Spell,IShootable
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject,3f);
-        if (other.CompareTag("Enemy"))
+        if(!IsOwner) return;
+        Debug.Log("tim before: " +tim.alarm[0]);
+        tim.alarm[0] = 0f;
+        Debug.Log(tim.alarm[0]);
+        Debug.Log("tim after: " +tim.alarm[0]);
+        //StartCoroutine(DestroyAfter(3f));
+        Clash(other);
+        if (other.CompareTag("Player"))
         {
-            Damager(other);
-            transform.SetParent(other.transform);
-            new SSlow();
+            
+            //transform.SetParent(other.transform);
+            if (other.TryGetComponent(out NetworkObject nob))
+            {
+                if (nob.IsOwner) return;
+                PreAffect(nob.Owner);
+            }
+            
             //_conjure.effectsManager.ActiveEffects.Add(slow);
             _col.enabled = false;
         }
@@ -56,5 +75,19 @@ public class IceShardS : Spell,IShootable
             speed = 0f;
             rotSpeed = 0f;
         }
+    }
+
+    [ServerRpc]
+    private void PreAffect(NetworkConnection conn)
+    {
+        Affect(conn);
+    }
+    
+    
+    [TargetRpc]
+    private void Affect(NetworkConnection conn)
+    {
+        AlterSpell alterSpell = new SSlow();
+        _conjure.effectsManager.AddEffect(alterSpell);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -9,6 +10,10 @@ public sealed class GameManager : NetworkBehaviour
     
     [SyncObject]
     public readonly SyncList<Player> players = new SyncList<Player>();
+
+
+    //only available on server
+    public readonly List<Conjure> Conjurers;
 
     /*[SyncObject] public readonly SyncList<Conjure> conjureDatabase;
     */

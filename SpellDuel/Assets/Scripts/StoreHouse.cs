@@ -14,15 +14,15 @@ public class StoreHouse : ScriptableObject
     public GameObject impulse;
     public DoomS doom;
     public GameObject paralysis;
-    public GameObject ice;
+    public IceShardS ice;
     public CheckS checker;
+    public BlizzardS blizzard;
     
     public GameObject LP;
     
     
 
     //assets
-
-    //TryGetComponent
+    
     //Physics.RaycastAll
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using TMPro;
 using UnityEngine;
 
-public class EffectsManager : MonoBehaviour
+public class EffectsManager : NetworkBehaviour
 {
     public List<AlterSpell> ActiveEffects;
     public TextMeshProUGUI informer;
@@ -25,13 +26,11 @@ public class EffectsManager : MonoBehaviour
     private void OnEnable()
     {
         AlterSpell.onEnd += RemoveEffect;
-        AlterSpell.onStart += AddEffect;
     }
 
     private void OnDisable()
     {
         AlterSpell.onEnd -= RemoveEffect;
-        AlterSpell.onStart -= AddEffect;
     }
 
     

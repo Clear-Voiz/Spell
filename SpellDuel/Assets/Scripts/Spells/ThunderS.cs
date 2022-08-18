@@ -8,12 +8,11 @@ public class ThunderS : Spell
     public float range;
 
     private void Awake()
-    { 
-       // _conjure = FindObjectOfType<Conjure>();
+    {
         _bolt = GetComponentInChildren<VisualEffect>();
         PM = 1.2f; //Power Multiplier
         Element = Elements.Thunder;
-        _conjure = FindObjectOfType<Conjure>();
+        cooldown = 1f;
     }
 
     public override void OnStartClient()
@@ -24,11 +23,13 @@ public class ThunderS : Spell
         Physics.Raycast(_conjure.ori.position, _conjure.ori.forward, out hit);
         if (hit.collider != null)
         {
-            if (hit.collider.TryGetComponent(out Stats stats))
+            Clash(hit.collider);
+            /*if (hit.collider.TryGetComponent(out Stats stats))
             {
                 if (stats.IsOwner) return;
-                Strike(hit.collider);
-            }
+                Damager(hit.collider);
+                //Strike(hit.collider);
+            }*/
             
             if (hit.collider.TryGetComponent(out spell))
             {
@@ -55,13 +56,14 @@ public class ThunderS : Spell
         if (!IsOwner) return;
         StartCoroutine(Cleaner());
     }
-    private void Strike(Collider other)
+    /*private void Strike(Collider other)
     {
         var stats = other.GetComponent<Stats>();
         
         int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.mgkDef.Value)*PM*stats.RES[Element]);
-        Inflict(stats,damage,LocalConnection);
-    }
+        //Inflict(stats,damage,LocalConnection);
+        Damager(other);
+    }*/
     
     private IEnumerator Cleaner()
     {

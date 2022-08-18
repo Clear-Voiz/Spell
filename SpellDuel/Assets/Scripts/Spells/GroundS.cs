@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class GroundS : Spell
 {
-    private void Start()
+    private void Awake()
     {
+        cooldown = 1f;
         //VFX = Resources.Load("Terra") as GameObject;
         ImpactVFX = null;
         lifespan = 3f;
@@ -14,7 +15,12 @@ public class GroundS : Spell
         PM = 0.6f; //Power Multiplier
         cost = 2f;
         Element = Elements.Earth;
-        Destroy(gameObject,lifespan);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        StartCoroutine(DestroyAfter(lifespan));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,15 +32,15 @@ public class GroundS : Spell
             {
                 if (spell.Element != Elements.NonElemental)
                 {
-                    Destroy(other.gameObject);
+                    ServerManager.Despawn(other.gameObject);
                     if (spell.Element != Elements.Thunder)
                     {
-                        Destroy(gameObject);
+                        ServerManager.Despawn(gameObject);
                     }
                 }
                 else
                 {
-                    Destroy(gameObject);
+                    ServerManager.Despawn(gameObject);
                 }
             }
         }

@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class FireS : Spell,IControllable,IShootable
 {
         public static string[] definition = {"Fire</color></b>: casts a flame controllable with your wand.","Firing</color></b>: Increased size and damage.","Fired</color></b>: Explodes when colliding or manually by left-pressing your wand."};
         private Timers tim;
+
+        private void Awake()
+        {
+                cooldown = 0.3f;
+        }
 
         public override void OnStartClient()
         {
@@ -16,13 +22,14 @@ public class FireS : Spell,IControllable,IShootable
                 cost = 2f;
                 Element = Elements.Fire;
                 tim = new Timers(1);
-                
+
         }
 
         private void Update()
         {
                 if (!IsOwner) return;
-                tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], Debugger);
+                
+                tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], Despawner);
                 /*if (_conjure == null) return;*/
                 Control();
                 Shoot();
@@ -44,8 +51,8 @@ public class FireS : Spell,IControllable,IShootable
 
         private void OnTriggerEnter(Collider other)
         {
-                //if (!IsOwner) return;
-                Damager(other);  
+                if (!IsOwner) return;
+                Clash(other);  
         }
 
         private void Debugger()

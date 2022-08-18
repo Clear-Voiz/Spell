@@ -13,7 +13,8 @@ public class SDoom : AlterSpell
         tim = new Timers(1);
         Element = Elements.NonElemental;
         PM = pm;
-        OnStart();
+        _conjure.effectsManager.AddEffect(this);
+        //OnStart();
     }
     public override void Effect()
     {

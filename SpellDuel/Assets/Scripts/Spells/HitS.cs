@@ -1,7 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class HitS : Spell,IShootable
 {
+    private void Awake()
+    {
+        cooldown = 0.3f;
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -24,7 +30,7 @@ public class HitS : Spell,IShootable
 
     private void OnTriggerEnter(Collider other)
     {
-        Damager(other);
+        Clash(other);
     }
     
     public void Shoot()
