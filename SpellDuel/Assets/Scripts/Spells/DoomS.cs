@@ -43,6 +43,7 @@ public class DoomS : Spell,IShootable
         {
             judge._conjure = conjure;
             Spawn(judge.gameObject,conn);
+            _conjure.effectsManager.AddDebuff(judge);
         }
         
         Despawn();

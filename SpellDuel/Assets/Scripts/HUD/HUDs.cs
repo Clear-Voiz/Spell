@@ -24,7 +24,7 @@ public class HUDs : NetworkBehaviour
         tim = new Timers(2);
         waitTime = 1f;
         tim.alarm[1] = waitTime;
-        SetHUDStats();
+        //SetHUDStats();
         
         //Displayer.text = "<color=green>HP</color>: " + stats[0].hp +"\n<color=purple>MP</color>: "+stats[0].mt;
     }
@@ -121,17 +121,6 @@ public class HUDs : NetworkBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
-
-    /*public void Rematch()   reactivate once you solve all the camera problems
-    {
-        finalPanel.SetActive(false);
-        secondaryCam.SetActive(false);
-        primaryCam.SetActive(true);
-        foreach (var col in stats)
-        {
-            col.ResetPlayerStats();
-        }
-    }*/
 
     public void EndFightCinematic(Stats stats)
     {

@@ -1,20 +1,20 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HitS : Spell,IShootable
 {
     private void Awake()
     {
         cooldown = 0.3f;
+        speed = 18f;//tis 18f
+        lifespan = 3f;
+        PM = 0.5f;
+        Element = Elements.NonElemental;
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-        speed = 18f;//tis 18f
-        lifespan = 3f;
-        PM = 0.5f;
-        Element = Elements.NonElemental;
+        
         if (!IsOwner) return;
         StartCoroutine(DestroyAfter(lifespan));
         Debug.Log(transform.rotation);

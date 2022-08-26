@@ -68,18 +68,22 @@ public class EffectsManager : NetworkBehaviour
         }*/
     }
     
+    [Server]
     public void RemoveEffect(AlterSpell effect)
     {
         if (effect.IsBuff)
         {
             ActiveBuffs.Remove(effect);
+            effect.Despawn();
         }
         else
         {
             ActiveDebuffs.Remove(effect);
+            effect.Despawn();
         }
     }
     
+    [Server]
     public void AddDebuff(AlterSpell effect)
     {
         ActiveDebuffs.Add(effect);
@@ -90,6 +94,7 @@ public class EffectsManager : NetworkBehaviour
         }
     }
     
+    [Server]
     public void AddBuff(AlterSpell effect)
     {
         ActiveBuffs.Add(effect);

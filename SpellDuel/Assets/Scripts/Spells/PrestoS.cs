@@ -9,51 +9,61 @@ public class PrestoS : AlterSpell
     public override void OnStartClient()
     {
         base.OnStartClient();
-        tim = new Timers(1);
-        lifespan = 5f;
+        
         effectTitle = "Haste";
-        IsBuff = true;
 
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
+        tim = new Timers(1);
+        lifespan = 5f;
+        IsBuff = true;
+        
         Acceleration(Owner);
     }
 
     private void Update()
     {
-        if(!IsOwner) return;
+        if(!IsServer) return;
         Effect();
     }
 
     public override void Effect()
     {
-        tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], Dispell,Owner);
+        if(Owner != _conjure.Owner) return;
+        tim.alarm[0] = tim.Timer(lifespan, tim.alarm[0], EndEffect);
     }
-    
+
     public override void EndEffect()
     {
-        if(!IsOwner) return;
+        Dispell();
+    }
+
+    [Server]
+    public void Dispell()
+    {
+        if (Owner != _conjure.Owner) return;
         Debug.Log("it had to end...");
-        Globs.spd.RemoveModifier(presto);
+        Stats stats = _conjure.stats;
+        stats.spd.RemoveModifier(presto);
+        stats.cSpd = stats.spd.Value;
+        //Globs.spd.RemoveModifier(presto);
         OnEnd();
     }
 
-    [TargetRpc]
-    public void Dispell(NetworkConnection conn)
-    {
-        EndEffect();
-    }
 
-    [TargetRpc]
+    [Server]
     private void Acceleration(NetworkConnection conn)
-    {
+    { if (conn != _conjure.Owner) return;
         presto = new StatModifier(1f, modiType.Percent);
-        if (!Globs.spd.statModifiers.Contains(presto))
+        Stats stats = _conjure.stats;
+        if (!stats.spd.statModifiers.Contains(presto))
         {
-            Globs.spd.AddModifier(presto);
+            stats.spd.AddModifier(presto);
+            stats.cSpd = stats.spd.Value;
+            //Globs.spd.AddModifier(presto);
             Debug.Log("has been added");
         }
     }

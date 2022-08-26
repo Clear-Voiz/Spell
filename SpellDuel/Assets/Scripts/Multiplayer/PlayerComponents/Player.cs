@@ -46,6 +46,11 @@ public sealed class Player : NetworkBehaviour
 
     private void Update()
     {
+        if (IsHost)
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+                GameManager.Instance.StartGame();   
+        }
         if (!IsOwner) return;
         if(Input.GetKeyDown(KeyCode.R))
             ServerSetIsReady(!isReady);
@@ -58,7 +63,7 @@ public sealed class Player : NetworkBehaviour
         
         int playerIndex = GameManager.Instance.players.IndexOf(this);
         
-        GameObject pawnPrefab = Resources.Load("Player1") as GameObject;
+        GameObject pawnPrefab = Resources.Load("Foxo") as GameObject;
 
 
         if (pawnPrefab == null) return;

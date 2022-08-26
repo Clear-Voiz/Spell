@@ -29,6 +29,7 @@ public class Conjure : NetworkBehaviour
 
     public StoreHouse SH;
     public Stats stats;
+    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class Conjure : NetworkBehaviour
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
         tim = new Timers(1);
-        channelled = Doom;
+        channelled = Water;
     }
 
     public override void OnStartClient()
@@ -79,10 +80,11 @@ public class Conjure : NetworkBehaviour
         spellDic.Add("check",Check);
         spellDic.Add("Jaque", Check);
         //spellDic.Add("freeze",Freeze);
+        
 
         if (_recognizer == null)
         {
-            _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray());
+            _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray(),confidence);
             _recognizer.OnPhraseRecognized += Recognized;
             _recognizer.Start();
         }
@@ -90,7 +92,15 @@ public class Conjure : NetworkBehaviour
         MyEnemy(Owner);
         
     }
-    
+
+    private void OnDisable()
+    {
+        if(_recognizer !=null && _recognizer.IsRunning)
+        {_recognizer.OnPhraseRecognized -= Recognized;
+         _recognizer.Stop();
+         _recognizer.Dispose();}
+    }
+
     [ServerRpc]
     private void MyEnemy(NetworkConnection conn)
     {
@@ -154,9 +164,7 @@ public class Conjure : NetworkBehaviour
             recastable = false;
             tim.alarm[0] = 0f;
         }
-
-
-
+        
     }
 
     
@@ -177,7 +185,6 @@ public class Conjure : NetworkBehaviour
         if (vfx == null) return;
         
         Spawn(vfx,Owner);
-
     }
 
     private void Levitate()
@@ -226,9 +233,13 @@ public class Conjure : NetworkBehaviour
        Spawn(hit.gameObject,Owner);
     }
 
+    [ServerRpc]
     private void Impulse()
     {
-        Instantiate(SH.impulse,ori.position,Quaternion.identity);
+        ImpulseS impulse = Instantiate(SH.impulse,ori.position,Quaternion.identity);
+        impulse._conjure = this;
+        cooldown = impulse.cooldown;
+        Spawn(impulse.gameObject,Owner);
     }
 
     [ServerRpc]
@@ -238,7 +249,7 @@ public class Conjure : NetworkBehaviour
         haste._conjure = this;
         cooldown = 5f;
         Spawn(haste.gameObject,Owner);
-        //effectsManager.AddBuff(haste);
+        effectsManager.AddBuff(haste);
     }
     
     [ServerRpc]
@@ -248,6 +259,7 @@ public class Conjure : NetworkBehaviour
         doom._conjure = this;
         cooldown = doom.cooldown;
         Spawn(doom.gameObject, Owner);
+        
     }
 
     private void Whisper()
@@ -275,9 +287,13 @@ public class Conjure : NetworkBehaviour
       //SParalysis paralysis =  Instantiate(SH.paralysis,ori.position,ori.rotation);
     }
     
+    [ServerRpc]
     private void Water()
     {
-        SWater water = new SWater(this);
+        SWater water = Instantiate(SH.water,ori.position,ori.rotation);
+        water._conjure = this;
+        cooldown = 1f;
+        Spawn(water.gameObject,Owner);
         effectsManager.AddBuff(water);
         
     }

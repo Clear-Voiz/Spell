@@ -50,15 +50,12 @@ public class IceShardS : Spell,IShootable
     private void OnTriggerEnter(Collider other)
     {
         if(!IsOwner) return;
-        Debug.Log("tim before: " +tim.alarm[0]);
         tim.alarm[0] = 0f;
-        Debug.Log(tim.alarm[0]);
-        Debug.Log("tim after: " +tim.alarm[0]);
+        
         //StartCoroutine(DestroyAfter(3f));
         Clash(other);
         if (other.CompareTag("Player"))
         {
-            
             //transform.SetParent(other.transform);
             if (other.TryGetComponent(out NetworkObject nob))
             {
@@ -87,6 +84,7 @@ public class IceShardS : Spell,IShootable
     [TargetRpc]
     private void Affect(NetworkConnection conn)
     {
+        //Instantiate(_conjure.SH.)
         AlterSpell alterSpell = new SSlow();
         _conjure.effectsManager.AddDebuff(alterSpell);
     }

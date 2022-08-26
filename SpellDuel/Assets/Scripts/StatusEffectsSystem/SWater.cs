@@ -1,16 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SWater : AlterSpell
 {
-    public SWater(Conjure conjure )
+    private void Awake()
     {
         IsBuff = true;
         tim = new Timers(2);
-        _conjure = conjure;
+        lifespan = 1f;
     }
-    
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        if (!IsServer) return;
+        Effect();
+        
+    }
+
+
     public override void Effect()
     {
         var EM = _conjure.effectsManager.ActiveDebuffs;
@@ -28,7 +35,8 @@ public class SWater : AlterSpell
             Debug.Log(removedEffects);
         }
         
-        EndEffect();
+        
+        //EndEffect();
     }
 
     public override void EndEffect()

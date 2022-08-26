@@ -20,6 +20,7 @@ public class Stats : NetworkBehaviour
     public float maxExp;
     public float str;
     public float def;
+    [SyncVar] public float cSpd; //client version. Change on the server
     private HUDs Huds;
     private Conjure _conjure;
 
@@ -33,7 +34,7 @@ public class Stats : NetworkBehaviour
     [SyncVar(SendRate = 0)] public float hp;
     public CharacterStat maxMt;
     public float mt;
-    public CharacterStat spd;
+    public CharacterStat spd; //this one is for the server
     
     public GameConditions currentState = GameConditions.None;
     
@@ -94,7 +95,8 @@ public class Stats : NetworkBehaviour
         xpGain = new CharacterStat(1f);
         maxMt = new CharacterStat(pjFicha.maxMp);
         mt = 0f;
-        spd = new CharacterStat(pjFicha.speed);
+        spd = pjFicha.spd;
+        cSpd = spd.Value;//
 
         str = pjFicha.str;
         def = pjFicha.def;
@@ -119,7 +121,7 @@ public class Stats : NetworkBehaviour
         RES.Add(Elements.NonElemental,0.8f);
     }
 
-    public void ResetPlayerStats()
+    /*public void ResetPlayerStats()
     {
         Name = pjFicha.Name;
         lvl = pjFicha.lvl;
@@ -133,10 +135,11 @@ public class Stats : NetworkBehaviour
         maxMt = new CharacterStat(pjFicha.maxMp);
         mt = 0f;
         spd = new CharacterStat(pjFicha.speed);
+        cSpd = spd.Value;
 
         str = pjFicha.str;
         def = pjFicha.def;
-    }
+    }*/
 
     private void setHud(HUDs huds)
     {

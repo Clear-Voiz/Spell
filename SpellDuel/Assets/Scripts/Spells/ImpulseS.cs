@@ -1,60 +1,68 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using FishNet.Object;
 using UnityEngine;
-
 public class ImpulseS: Spell
 {
-    private GameObject _subject;
-    private Timers tim;
     private bool trigger;
-    private Vector3 dir;
+    //private Vector3 dir;
     private Rigidbody rb;
+    private Collider col;
     private void Awake()
     {
         PM = 1.2f; //Power Multiplier
         Element = Elements.NonElemental;
-        _conjure = FindObjectOfType<Conjure>();
-        tim = new Timers(2);
+        cooldown = 3f;
     }
 
-    private void Start()
+    public override void OnStartClient()
     {
-        tim.alarm[0] = 2f;
-        RaycastHit hit;
-        Physics.Raycast(_conjure.ori.position, _conjure.ori.forward, out hit);
-        if (hit.collider != null)
-        {
-            if (hit.collider.CompareTag("Controllable"))
-            {
-                _subject = hit.collider.gameObject;
-                rb = _subject.AddComponent<Rigidbody>();
-                rb.useGravity = false;
-
-            }
-        }
-        trigger = true;
-        
+        base.OnStartClient();
+        if(!IsOwner) return;
+        TakeOver();
     }
+
 
     private void Update()
     {
-        if (_subject != null)
-        {
+        if (!IsOwner) return;
+        if (rb == null) return;
+        
             if (trigger)
             {
                 //_subject.transform.localRotation = _conjure.ori.rotation;
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Debug.Log("Yeeted and deleted");
                     trigger = false;
-                    rb.AddForce(_conjure.ori.forward*12f,ForceMode.Impulse);
+                    Vector3 dir = (_conjure.aimAt.pointer.position - rb.position);
+                    dir = dir.normalized * _conjure.stats.str*6f;
+                    rb.AddForce(dir,ForceMode.Impulse);
+                    rb.useGravity = true;
+                    Despawner();
                     //rb.AddForce(_subject.transform.forward*12f,ForceMode.Impulse);
                 }
             }
-        }
-        else
+            /*else
         {
-            Destroy(gameObject);
-        }
+            //Destroy(gameObject);
+            //DESPAWN HERE
+        }*/
     }
+
+    [ServerRpc]
+    private void TakeOver()
+    {
+        Debug.Log("Raycast thrown");
+        Physics.Raycast(_conjure.ori.position, _conjure.ori.forward, out RaycastHit hit);
+        if (!hit.collider.CompareTag("Controllable")) Despawner();
+        //if (hit.collider.gameObject)
+        if (hit.collider.TryGetComponent(out rb))
+        {
+            Debug.Log("Gotcha now!");
+            PM = rb.mass; //POTENTIAL CAUSE OF NOT RECEIVING DAMAGE
+            rb.useGravity = false;
+
+        }
+        trigger = true;
+    }
+    
 }

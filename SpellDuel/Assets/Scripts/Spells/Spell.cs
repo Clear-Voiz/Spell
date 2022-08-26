@@ -23,10 +23,12 @@ public abstract class Spell: NetworkBehaviour
     [SyncVar]
     public Conjure _conjure;
     
+    
     protected void Clash(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            
             if (other.TryGetComponent(out NetworkObject nob))
             {
                 if (nob.IsOwner) return;
@@ -50,7 +52,7 @@ public abstract class Spell: NetworkBehaviour
     {
         var stats = _conjure.enemy.GetComponent<Stats>();
         var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Element];
-        //Debug.Log("mgk: " + Globs.mgk.Value + " - def: " +stats.mgkDef.Value + " * PM: " + PM + " * " + "stats.RES: " + stats.RES[Element] + " = " + tmpdmg);
+        Debug.Log("mgk: " + Globs.mgk.Value + " - def: " +stats.mgkDef.Value + " * PM: " + PM + " * " + "stats.RES: " + stats.RES[Element] + " = " + tmpdmg);
         int damage = Mathf.RoundToInt(tmpdmg);
         if (damage < 1)
         {

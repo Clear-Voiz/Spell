@@ -6,32 +6,45 @@ public class ThunderS : Spell
 {
     private VisualEffect _bolt;
     public float range;
+    private const string LENGTH = "Length";
 
     private void Awake()
     {
-        _bolt = GetComponentInChildren<VisualEffect>();
-        PM = 1.2f; //Power Multiplier
-        Element = Elements.Thunder;
         cooldown = 1f;
+        cost = 2f;
+        lifespan = 0.2f;
+        Element = Elements.Thunder;
+        PM = 1.2f; //Power Multiplier
+        _bolt = GetComponentInChildren<VisualEffect>();
+        lifespan = _bolt.GetFloat("LifeSpan");
+        
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-        Spell spell;
-        RaycastHit hit;
-        Physics.Raycast(_conjure.ori.position, _conjure.ori.forward, out hit);
+        ImpactVFX = null;
+        
+
+        if (!IsOwner) return;
+        Strike();
+
+    }
+
+
+    private void Strike()
+    {
+        Physics.Raycast(_conjure.ori.position, _conjure.ori.forward, out RaycastHit hit);
         if (hit.collider != null)
         {
-            Clash(hit.collider);
-            /*if (hit.collider.TryGetComponent(out Stats stats))
-            {
-                if (stats.IsOwner) return;
-                Damager(hit.collider);
-                //Strike(hit.collider);
-            }*/
+            //Debug.Log("Clashed actually");
             
-            if (hit.collider.TryGetComponent(out spell))
+            Clash(hit.collider);
+            
+            
+            range = hit.distance;
+            
+            if (hit.collider.TryGetComponent(out Spell spell))
             {
                 if (spell is ShieldS)
                 {
@@ -40,35 +53,27 @@ public class ThunderS : Spell
                     spell.Despawner();
                 }
             }
-            range = hit.distance;
+            
         }
         else
         {
             range = 30f;
         }
-        _bolt.SetFloat("Length",range);
-        _bolt.SetFloat("Pivoter",-4.4f);
+        
+        float length = range / _bolt.GetFloat(LENGTH);
 
-        ImpactVFX = null;
-        lifespan = _bolt.GetFloat("LifeSpan");
-        cost = 2f;
+        transform.localScale = new Vector3(1, 1f, length);
+        //_bolt.SetFloat("Length",range);
+        //_bolt.SetFloat("Pivoter",-4.4f);
+
+       
         StartCoroutine(Cine_Shake.Instance.shakeCamera(3f, lifespan-0.1f));
-        if (!IsOwner) return;
         StartCoroutine(Cleaner());
     }
-    /*private void Strike(Collider other)
-    {
-        var stats = other.GetComponent<Stats>();
-        
-        int damage = Mathf.RoundToInt((Globs.mgk.Value - stats.mgkDef.Value)*PM*stats.RES[Element]);
-        //Inflict(stats,damage,LocalConnection);
-        Damager(other);
-    }*/
     
     private IEnumerator Cleaner()
     {
         yield return new WaitForSeconds(lifespan);
-        Debug.Log("should Clean 2");
         Despawner();
     }
 }

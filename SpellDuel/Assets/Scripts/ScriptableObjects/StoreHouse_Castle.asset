@@ -15,21 +15,22 @@ MonoBehaviour:
   groundLevel: -0.2
   sparks: {fileID: 2658854811586574444, guid: 871304df0238ee4459db412ca024ef8b, type: 3}
   shield: {fileID: -1148516766599210956, guid: ef4c4dc980dbe574c9ce9667f40fa6cd, type: 3}
-  terra: {fileID: 7230730386079026709, guid: a3b744c4cb3dc2f4b9a011c5345c29a6, type: 3}
+  terra: {fileID: 982624599381839586, guid: 112a6d0987955624890594a69707f621, type: 3}
   fireBall: {fileID: -3774412664119842560, guid: 3dca388ecfb32d546b12095e10fdc337,
     type: 3}
   thunder: {fileID: -4099322717639279158, guid: 7b44c9dbdb0166547a2d71b461efc6b7,
     type: 3}
   mgkHit: {fileID: 6350524822075860907, guid: 306431dcd6ef06846b7bdda685c4b144, type: 3}
-  impulse: {fileID: 2294224319409469716, guid: 399d5be5116dc9b49bc4a0f5a103caeb, type: 3}
+  impulse: {fileID: 5732668501307173213, guid: 399d5be5116dc9b49bc4a0f5a103caeb, type: 3}
   doom: {fileID: 8062222982195470668, guid: 260e91771630f6b44bc27c19e66b8d39, type: 3}
   ice: {fileID: 6924883219964637257, guid: d4fc20a0c3ee1654683b82cc554a0b41, type: 3}
   checker: {fileID: -979648680099020995, guid: ea1be92a8007b7e468299f5b870e98c3, type: 3}
   blizzard: {fileID: 2545133573799825792, guid: c4038abc53d7f8b488884bc70c73bdf3,
     type: 3}
+  slow: {fileID: 5478081817747072755, guid: 8dc82bed3d19cf74a92bb76507fc1f44, type: 3}
   presto: {fileID: 8989297488270898978, guid: 241ee77899c1c194eab834e9979ad00a, type: 3}
   paralysis: {fileID: 0}
-  water: {fileID: 0}
+  water: {fileID: 1042982654093413953, guid: f9c74fa327c4c564db49552d39c6f7ae, type: 3}
   vanish: {fileID: 0}
   judge: {fileID: 7952830005746901269, guid: 2b7dbfb8a8888cf4098ecbfc235c4764, type: 3}
   LP: {fileID: 7759937486753077659, guid: 604da8c3659641f418054df0e9f4057d, type: 3}

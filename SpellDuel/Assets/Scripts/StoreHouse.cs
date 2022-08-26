@@ -11,11 +11,12 @@ public class StoreHouse : ScriptableObject
     public FireS fireBall;
     public ThunderS thunder;
     public HitS mgkHit;
-    public GameObject impulse;
+    public ImpulseS impulse;
     public DoomS doom;
     public IceShardS ice;
     public CheckS checker;
     public BlizzardS blizzard;
+    public SSlow slow;
     public PrestoS presto;
     public SParalysis paralysis;
     public SWater water;

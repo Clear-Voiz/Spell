@@ -20,7 +20,7 @@ MonoBehaviour:
   maxHp: 10
   mp: 30
   maxMp: 30
-  str: 0
+  str: 5
   mgk: 10
   def: 0
   mgkDef: 3

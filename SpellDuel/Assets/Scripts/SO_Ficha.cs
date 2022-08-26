@@ -22,9 +22,15 @@ public class SO_Ficha : ScriptableObject
     public float luck;
     public float eva;
     public float aim;
+    public CharacterStat spd;
     public float speed;
     public float stamina;
     public float dmg;
     public Dictionary<Elements, float> RES = new Dictionary<Elements, float>();
-    
+
+    private void OnEnable()
+    {
+        if (spd == null)
+            spd = new CharacterStat(2f);
+    }
 }

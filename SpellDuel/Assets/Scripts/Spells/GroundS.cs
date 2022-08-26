@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GroundS : Spell
@@ -22,6 +20,11 @@ public class GroundS : Spell
         base.OnStartClient();
         StartCoroutine(DestroyAfter(lifespan));
     }
+
+    /*private void Update()
+    {
+        transform.Translate(0f,1f * Time.deltaTime,0f);
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
@@ -45,5 +48,15 @@ public class GroundS : Spell
             }
         }
     }
-    
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!other.gameObject.CompareTag("Player")) return;
+        Debug.Log("touched");
+
+        if (other.GetContact(0).point == Vector3.up)
+        {
+            Debug.Log("Atatta");
+        }
+    }
 }

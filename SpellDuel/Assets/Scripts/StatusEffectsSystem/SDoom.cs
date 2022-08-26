@@ -1,37 +1,51 @@
-﻿using System;
-using FishNet.Object;
+﻿using FishNet.Object;
 using UnityEngine;
 
 public class SDoom : AlterSpell
 {
     private float PM;
     
-    private void Start()
+    /*private void Start()
     {
-        lifespan = (float)_conjure.stats.lvl;
+        
+    }*/
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
         _conjure.effectsManager.AddDebuff(this);
+        lifespan = (float)_conjure.stats.lvl;
+        
         tim = new Timers(1);
-        PM = lifespan;
+        PM = 0;
         IsBuff = false;
     }
 
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
         Effect();
     }
 
     
     public override void Effect()
     {
-        tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0], EndEffect);
+        if(Owner != _conjure.Owner) return;
+        PM = tim.alarm[0];
+        
+        tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0], Dispel);
     }
 
-   
-
-    [ServerRpc]
+    [Server]
+    public void Dispel()
+    {
+        EndEffect();
+    }
+    
+    
     public override void EndEffect()
     {
+        if(Owner != _conjure.Owner) return;
         var stats = _conjure.stats;
         var tmpdmg = (Globs.mgk.Value - stats.mgkDef.Value) * PM * stats.RES[Elements.Dark];
         int damage = Mathf.RoundToInt(tmpdmg);

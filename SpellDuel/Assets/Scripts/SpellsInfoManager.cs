@@ -3,12 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FishNet;
+using FishNet.Discovery;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 public class SpellsInfoManager : MonoBehaviour
 {
+
+    /*private void Start()
+    {
+        if (InstanceFinder.IsHost)
+        {
+            networkDiscovery.StartAdvertisingServer();
+            //networkDiscovery.StartSearchingForServers();
+            
+        }
+        if(InstanceFinder.IsClientOnly) networkDiscovery.StartSearchingForServers();
+    }*/
     /*public Dictionary<string, SO_SpellInfo> SData;
     private string path = "file:/UnityProjects/Spell/SpellDuel/Assets/Scripts/ScriptableObjects/InfoSpells";
     public SO_SpellInfo test;
@@ -60,6 +73,23 @@ public class SpellsInfoManager : MonoBehaviour
         if (SData.Count > 0) foreach (var VARIABLE in SData)
         {
             print(VARIABLE);
+        }
+        
+    }*/
+    
+    /*
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            InstanceFinder.ServerManager.StartConnection();
+            InstanceFinder.ClientManager.StartConnection();
+            networkDiscovery.StartAdvertisingServer();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            networkDiscovery.StartSearchingForServers();
         }
         
     }*/

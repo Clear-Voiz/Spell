@@ -1,32 +1,54 @@
-﻿using UnityEngine;
+﻿using FishNet.Object;
+using UnityEngine;
 
 public class SSlow : AlterSpell
 {
     private StatModifier slow;
 
-
-    public SSlow()
+    private void Awake()
     {
         tim = new Timers(1);
         lifespan = 5f;
         effectTitle = "Slowed";
         IsBuff = false;
-        if (!Globs.spd.statModifiers.Contains(slow))
-        {
-            slow = new StatModifier(-0.1f, modiType.Percent);
-            Globs.spd.AddModifier(slow);
-        }
     }
     
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        SlowDown();
+    }
+
+    [Server]
+    public void SlowDown()
+    {
+        Stats stats = _conjure.stats;
+        if (!stats.spd.statModifiers.Contains(slow))
+        {
+            slow = new StatModifier(-0.1f, modiType.Percent);
+            stats.spd.AddModifier(slow);
+            stats.cSpd = stats.spd.Value;
+        }
+    }
+
+    private void Update()
+    {
+        Effect();
+    }
+
     public override void Effect()
     {
         tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0],EndEffect);
     }
 
+    [Server]
     public override void EndEffect()
     {
-        Globs.spd.RemoveModifier(slow);
-        Debug.Log(Globs.spd.statModifiers.Count);
+        Stats stats = _conjure.stats;
+        stats.spd.RemoveModifier(slow);
+        stats.cSpd = stats.spd.Value;
+        Debug.Log(stats.spd.statModifiers.Count);
         OnEnd();
     }
 }

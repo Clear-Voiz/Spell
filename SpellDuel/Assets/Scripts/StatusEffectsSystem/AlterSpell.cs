@@ -21,6 +21,7 @@ public abstract class AlterSpell : NetworkBehaviour
     }*/
 
     public abstract void Effect();
+    
     public abstract void EndEffect();
 
     protected void OnEnd()
