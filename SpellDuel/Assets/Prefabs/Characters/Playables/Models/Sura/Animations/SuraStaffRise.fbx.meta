@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: efdd8eb89f407934691e4ebda1dbf561
+guid: 1fc455a990a47be4d82f62fa0345b62f
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Standing Torch Idle 01
+    second: SuraStaffRise
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Standing Torch Idle 01
+      name: SuraStaffRise
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 190
+      lastFrame: 26
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

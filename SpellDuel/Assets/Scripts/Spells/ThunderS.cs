@@ -12,7 +12,6 @@ public class ThunderS : Spell
     {
         cooldown = 1f;
         cost = 2f;
-        lifespan = 0.2f;
         Element = Elements.Thunder;
         PM = 1.2f; //Power Multiplier
         _bolt = GetComponentInChildren<VisualEffect>();
@@ -50,7 +49,7 @@ public class ThunderS : Spell
                 {
                     if (!IsOwner) return;
                     BonusPoints(LocalConnection);
-                    spell.Despawner();
+                    StartCoroutine(Cleaner());
                 }
             }
             

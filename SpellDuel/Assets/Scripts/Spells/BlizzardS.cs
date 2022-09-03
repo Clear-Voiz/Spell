@@ -14,18 +14,10 @@ public class BlizzardS : Spell
     {
         cooldown = 10f;
         interval = 0.2f;
-        //iceShard = _conjure.SH.ice;
-
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        
         tim = new Timers(1);
+
     }
 
-   
 
     private void Update()
     {
@@ -35,6 +27,7 @@ public class BlizzardS : Spell
         tim.alarm[0] = tim.Cicle(interval, tim.alarm[0], Freezer,place, ref repetitions);
     }
 
+    
     [ServerRpc]
     private void Freezer(Vector3 vec)
     {

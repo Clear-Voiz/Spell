@@ -7,6 +7,7 @@ public abstract class AlterSpell : NetworkBehaviour
 {
     protected Timers tim;
     protected float lifespan;
+    public float cooldown;
     public string effectTitle = string.Empty;
     [SyncVar] public Conjure _conjure;
     protected NetworkConnection Caller;

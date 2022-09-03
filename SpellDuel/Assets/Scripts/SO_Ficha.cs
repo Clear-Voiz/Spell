@@ -31,6 +31,6 @@ public class SO_Ficha : ScriptableObject
     private void OnEnable()
     {
         if (spd == null)
-            spd = new CharacterStat(2f);
+            spd = new CharacterStat(4f);
     }
 }

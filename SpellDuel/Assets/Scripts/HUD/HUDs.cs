@@ -31,14 +31,14 @@ public class HUDs : NetworkBehaviour
 
     private void OnEnable()
     {
-        OnExisting?.Invoke(this);
         Stats.OnEnd += EndFightCinematic;
+        OnExisting?.Invoke(this);
     }
 
     private void OnDisable()
     {
+        if (!IsOwner) return;
         Stats.OnEnd -= EndFightCinematic;
-
     }
     
     
@@ -48,8 +48,8 @@ public class HUDs : NetworkBehaviour
     {
         if (ownerStats != null && contendantStats!=null)
         {
-            toDisplay.text = "HP: " + ownerStats.hp +"\nMP: " + ownerStats.mt + "\nOwner: " + ownerStats.OwnerId
-                + "\nRHP: " + contendantStats.hp + "\nRMT = " + contendantStats.mt;
+            toDisplay.text = "Player" + ownerStats.OwnerId +"'s HP: " + ownerStats.hp +"\nMP: " + ownerStats.mp
+                + "\nOponent's HP: " + contendantStats.hp + "\nMP = " + contendantStats.mp;
             
         }
         /*else
@@ -92,7 +92,7 @@ public class HUDs : NetworkBehaviour
     {
         get
         {
-            if (ownerStats != null) return ownerStats.mt;
+            if (ownerStats != null) return ownerStats.mp;
             else
                 return 100;
         }
@@ -100,7 +100,7 @@ public class HUDs : NetworkBehaviour
         {
             if (ownerStats != null)
             {
-                ownerStats.mt = value;
+                ownerStats.mp = value;
                 //toDisplay.text = "<color=green>HP</color>: " + ownerStats.hp +"\n<color=purple>MP</color>: "+ownerStats.mt;
             }
             

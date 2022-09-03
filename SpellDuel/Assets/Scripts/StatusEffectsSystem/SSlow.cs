@@ -12,15 +12,15 @@ public class SSlow : AlterSpell
         effectTitle = "Slowed";
         IsBuff = false;
     }
-    
 
-    public override void OnStartServer()
+    public override void OnStartClient()
     {
-        base.OnStartServer();
+        base.OnStartClient();
+        if (!IsOwner) return; 
         SlowDown();
     }
 
-    [Server]
+    [ServerRpc]
     public void SlowDown()
     {
         Stats stats = _conjure.stats;
@@ -34,9 +34,11 @@ public class SSlow : AlterSpell
 
     private void Update()
     {
+        if (!IsServer) return;
         Effect();
     }
 
+    [Server]
     public override void Effect()
     {
         tim.alarm[0] = tim.Timer(lifespan,tim.alarm[0],EndEffect);

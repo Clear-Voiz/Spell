@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SVanish : AlterSpell
 {
@@ -15,7 +12,7 @@ public class SVanish : AlterSpell
     public SVanish(Conjure conj)
     {
         //if (_conjure._player1_mesh.GetComponent<MeshRenderer>().material != null) //TryGetComponent(out curMat)
-        if (conj._player1_mesh.TryGetComponent(out meshRend))
+        if (conj.playerMesh.TryGetComponent(out meshRend))
         {
             //meshRend = GameObject.Find("Player1_mesh").GetComponent<MeshRenderer>();
             mat = meshRend.material;
@@ -28,11 +25,7 @@ public class SVanish : AlterSpell
 
         tim = new Timers(3);
     }
-
-    private void Update()
-    {
-        
-    }
+    
 
     public override void Effect()
     {

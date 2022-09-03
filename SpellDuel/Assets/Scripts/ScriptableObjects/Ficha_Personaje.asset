@@ -16,8 +16,8 @@ MonoBehaviour:
   lvl: 1
   exp: 0
   maxExp: 10
-  hp: 10
-  maxHp: 10
+  hp: 20
+  maxHp: 20
   mp: 30
   maxMp: 30
   str: 5
@@ -28,6 +28,6 @@ MonoBehaviour:
   luck: 16
   eva: 0
   aim: 0
-  speed: 2
+  speed: 4
   stamina: 10
   dmg: 0

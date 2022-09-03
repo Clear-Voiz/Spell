@@ -28,6 +28,7 @@ public class TD_Movement : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        
         var horizontal = Input.GetAxisRaw("Horizontal");
         var vertical = Input.GetAxisRaw("Vertical");
         var movement = new Vector3(horizontal, 0f, vertical);
@@ -37,6 +38,11 @@ public class TD_Movement : NetworkBehaviour
             //var angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg; //radianes a grados
             transform.Translate(stats.cSpd * Time.deltaTime * movement);
             //player.localPosition += (Globs.spd.Value * Time.deltaTime * movement);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(Vector3.up*6f,ForceMode.Impulse);
         }
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -80,4 +86,5 @@ public class TD_Movement : NetworkBehaviour
             await Task.Yield();
         }
     }
+    
 }

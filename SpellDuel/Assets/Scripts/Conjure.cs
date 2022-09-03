@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -13,23 +14,25 @@ public class Conjure : NetworkBehaviour
     //private Transform _player2;
     private Dictionary<string, Action> spellDic = new Dictionary<string, Action>();
     public Transform ori;
-    public Speller speller;
-    public Transform _player1_mesh;
-    [SyncVar] public Transform enemy;
-    public bool whisper;
+    [HideInInspector] public Speller speller;
+    [HideInInspector] public SpellListener spellListener;
+    public Transform playerMesh;
+    [HideInInspector] [SyncVar] public Transform enemy;
+    [HideInInspector] public bool whisper;
     public AimAt aimAt;
     public EffectsManager effectsManager;
+    public PawnStateManager stateManager;
     private HUD_Displayer _hudDisplayer;
     public SpellCosts cost;
     public Transform middlePoint;
     private Timers tim;
     private Action channelled;
-    [SyncVar] public float cooldown;
-    public bool recastable = true;
+    [HideInInspector][SyncVar] public float cooldown;
+    [HideInInspector] public bool recastable = true;
 
     public StoreHouse SH;
     public Stats stats;
-    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
+    [HideInInspector] public ConfidenceLevel confidence = ConfidenceLevel.Medium;
 
     private void Awake()
     {
@@ -38,7 +41,7 @@ public class Conjure : NetworkBehaviour
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
         tim = new Timers(1);
-        channelled = Water;
+        channelled = Thunder;
     }
 
     public override void OnStartClient()
@@ -48,58 +51,53 @@ public class Conjure : NetworkBehaviour
         if (!IsOwner) return;
         if (spellDic.Count >0) spellDic.Clear();
         
-        spellDic.Add("fire",Fire);
         spellDic.Add("fuego",Fire);
-        spellDic.Add("levitate",Levitate);
         spellDic.Add("levita",Levitate);
-        spellDic.Add("shield",Shield);
         spellDic.Add("escudo",Shield);
-        spellDic.Add("earth",Earth);
         spellDic.Add("tierra",Earth);
-        spellDic.Add("thunder",Thunder);
         spellDic.Add("rayo",Thunder);
-        spellDic.Add("vanish",Vanish);
         spellDic.Add("oculto",Vanish);
-        spellDic.Add("hit",MagicHit);
         spellDic.Add("golpe", MagicHit);
         spellDic.Add("presto", Presto);
-        spellDic.Add("impulse", Impulse);
         spellDic.Add("impulso", Impulse);
-        spellDic.Add("doom", Doom);
         spellDic.Add("condena", Doom);
-        spellDic.Add("whisper", Whisper);
         spellDic.Add("susurro", Whisper);
-        spellDic.Add("ice",Shards);
         spellDic.Add("hielo",Shards);
-        spellDic.Add("darkness", Darkness);
         spellDic.Add("oscuridad",Darkness);
-        spellDic.Add("paralysis",Paralysis);
-        spellDic.Add("paralisis",Paralysis);
-        spellDic.Add("water",Water);
-        spellDic.Add("Agua", Water);
-        spellDic.Add("check",Check);
-        spellDic.Add("Jaque", Check);
-        //spellDic.Add("freeze",Freeze);
+        spellDic.Add("parálisis",Paralysis);
+        spellDic.Add("agua", Water);
+        spellDic.Add("jaque", Check);
+        
+        SpellListener.OnListenerEnabled += listener =>
+        {
+            spellListener = listener;
+            spellListener.conjure = this;
+            Debug.Log("reached lambda");
+        };
         
 
-        if (_recognizer == null)
+
+        /*if (_recognizer == null)
         {
             _recognizer = new KeywordRecognizer(spellDic.Keys.ToArray(),confidence);
             _recognizer.OnPhraseRecognized += Recognized;
             _recognizer.Start();
-        }
+        }*/
 
         MyEnemy(Owner);
         
+        
     }
 
-    private void OnDisable()
+    /*private void OnDisable()
     {
         if(_recognizer !=null && _recognizer.IsRunning)
         {_recognizer.OnPhraseRecognized -= Recognized;
          _recognizer.Stop();
          _recognizer.Dispose();}
-    }
+    }*/
+
+    
 
     [ServerRpc]
     private void MyEnemy(NetworkConnection conn)
@@ -119,11 +117,11 @@ public class Conjure : NetworkBehaviour
     }
 
 
-    private void Recognized(PhraseRecognizedEventArgs speech)
+    public void Recognized(string speech)
     {
         if (!IsOwner) return;
-        Debug.Log(speech.text);
-        Action spell = spellDic[speech.text];
+        Debug.Log(speech);
+        Action spell = spellDic[speech];
 
         if (channelled != spell)
         {
@@ -140,11 +138,10 @@ public class Conjure : NetworkBehaviour
         CallSpeller(speech);
     }
     
-    private void CallSpeller(PhraseRecognizedEventArgs speech)
+    private void CallSpeller(string speech)
     {
-        var txt = speech.text;
-        txt = txt.Substring(0, 1).ToUpper() + txt.Substring(1);
-        speller._renderer.text = txt;
+        speech = speech.Substring(0, 1).ToUpper() + speech.Substring(1);
+        speller._renderer.text = speech;
         if (whisper)
             return;
         speller.visible = true;
@@ -154,6 +151,10 @@ public class Conjure : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Slow();
+        }
         tim.alarm[0] = tim.Timer(cooldown, tim.alarm[0], ()=>recastable = true);
         
         //if (Input.GetMouseButtonDown(0)) Check();
@@ -164,6 +165,7 @@ public class Conjure : NetworkBehaviour
             recastable = false;
             tim.alarm[0] = 0f;
         }
+        
         
     }
 
@@ -187,6 +189,16 @@ public class Conjure : NetworkBehaviour
         Spawn(vfx,Owner);
     }
 
+    [ServerRpc]
+    private void Slow()
+    {
+        SSlow slow = Instantiate(SH.slow, ori.position, ori.rotation);
+        slow._conjure = this;
+        cooldown = 5f;
+        Spawn(slow.gameObject,Owner);
+        effectsManager.AddBuff(slow);
+    }
+    
     private void Levitate()
     {
         transform.position += Vector3.up*3f;
@@ -209,37 +221,32 @@ public class Conjure : NetworkBehaviour
         Spawn(earth.gameObject,Owner);
     }
 
-    [ServerRpc]
+    
     private void Thunder()
     {
-        ThunderS thunder = Instantiate(SH.thunder, ori.position + (ori.forward*1.2f), ori.rotation);
-        cooldown = thunder.cooldown;
-        thunder._conjure = this;
-        Spawn(thunder.gameObject,Owner);
+        stateManager.SwitchState(stateManager.stab);
+        Cast(SH.thunder,0.85f);
     }
 
     private void Vanish()
     {
-        new SVanish(this);
+        VanishS vanish = Instantiate(SH.vanish);
+        vanish._conjure = this;
+        vanish.cooldown = 5f;
+        Spawn(vanish.gameObject,Owner);
+
     }
 
-    [ServerRpc]
+  
     private void MagicHit() //
     {
-        
-        HitS hit = Instantiate(SH.mgkHit, ori.position + (ori.forward * 1.2f), ori.rotation);
-       hit._conjure = this;
-       cooldown = hit.cooldown;
-       Spawn(hit.gameObject,Owner);
+        Cast(SH.mgkHit, 0.5f);
     }
 
-    [ServerRpc]
+ 
     private void Impulse()
     {
-        ImpulseS impulse = Instantiate(SH.impulse,ori.position,Quaternion.identity);
-        impulse._conjure = this;
-        cooldown = impulse.cooldown;
-        Spawn(impulse.gameObject,Owner);
+        Cast(SH.impulse, 0.5f);
     }
 
     [ServerRpc]
@@ -295,7 +302,6 @@ public class Conjure : NetworkBehaviour
         cooldown = 1f;
         Spawn(water.gameObject,Owner);
         effectsManager.AddBuff(water);
-        
     }
 
     [ServerRpc]
@@ -306,6 +312,37 @@ public class Conjure : NetworkBehaviour
         CheckS checker = Instantiate(SH.checker,place,Quaternion.identity);
         cooldown = checker.cooldown;
         Spawn(checker.gameObject,Owner);
+    }
+    
+    [ServerRpc]
+    public async void Cast(Spell spell,  float delay) // Vector3 position, Quaternion rotation,
+    {
+        float trueDelay = delay * 1000f;
+        await Task.Delay((int) trueDelay);
+        var magic = Instantiate(spell, ori.position, ori.rotation);
+        magic._conjure = this;
+        cooldown = magic.cooldown;
+        Spawn(magic.gameObject,Owner);
+    }
+    
+    [ServerRpc]
+    public async void Cast(AlterSpell spell, Vector3 position, Quaternion rotation,bool isBuff, float delay)
+    {
+        float trueDelay = delay * 1000f;
+        await Task.Delay((int) trueDelay);
+        var magic = Instantiate(spell, position, rotation);
+        magic._conjure = this;
+        cooldown = magic.cooldown;
+        Spawn(magic.gameObject,Owner);
+        if (isBuff)
+        {
+            effectsManager.ActiveBuffs.Add(magic);
+        }
+        else
+        
+        {
+            effectsManager.ActiveDebuffs.Add(magic);
+        }
     }
 
 }

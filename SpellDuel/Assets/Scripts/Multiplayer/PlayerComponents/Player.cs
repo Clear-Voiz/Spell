@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using FishNet;
 using FishNet.Connection;
+using FishNet.Discovery;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
-
-
 
 public sealed class Player : NetworkBehaviour
 {
@@ -43,6 +42,7 @@ public sealed class Player : NetworkBehaviour
         UIManager.Instance.Show<LobbyView>();
         /*Debug.Log("should work sweetheart");*/
     }
+    
 
     private void Update()
     {
@@ -63,7 +63,7 @@ public sealed class Player : NetworkBehaviour
         
         int playerIndex = GameManager.Instance.players.IndexOf(this);
         
-        GameObject pawnPrefab = Resources.Load("Foxo") as GameObject;
+        GameObject pawnPrefab = Resources.Load("Sura") as GameObject;
 
 
         if (pawnPrefab == null) return;
@@ -84,6 +84,9 @@ public sealed class Player : NetworkBehaviour
         controlledPawn.controllingPlayer = this;
         
         TargetPawnSpawned(Owner);
+
+        var nd = FindObjectOfType<NetworkDiscovery>();
+        if(nd.IsAdvertising) nd.StopAdvertisingServer();
     }
 
     [ServerRpc(RequireOwnership = false)]

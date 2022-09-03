@@ -8,8 +8,6 @@ public class IceShardS : Spell,IShootable
     private float rotSpeed;
     private Collider _col;
     private Timers tim;
-
-
     
 
     public override void OnStartClient()
@@ -60,7 +58,12 @@ public class IceShardS : Spell,IShootable
             if (other.TryGetComponent(out NetworkObject nob))
             {
                 if (nob.IsOwner) return;
-                PreAffect(nob.Owner);
+                if (_conjure.enemy.TryGetComponent(out Conjure conjure))
+                {
+                    Affect(nob.Owner,conjure);
+                }
+               
+                //PreAffect(nob.Owner);
             }
             
             //_conjure.effectsManager.ActiveEffects.Add(slow);
@@ -77,15 +80,18 @@ public class IceShardS : Spell,IShootable
     [ServerRpc]
     private void PreAffect(NetworkConnection conn)
     {
-        Affect(conn);
+        Affect(conn,_conjure);
     }
     
     
-    [TargetRpc]
-    private void Affect(NetworkConnection conn)
+    [ServerRpc]
+    private void Affect(NetworkConnection conn, Conjure conjure)
     {
         //Instantiate(_conjure.SH.)
-        AlterSpell alterSpell = new SSlow();
-        _conjure.effectsManager.AddDebuff(alterSpell);
+        SSlow slow = Instantiate(_conjure.SH.slow);
+        Debug.Log("that's how I was created");
+        slow._conjure = conjure;
+        Spawn(slow.gameObject,Owner);
+        conjure.effectsManager.AddDebuff(slow);
     }
 }

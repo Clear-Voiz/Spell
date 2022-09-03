@@ -14,7 +14,6 @@ public class SWater : AlterSpell
         base.OnStartServer();
         if (!IsServer) return;
         Effect();
-        
     }
 
 

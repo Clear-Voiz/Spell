@@ -31,6 +31,6 @@ MonoBehaviour:
   presto: {fileID: 8989297488270898978, guid: 241ee77899c1c194eab834e9979ad00a, type: 3}
   paralysis: {fileID: 0}
   water: {fileID: 1042982654093413953, guid: f9c74fa327c4c564db49552d39c6f7ae, type: 3}
-  vanish: {fileID: 0}
+  vanish: {fileID: 3501949766138843643, guid: 77f3038ce643bae49963ddc695952e2a, type: 3}
   judge: {fileID: 7952830005746901269, guid: 2b7dbfb8a8888cf4098ecbfc235c4764, type: 3}
   LP: {fileID: 7759937486753077659, guid: 604da8c3659641f418054df0e9f4057d, type: 3}

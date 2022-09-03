@@ -8,15 +8,13 @@ public class AimAt : NetworkBehaviour
 
    public Transform pointer;
    private Camera _mCam;
-   private Timers tim;
    private Vector3 Direction;
    public Quaternion rot;
 
    private void Start()
    {
        _mCam = Camera.main;
-       tim = new Timers(2);
-       tim.alarm[0] = 1f;
+
    }
    
    private void Update()

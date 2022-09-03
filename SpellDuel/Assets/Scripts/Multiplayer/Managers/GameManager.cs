@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FishNet.Discovery;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;

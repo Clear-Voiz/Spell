@@ -15,12 +15,12 @@ public class Stats : NetworkBehaviour
     public SO_Ficha pjFicha;
     public float scaleFact = 1.25f;
     public string Name;
-    public int lvl;
-    public float exp;
-    public float maxExp;
-    public float str;
-    public float def;
-    [SyncVar] public float cSpd; //client version. Change on the server
+    [HideInInspector] public int lvl;
+    [HideInInspector] public float exp;
+    [HideInInspector] public float maxExp;
+    [HideInInspector] public float str;
+    [HideInInspector] public float def;
+    [HideInInspector] [SyncVar] public float cSpd; //client version. Change on the server
     private HUDs Huds;
     private Conjure _conjure;
 
@@ -31,12 +31,12 @@ public class Stats : NetworkBehaviour
     public CharacterStat xpGain; //this will store the amount of xp multiplier. Add numbers between 0 and 1 to modifier list. Although percentage treat as flat
     public CharacterStat mgkDef;
     public CharacterStat maxHp;
-    [SyncVar(SendRate = 0)] public float hp;
-    public CharacterStat maxMt;
-    public float mt;
+    [HideInInspector] [SyncVar(SendRate = 0)] public float hp;
+    public CharacterStat maxMp;
+    [HideInInspector] public float mp;
     public CharacterStat spd; //this one is for the server
     
-    public GameConditions currentState = GameConditions.None;
+    [HideInInspector] public GameConditions currentState = GameConditions.None;
     
     public static event Action<Stats> OnEnd; 
 
@@ -93,8 +93,8 @@ public class Stats : NetworkBehaviour
         mgk = new CharacterStat(pjFicha.mgk);
         mgkDef = new CharacterStat(pjFicha.mgkDef);
         xpGain = new CharacterStat(1f);
-        maxMt = new CharacterStat(pjFicha.maxMp);
-        mt = 0f;
+        maxMp = new CharacterStat(pjFicha.maxMp);
+        mp = maxMp.Value;
         spd = pjFicha.spd;
         cSpd = spd.Value;//
 
@@ -141,9 +141,9 @@ public class Stats : NetworkBehaviour
         def = pjFicha.def;
     }*/
 
+    [ServerRpc(RequireOwnership = false)]
     private void setHud(HUDs huds)
     {
-        if (!IsOwner) return;
         Huds = huds;
         huds.SetHUDStats();
     }

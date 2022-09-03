@@ -20,7 +20,7 @@ public class StoreHouse : ScriptableObject
     public PrestoS presto;
     public SParalysis paralysis;
     public SWater water;
-    public SVanish vanish;
+    public VanishS vanish;
     public SDoom judge;
 
     public GameObject LP;
