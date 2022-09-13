@@ -1,4 +1,4 @@
-﻿using System;using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using FishNet;
@@ -70,6 +70,9 @@ public sealed class MultiplayerMenu : MonoBehaviour
     Debug.Log(_endPoints.Count);
     if (_endPoints.Count > 0)
     {
+        networkDiscovery.StopAdvertisingServer();
+        networkDiscovery.StopSearchingForServers();
+        
         while (InstanceFinder.ClientManager.Started == false)
         {
             Debug.Log("I'm trying okay?");

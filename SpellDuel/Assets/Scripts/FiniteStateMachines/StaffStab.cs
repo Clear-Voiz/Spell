@@ -2,7 +2,7 @@
 
 public class StaffStab : PawnBaseState
 {
-    private const string Act = "Sura Staff Stab";
+    public const string Act = "Sura Staff Stab";
     private AnimatorStateInfo stateInfo;
     private Timers tim;
     
@@ -13,9 +13,11 @@ public class StaffStab : PawnBaseState
     public override void EnterState()
     {
         manager.netAnima.Play(Act);
+        Debug.Log(manager.netAnima.Animator.GetCurrentAnimatorStateInfo(0).length);
         tim = new Timers(1);
-        stateInfo = manager.anima.GetCurrentAnimatorStateInfo(0);
-        Debug.Log(stateInfo.length);
+        //stateInfo = manager.anima.GetCurrentAnimatorStateInfo(0);
+        
+        //Debug.Log(stateInfo.length);
         
     }
 
@@ -26,7 +28,7 @@ public class StaffStab : PawnBaseState
 
     public override void ExitState()
     {
-       
+        
     }
 
     public override void CheckSwitchState()

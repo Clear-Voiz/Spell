@@ -5,16 +5,17 @@ using UnityEngine;
 public class TD_Movement : NetworkBehaviour
 {
     public Transform player;
-    public Rigidbody rb;
     [SerializeField] private AnimationCurve curve;
     private Timers tim;
     private bool canDash;
     private float cooldown;
     private Stats stats;
+    private Rigidbody rb;
 
     private void Awake()
     {
         stats = GetComponent<Stats>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -24,8 +25,7 @@ public class TD_Movement : NetworkBehaviour
         cooldown = 1f;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (!IsOwner) return;
         
@@ -36,13 +36,7 @@ public class TD_Movement : NetworkBehaviour
         if (movement.magnitude >= 0.1f)
         {
             //var angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg; //radianes a grados
-            transform.Translate(stats.cSpd * Time.deltaTime * movement);
-            //player.localPosition += (Globs.spd.Value * Time.deltaTime * movement);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(Vector3.up*6f,ForceMode.Impulse);
+            rb.MovePosition(rb.position + (movement * stats.cSpd * Time.deltaTime));
         }
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -53,12 +47,12 @@ public class TD_Movement : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && canDash)
         {
-            Evade(player.position,player.position+(Vector3.right*stats.cSpd),0.4f);
+            Evade(rb.position,rb.position+(Vector3.right*stats.cSpd),0.4f);
             canDash = false;
         }
         if (Input.GetKeyDown(KeyCode.Q) && canDash)
         {
-            Evade(player.position,player.position+(Vector3.right*-stats.cSpd),0.4f);
+            Evade(rb.position,rb.position+(Vector3.right*-stats.cSpd),0.4f);
             canDash = false;
         }
 
@@ -81,7 +75,8 @@ public class TD_Movement : NetworkBehaviour
         while (elapsedTime / duration < 1f)
         {
             completeness = elapsedTime / duration;
-            player.position = Vector3.Lerp(initialPos, finalPos, curve.Evaluate(completeness));
+            //rb.position = Vector3.Lerp(initialPos, finalPos, curve.Evaluate(completeness));
+            rb.MovePosition(Vector3.Lerp(initialPos, finalPos, curve.Evaluate(completeness)));
             elapsedTime += Time.deltaTime;
             await Task.Yield();
         }

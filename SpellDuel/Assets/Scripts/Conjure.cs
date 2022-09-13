@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.Windows.Speech;
 
 public class Conjure : NetworkBehaviour
@@ -41,7 +43,7 @@ public class Conjure : NetworkBehaviour
         stats = GetComponent<Stats>();
         speller = FindObjectOfType<Speller>();
         tim = new Timers(1);
-        channelled = Thunder;
+        channelled = Impulse;
     }
 
     public override void OnStartClient()
@@ -72,7 +74,6 @@ public class Conjure : NetworkBehaviour
         {
             spellListener = listener;
             spellListener.conjure = this;
-            Debug.Log("reached lambda");
         };
         
 
@@ -175,9 +176,8 @@ public class Conjure : NetworkBehaviour
     [ServerRpc]
     private void Fire()
     {
-        //if (stats.mt < stats.maxMt.Value) _hudDisplayer.Mt += 5;
-        Debug.Log("Launched fire");
-        
+        stateManager.SwitchBattleState(stateManager.shortAndFast);
+        //Cast(SH.fireBall,0.3f,SH.sparks);
         FireS shot = Instantiate(SH.fireBall,ori.position + (ori.forward*1.2f),aimAt.rot);
         shot._conjure = this;
         cooldown = shot.cooldown;
@@ -215,6 +215,7 @@ public class Conjure : NetworkBehaviour
     [ServerRpc]
     private void Earth()
     {
+        stateManager.SwitchBattleState(stateManager.objectLift);
         GroundS earth = Instantiate(SH.terra, new Vector3(ori.position.x+(ori.forward.x*3.5f),SH.groundLevel,ori.position.z+(ori.forward.z*3.5f)), Quaternion.identity);
         earth._conjure = this;
         cooldown = earth.cooldown;
@@ -240,13 +241,16 @@ public class Conjure : NetworkBehaviour
   
     private void MagicHit() //
     {
+        stateManager.SwitchState(stateManager.shortAndFast);
         Cast(SH.mgkHit, 0.5f);
     }
 
  
     private void Impulse()
     {
-        Cast(SH.impulse, 0.5f);
+        //stateManager.SwitchState(stateManager.objectLift);
+        Cast(SH.impulse, 0.01f);
+        
     }
 
     [ServerRpc]
@@ -262,6 +266,7 @@ public class Conjure : NetworkBehaviour
     [ServerRpc]
     private void Doom()
     {
+        stateManager.SwitchState(stateManager.shortAndFast);
         DoomS doom = Instantiate(SH.doom,ori.position,ori.rotation);
         doom._conjure = this;
         cooldown = doom.cooldown;
@@ -308,6 +313,7 @@ public class Conjure : NetworkBehaviour
     private void Check()
     {
         if (enemy == null) return;
+        stateManager.SwitchState(stateManager.objectLift);
         var place = Vector3.up * 3f + enemy.position;
         CheckS checker = Instantiate(SH.checker,place,Quaternion.identity);
         cooldown = checker.cooldown;
@@ -324,6 +330,22 @@ public class Conjure : NetworkBehaviour
         cooldown = magic.cooldown;
         Spawn(magic.gameObject,Owner);
     }
+    [ServerRpc]
+    public async void Cast(Spell spell,  float delay, GameObject visualEffect) // Vector3 position, Quaternion rotation,
+    {
+        int trueDelay = (int)(delay * 1000f);
+        await Task.Delay(trueDelay); 
+        var magic = Instantiate(spell, ori.position, ori.rotation);
+        magic._conjure = this;
+        cooldown = magic.cooldown;
+        Debug.Log(cooldown);
+        if (magic == null) return; 
+            Spawn(magic.gameObject,Owner);
+        GameObject vFX = Instantiate(visualEffect,ori.position, ori.rotation); 
+        if (visualEffect != null)  return;
+            Spawn(vFX,Owner);
+    }
+    
     
     [ServerRpc]
     public async void Cast(AlterSpell spell, Vector3 position, Quaternion rotation,bool isBuff, float delay)

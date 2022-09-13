@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7164739192901391235}
   - component: {fileID: 5732668501307173213}
+  - component: {fileID: 9146153900493567481}
   m_Layer: 0
   m_Name: Impulse
   m_TagString: Spell
@@ -43,5 +44,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2752948a2ec10438f7b4808300fc78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 9146153900493567481}
+  _networkObjectCache: {fileID: 9146153900493567481}
   speed: 0
   Element: 0
+  cooldown: 0
+  _conjure: {fileID: 0}
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &9146153900493567481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294224319409469716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkObserver: {fileID: 0}
+  _prefabId: 9
+  _scenePathHash: 0
+  _sceneId: 0
+  _sceneNetworkObjects: []
+  _networkBehaviours:
+  - {fileID: 5732668501307173213}
+  SceneTransformProperties:
+    Position: {x: -2.0652921, y: 3.2834833, z: 13.844595}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _hasParentNetworkObjectAtEdit: 0

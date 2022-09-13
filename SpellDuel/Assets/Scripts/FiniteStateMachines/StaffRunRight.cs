@@ -2,14 +2,15 @@
 
 public class StaffRunRight : PawnBaseState
 {
-    private const string Act = "Sura Staff Run Right";
+    const string Act = "Sura Staff Run Right";
     public StaffRunRight(PawnStateManager manager) : base(manager)
     {
+        
     }
 
     public override void EnterState()
     {
-        manager.netAnima.Play(Act);
+        manager.netAnima.Play(Act,0);
     }
 
     public override void UpdateState()
@@ -24,7 +25,7 @@ public class StaffRunRight : PawnBaseState
 
     public override void CheckSwitchState()
     {
-        if(Input.GetKeyUp(KeyCode.RightArrow))
+        if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
             manager.SwitchState(manager.idle);
     }
 }

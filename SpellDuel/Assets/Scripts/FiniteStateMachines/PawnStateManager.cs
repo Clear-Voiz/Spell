@@ -1,5 +1,4 @@
-﻿using System;
-using FishNet.Component.Animating;
+﻿using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class PawnStateManager : NetworkBehaviour
 {
     public Animator anima;
     public PawnBaseState currentState;
+    public PawnBaseState currentBattleState;
     
     //States Factory
     public StaffIdle idle;
@@ -16,6 +16,9 @@ public class PawnStateManager : NetworkBehaviour
     public StaffRunBack runBack;
     public StaffJump jump;
     public StaffStab stab;
+    public StaffObjectLift objectLift;
+    public StaffPush staffPush;
+    public StaffShortAndFast shortAndFast;
     public NetworkAnimator netAnima;
 
     public override void OnStartClient()
@@ -29,6 +32,10 @@ public class PawnStateManager : NetworkBehaviour
         runBack = new StaffRunBack(this);
         jump = new StaffJump(this);
         stab = new StaffStab(this);
+        objectLift = new StaffObjectLift(this);
+        staffPush = new StaffPush(this);
+        shortAndFast = new StaffShortAndFast(this);
+        
         
         currentState = idle;
         currentState.EnterState();
@@ -38,6 +45,8 @@ public class PawnStateManager : NetworkBehaviour
     {
         if (!IsOwner) return;
         currentState.UpdateState();
+        if(currentBattleState == null) return;
+        currentBattleState.UpdateState();
     }
 
     public void SwitchState(PawnBaseState nextState)
@@ -46,5 +55,12 @@ public class PawnStateManager : NetworkBehaviour
         currentState.ExitState();
         currentState = nextState;
         currentState.EnterState();
+    }
+
+    public void SwitchBattleState(PawnBaseState nextState)
+    {
+        if(!IsOwner) return;
+        currentBattleState = nextState;
+        nextState.EnterState();
     }
 }

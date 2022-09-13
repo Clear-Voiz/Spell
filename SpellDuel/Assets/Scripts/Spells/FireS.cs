@@ -8,6 +8,7 @@ public class FireS : Spell,IControllable,IShootable
         private void Awake()
         {
                 cooldown = 0.3f;
+                cost = 2f;
         }
 
         public override void OnStartClient()
@@ -18,7 +19,6 @@ public class FireS : Spell,IControllable,IShootable
                 lifespan = 3f;
                 speed = 8f;
                 PM = 0.6f; //Power Multiplier
-                cost = 2f;
                 Element = Elements.Fire;
                 tim = new Timers(1);
 

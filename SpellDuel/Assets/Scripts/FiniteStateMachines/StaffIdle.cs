@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StaffIdle : PawnBaseState
 {
-    private const string Act = "Sura Staff Idle";
+    const string Act = "Sura Staff Idle";   
     public StaffIdle(PawnStateManager manager) : base(manager)
     {
         
@@ -13,6 +13,8 @@ public class StaffIdle : PawnBaseState
     public override void EnterState()
     {
         manager.netAnima.Play(Act);
+        Debug.Log(manager.netAnima.Animator.GetCurrentAnimatorStateInfo(0).length);
+        
     }
 
     public override void UpdateState()
@@ -22,7 +24,7 @@ public class StaffIdle : PawnBaseState
 
     public override void ExitState()
     {
-       
+        
     }
 
     public override void CheckSwitchState()

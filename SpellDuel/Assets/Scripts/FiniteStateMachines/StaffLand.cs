@@ -1,9 +1,10 @@
 ﻿
 public class StaffLand : PawnBaseState
 {
-    private const string Act = "Sura Staff Run Left";
+    const string Act = "Sura Staff Run Left";
     public StaffLand(PawnStateManager manager) : base(manager)
     {
+        
     }
 
     public override void EnterState()
