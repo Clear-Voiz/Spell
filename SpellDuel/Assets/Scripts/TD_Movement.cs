@@ -36,6 +36,7 @@ public class TD_Movement : NetworkBehaviour
         if (movement.magnitude >= 0.1f)
         {
             //var angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg; //radianes a grados
+            movement = transform.InverseTransformDirection(movement);
             rb.MovePosition(rb.position + (movement * stats.cSpd * Time.deltaTime));
         }
 

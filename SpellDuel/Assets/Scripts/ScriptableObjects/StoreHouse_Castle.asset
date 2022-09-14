@@ -15,7 +15,7 @@ MonoBehaviour:
   groundLevel: -0.2
   sparks: {fileID: 2658854811586574444, guid: 871304df0238ee4459db412ca024ef8b, type: 3}
   shield: {fileID: -1148516766599210956, guid: ef4c4dc980dbe574c9ce9667f40fa6cd, type: 3}
-  terra: {fileID: 982624599381839586, guid: 112a6d0987955624890594a69707f621, type: 3}
+  terra: {fileID: 7230730386079026709, guid: a3b744c4cb3dc2f4b9a011c5345c29a6, type: 3}
   fireBall: {fileID: -3774412664119842560, guid: 3dca388ecfb32d546b12095e10fdc337,
     type: 3}
   thunder: {fileID: -4099322717639279158, guid: 7b44c9dbdb0166547a2d71b461efc6b7,
