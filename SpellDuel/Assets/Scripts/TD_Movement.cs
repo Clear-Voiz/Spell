@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FishNet.Object;
 using UnityEngine;
 
@@ -36,7 +37,9 @@ public class TD_Movement : NetworkBehaviour
         if (movement.magnitude >= 0.1f)
         {
             //var angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg; //radianes a grados
-            rb.MovePosition(rb.position + (movement * stats.cSpd * Time.deltaTime));
+            movement = Vector3.ClampMagnitude(movement, 1f);
+            movement = transform.InverseTransformDirection(movement* stats.cSpd * Time.deltaTime);
+            rb.MovePosition(rb.position + movement); 
         }
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -66,6 +69,11 @@ public class TD_Movement : NetworkBehaviour
             }
         }
     }
+    
+    /*private void Update()
+    {
+        throw new NotImplementedException();
+    }*/
 
     private async void Evade(Vector3 initialPos, Vector3 finalPos, float duration)
     {
